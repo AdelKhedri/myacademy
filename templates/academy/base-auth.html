@@ -1,0 +1,78 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="fa">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <title>{% block title %}آکادمی{% endblock %}</title>
+    <meta content="" name="description">
+    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <link href="{% static 'img/logo/favicon.png' %}" rel="icon" type="image/x-icon">
+    <link href="{% static 'css/bootstrap.rtl.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.rtl.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <div id="loading">
+        <div id="loading-center">
+            <div id="loading-center-absolute">
+                <div class="tp-preloader-content">
+                    <div class="tp-preloader-logo">
+                        <div class="tp-preloader-circle"><svg fill="none" height="190" viewbox="0 0 380 380" width="190"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="190" cy="190" r="180" stroke="#D9D9D9" stroke-linecap="round"
+                                    stroke-width="6"></circle>
+                                <circle cx="190" cy="190" r="180" stroke="red" stroke-linecap="round" stroke-width="6">
+                                </circle>
+                            </svg>
+                        </div>
+                        <img alt="" src="{% static 'img/logo/preloader-icon.png' %}">
+                    </div>
+                    <p class="tp-preloader-subtitle">بارگیری ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="back-to-top-wrapper"><button class="back-to-top-btn" id="back_to_top" type="button"><svg fill="none"
+                height="7" viewbox="0 0 12 7" width="12" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 6L6 1L1 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="1.5"></path>
+            </svg></button></div>
+    <main>
+        <section class="tp-login-area">
+            <div class="tp-login-register-box d-flex align-items-center">
+                <div class="tp-login-register-banner-box p-relative"
+                    data-background="{% static 'img/login/login-register-bg.jpg' %}">
+                    <div class="tp-login-register-logo tp-header-logo"><a href="/"><img alt=""
+                                src="{% static 'img/logo/logo-white.png' %}"></a></div>
+                    <div class="tp-login-register-heading">
+                        <h3 class="tp-login-register-title">جهان را کشف کنید<br>بهترین دوره های آنلاین اینجا</h3>
+                    </div>
+                    <div class="tp-login-register-shape">
+                        <div class="shape-1"><img alt="" src="{% static 'img/login/login-register-shape-2.png' %}"></div>
+                        <div class="shape-2"><img alt="" src="{% static 'img/login/login-register-shape-1.png' %}"></div>
+                        <div class="shape-3"><img alt="" src="{% static 'img/login/login-register-shape-3.png' %}"></div>
+                    </div>
+                </div>
+                <div class="tp-login-register-wrapper d-flex justify-content-center align-items-center">
+                    <div class="tp-login-from-box">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="{% static 'js/vendor/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap-bundle.js' %}"></script>
+    <script src="{% static 'js/swiper-bundle.js' %}"></script>
+    <script src="{% static 'js/nice-select.js' %}"></script>
+    <script src="{% static 'js/imagesloaded-pkgd.js' %}"></script>
+    <script src="{% static 'js/slick.js' %}"></script>
+    <script src="{% static 'js/magnific-popup.js' %}"></script>
+    <script src="{% static 'js/purecounter.js' %}"></script>
+    <script src="{% static 'js/wow.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>
