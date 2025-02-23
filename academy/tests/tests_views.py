@@ -121,3 +121,61 @@ class TestRegisterView(BaseTestCase):
         self.assertEqual(res.status_code, 200)
         self.assertContains(res, 'لطفا کپچا رو تایید کنید.')
 
+
+class TestActiveRegisterdAccountView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        self.register_data = {
+            'username': 'user2',
+            'password1': 'password',
+            'password2': 'password',
+            'email': 'user2@gmail.com',
+            'phone_number': '09123789456',
+            'accept_rules': True,
+            'g-recaptcha-response': 'RESPONSE',
+        }
+        self.register_url = reverse('academy:register')
+        self.url = reverse('academy:active-account')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_url(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid = True)
+
+        res = self.client.post(self.register_url, data=self.register_data)
+        # print(res.content.decode('utf-8'))
+        self.assertEqual(res.status_code, 302)
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_template_used(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid = True)
+
+        res = self.client.post(self.register_url, data=self.register_data)
+        self.assertEqual(res.status_code, 302)
+        
+        res = self.client.get(self.url)
+        self.assertTemplateUsed(res, 'academy/activate.html')
+
+    def test_redirect_registered_user(self):
+        self.login()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+
+    def test_redirect_none_phone_number_in_session(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:register'))
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_active_account(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid = True)
+
+        res = self.client.post(self.register_url, self.register_data)
+        self.assertEqual(res.wsgi_request.session.get('phone_number', None), self.register_data['phone_number'])
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:active-account'))
+
+        code = OTPCode.objects.get(id = 1)
+        res = self.client.post(self.url, data={'g-recaptcha-response': 'RESPONSE', 'code': code.code})
+        self.assertTrue(res.wsgi_request.user.is_authenticated)
+
+    # def 
