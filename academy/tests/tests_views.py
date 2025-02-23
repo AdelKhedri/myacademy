@@ -1,7 +1,7 @@
 from unittest.mock import patch
 from django_recaptcha.client import RecaptchaResponse
 from django.test import TestCase
-from user.models import User
+from user.models import OTPCode, User, Profile
 from django.urls import reverse
 
 
@@ -24,6 +24,39 @@ class BaseTestCase(TestCase):
     def login(self, mocked_value):
         mocked_value.return_value = RecaptchaResponse(is_valid=True)
         self.client.post(self.login_url, data=self.user_data)
+
+
+class TestLoginView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+    def test_url_exist(self):
+        res = self.client.get(self.login_url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_template(self):
+        res = self.client.get(self.login_url)
+        self.assertTemplateUsed(res, 'academy/login.html')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_fail_login_user_not_exist(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        self.user_data['username'] = 'test'
+        res = self.client.post(self.login_url, data=self.user_data)
+        self.assertEqual(res.context['msg'], 'authentication failed')
+        self.assertContains(res, 'کاربری با این مشخصات یافت نشد.')
+
+    def test_failed_login_recaptcha(self):
+        del self.user_data['g-recaptcha-response']
+        res = self.client.post(self.login_url, data=self.user_data)
+        self.assertEqual(res.context['msg'], 'captcha error')
+        self.assertContains(res, 'لطفا کپچا رو تایید کنید.')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_login_success(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        res = self.client.post(self.login_url, data=self.user_data)
+        self.assertEqual(res.wsgi_request.user.username, 'user1')
 
 
 class TestRegisterView(BaseTestCase):

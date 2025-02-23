@@ -39,3 +39,8 @@ class RegisterForm(forms.ModelForm):
         otp = OTPCode.objects.create(phone_number = self.cleaned_data['phone_number'], code = code, code_type = 'register')
         # add send code statement here
         return True if otp else False
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=150, label='نام کاربری')
+    password = forms.CharField(max_length=150, widget=forms.PasswordInput, label='پسورد')
