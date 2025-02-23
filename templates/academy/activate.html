@@ -1,0 +1,73 @@
+{% extends 'academy/base-auth.html' %}
+{% block title %}فعال کردن اکانت | اکادمی من{% endblock %}
+{% block content %}
+<div class="tp-login-from-heading text-center">
+<h4 class="tp-login-from-title">پسورد اکانت خود را بازیابی کنید</h4>
+<p>حساب کاربری دارید؟<a href="{% url 'academy:login' %}">وارد شوید</a></p>
+</div>
+<div class="tp-login-input-form">
+<form method="post" class="row">
+    {% csrf_token %}
+    <div class="col-12">
+        <div class="tp-login-input p-relative">
+            <label>کد تایید</label>
+            <input placeholder="کد تایید" name="code" type="number">
+        </div>
+    </div>
+    <div class="col-12">
+        {{ recaptcha }}
+    </div>
+    <div class="col-12">
+        <div class="row">
+            {% if msg == 'code failed' %}
+            <div class="col-12">
+                <div class="alert alert-danger d-flex align-items-center text-start" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="max-width: 16px;max-height: 14px;" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                    <div>کد تایید اشتباه است یا منقضی شده.</div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if msg == 'code sended' %}
+            <div class="col-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+                    <symbol id="check-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </symbol>
+                </svg>
+                <div class="alert alert-success d-flex align-items-center" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" style="max-width: 16px;max-height: 14px;" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                    <div>کد با موفقیت ارسال شد.</div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if msg == 'code must be integer' %}
+            <div class="col-12">
+                <div class="alert alert-danger d-flex align-items-center text-start" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="max-width: 16px;max-height: 14px;" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                    <div>کد تایید باید عدد باشد.</div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="col-6">
+                <div class="tp-login-input-remeber text-start"><a href="{% url 'academy:login' %}">وارد شوید</a></div>
+            </div>
+            <div class="col-6">
+                <div class="tp-login-input-remeber text-end"><a href="{% url 'academy:register' %}">ثبت نام</a></div>
+            </div>
+        </div>
+        <div class="tp-login-from-btn">
+            <button class="tp-btn-inner w-100 text-center">فعال کردن حساب</button>
+        </div>
+        <div class="tp-login-from-autor text-center">
+            <p><span>تلفن پشتیبانی:</span>+989123456789</p>
+            <p><span>ایمیل پشتیبانی:</span>test@gmail.com</p>
+        </div>
+    </div>
+</form>
+{% endblock %}

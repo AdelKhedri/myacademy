@@ -90,7 +90,7 @@ RECAPTCHA_PRIVATE_KEY = ''
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
-
+LOGIN_AFTER_SIGNUP = True
 LANGUAGE_CODE = 'fa'
 
 TIME_ZONE = 'UTC'

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Profile
+from .models import OTPCode, User, Profile
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -42,3 +42,5 @@ class UserRegister(UserAdmin):
 class ProfileRegister(admin.ModelAdmin):
     list_display = [field.name for field in Profile._meta.fields]
     list_select_related = ['user']
+
+admin.site.register(OTPCode)
