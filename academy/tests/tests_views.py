@@ -1,8 +1,10 @@
 from unittest.mock import patch
 from django_recaptcha.client import RecaptchaResponse
 from django.test import TestCase
-from user.models import OTPCode, User, Profile
+from user.models import OTPCode, User
 from django.urls import reverse
+from freezegun import freeze_time
+from datetime import datetime, timedelta
 
 
 class BaseTestCase(TestCase):
@@ -178,4 +180,99 @@ class TestActiveRegisterdAccountView(BaseTestCase):
         res = self.client.post(self.url, data={'g-recaptcha-response': 'RESPONSE', 'code': code.code})
         self.assertTrue(res.wsgi_request.user.is_authenticated)
 
-    # def 
+
+class TestForgotPasswordView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('academy:forgot-password')
+
+    def test_url(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_template_used(self):
+        res = self.client.get(self.url)
+        self.assertTemplateUsed(res, 'academy/forgot-password.html')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_success_send_link_with_phone_number(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': '09123456789'
+        }
+        
+        res = self.client.post(self.url, data=data)
+        self.assertEqual(res.status_code, 200)
+        # self.assertContains(res, 'کد با موفقیت ارسال شد.')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_success_send_link_with_email(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': 'user1@gmail.com'
+        }
+
+        res = self.client.post(self.url, data=data)
+        self.assertEqual(res.status_code, 200)
+        # self.assertContains(res, 'کد با موفقیت ارسال شد.')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_success_send_link_with_username(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': 'user1'
+        }
+        
+        res = self.client.post(self.url, data=data)
+        self.assertEqual(res.status_code, 200)
+        # self.assertContains(res, 'کد با موفقیت ارسال شد.')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_failed_send_link_number_not_found(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': '65231'
+        }
+
+        res = self.client.post(self.url, data=data)
+        self.assertContains(res, 'نام کاربری/ایمیل/شماره تلفن اشتباه است.')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_failed_send_link_last_sended(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': '09123456789'
+        }
+
+        res = self.client.post(self.url, data=data)
+        res = self.client.post(self.url, data=data)
+        self.assertContains(res, 'ارسال کد در فاصله های 4 دقیقه پس از اخرین ارسال کد مجاز است.')
+
+
+    @freeze_time(datetime.now())
+    @patch('django_recaptcha.fields.client.submit')
+    def test_failed_send_link_last_sended(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        start_time = datetime.now()
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'number': '09123456789'
+        }
+
+        res = self.client.post(self.url, data=data)
+
+        # freeze time
+        with freeze_time(start_time + timedelta(minutes=5, seconds=2)):
+            res = self.client.post(self.url, data=data)
+            self.assertEqual(res.status_code, 200)
+
+    def test_redirect_authorized_user(self):
+        self.login()
+        res = self.client.post(self.url, data={})
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:home'), 302, 200)
