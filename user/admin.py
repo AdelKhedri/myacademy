@@ -43,4 +43,8 @@ class ProfileRegister(admin.ModelAdmin):
     list_display = [field.name for field in Profile._meta.fields]
     list_select_related = ['user']
 
-admin.site.register(OTPCode)
+
+@admin.register(OTPCode)
+class OTPCodeRegister(admin.ModelAdmin):
+    list_display = [field.name for field in OTPCode._meta.fields]
+    list_filter = ['code_type']
