@@ -5,6 +5,8 @@ from user.models import OTPCode, User
 from django.urls import reverse
 from freezegun import freeze_time
 from datetime import datetime, timedelta
+from django.utils import timezone
+from random import randint
 
 
 class BaseTestCase(TestCase):
@@ -195,7 +197,7 @@ class TestForgotPasswordView(BaseTestCase):
         self.assertTemplateUsed(res, 'academy/forgot-password.html')
 
     @patch('django_recaptcha.fields.client.submit')
-    def test_success_send_link_with_phone_number(self, mocked_value):
+    def test_success_send_code_with_phone_number(self, mocked_value):
         mocked_value.return_value = RecaptchaResponse(is_valid=True)
         data = {
             'g-recaptcha-response': 'RESPONSE',
@@ -203,8 +205,8 @@ class TestForgotPasswordView(BaseTestCase):
         }
         
         res = self.client.post(self.url, data=data)
-        self.assertEqual(res.status_code, 200)
-        # self.assertContains(res, 'کد با موفقیت ارسال شد.')
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:confirm-forgot-password'))
 
     @patch('django_recaptcha.fields.client.submit')
     def test_success_send_link_with_email(self, mocked_value):
@@ -215,11 +217,11 @@ class TestForgotPasswordView(BaseTestCase):
         }
 
         res = self.client.post(self.url, data=data)
-        self.assertEqual(res.status_code, 200)
-        # self.assertContains(res, 'کد با موفقیت ارسال شد.')
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:confirm-forgot-password'))
 
     @patch('django_recaptcha.fields.client.submit')
-    def test_success_send_link_with_username(self, mocked_value):
+    def test_success_send_code_with_username(self, mocked_value):
         mocked_value.return_value = RecaptchaResponse(is_valid=True)
         data = {
             'g-recaptcha-response': 'RESPONSE',
@@ -227,11 +229,11 @@ class TestForgotPasswordView(BaseTestCase):
         }
         
         res = self.client.post(self.url, data=data)
-        self.assertEqual(res.status_code, 200)
-        # self.assertContains(res, 'کد با موفقیت ارسال شد.')
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:confirm-forgot-password'))
 
     @patch('django_recaptcha.fields.client.submit')
-    def test_failed_send_link_number_not_found(self, mocked_value):
+    def test_failed_send_code_number_not_found(self, mocked_value):
         mocked_value.return_value = RecaptchaResponse(is_valid=True)
         data = {
             'g-recaptcha-response': 'RESPONSE',
@@ -276,3 +278,78 @@ class TestForgotPasswordView(BaseTestCase):
         res = self.client.post(self.url, data={})
         self.assertEqual(res.status_code, 302)
         self.assertRedirects(res, reverse('academy:home'), 302, 200)
+
+
+
+class TestForgotPasswordChangePasswordView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.otp_code = OTPCode.objects.create(
+            phone_number = self.user.phone_number,
+            expire_time=timezone.now() + timedelta(minutes=4),
+            code = 22266,
+            code_type = 'forgot-password')
+        self.data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'code': self.otp_code.code,
+            'password1': 'new_pass',
+            'password2': 'new_pass',
+        }
+        self.url = reverse('academy:confirm-forgot-password')
+        session = self.client.session
+        session['phone_number'] = self.user.phone_number
+        session.save()
+
+    def test_url(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_template_used(self):
+        res = self.client.get(self.url)
+        self.assertTemplateUsed(res, 'academy/confirm-forgot-password.html')
+
+    def test_redirect_authoraized_user(self):
+        self.login()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:home'))
+
+    def test_redirect_user_without_phone_number_in_session(self):
+        self.login()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:home'))
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_change_password_success(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+
+        res = self.client.post(self.url, self.data)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, res.wsgi_request.GET.get('next', reverse('academy:login')))
+        self.assertNotIn(self.user.phone_number, res.wsgi_request.session)
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_change_password_failed_invalid_code(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_change_password_failed_invalid_recaptcha(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        res = self.client.post(self.url, {})
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'کپچا اشتباه حل شده.')
+
+    @freeze_time(datetime.now())
+    @patch('django_recaptcha.fields.client.submit')
+    def test_change_password_failed_expire_code(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+
+        self.data['code'] = 22
+        start_time = datetime.now()
+        with freeze_time(start_time, timedelta(minutes=4, seconds=1)):
+            res = self.client.post(self.url, self.data)
+            self.assertContains(res, 'کد اشتباه است یا منقضی شده.')

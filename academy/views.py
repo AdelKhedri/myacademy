@@ -1,14 +1,14 @@
 from random import randint
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from datetime import timedelta
 from django.utils import timezone
 from user.models import OTPCode, User
-from .forms import RecaptchaFrom, RegisterForm, LoginForm
+from .forms import RecaptchaFrom, RegisterForm, LoginForm, ChangePasswordForgotPasswordFrom
 from django.conf import settings
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 class RegisterView(View):
@@ -107,7 +107,7 @@ class ActivateRegisterdAccountView(View):
         if recaptcha_form:
             code = request.POST.get('code', None)
             if code and code.isnumeric():
-                otp = OTPCode.objects.filter(code = code, phone_number = self.phone_number, time__lte = timedelta(minutes=4) + timezone.now())
+                otp = OTPCode.objects.filter(code = code, phone_number = self.phone_number, expire_time__gte = timezone.now())
                 if otp.exists():
                     user = User.objects.get(phone_number = otp.first().phone_number)
                     user.is_active = True
@@ -151,7 +151,7 @@ class ForgotPasswordView(View):
                     last_otp = OTPCode.objects.filter(phone_number = user.phone_number, code_type='forgot-password')
                     send_code = False
                     if last_otp.exists():
-                        if timedelta(minutes=4) + last_otp.first().time < timezone.now() :
+                        if last_otp.first().expire_time < timezone.now() :
                             last_otp.delete()
                             send_code = True
                         else:
@@ -161,16 +161,64 @@ class ForgotPasswordView(View):
 
                     if send_code:
                         code = randint(12121, 98989)
-                        OTPCode.objects.create(code = code, phone_number = user.phone_number, code_type = 'forgot-password')
+                        OTPCode.objects.create(code = code, expire_time = timedelta(minutes=5) + timezone.now(), phone_number = user.phone_number, code_type = 'forgot-password')
+                        
+                        request.session['phone_number'] = user.phone_number
+                        request.session.modified = True
                         # try:
                         #     pass
                         #     #send code
                         # except:
                         #     context['msg'] = 'otp failed' # for error when try for send code to Phone number
-                        # TODO: redirect to change password view
+                        return redirect('academy:confirm-forgot-password')
             else:
                 context['msg'] = 'token failed'
         else:
             context['msg'] = 'ivalid captcha'
         context['recaptcha'] = recaptcha_form
         return render(request, self.template_name, context)
+
+
+class ConfirmForgotPasswordView(View):
+    template_name = 'academy/confirm-forgot-password.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('academy:home')
+        self.phone_number = request.session.get('phone_number', None)
+        if self.phone_number is None:
+            return redirect('academy:home')
+
+        self.context = {
+            'recaptcha': RecaptchaFrom(),
+            'change_password_form': ChangePasswordForgotPasswordFrom()
+        }
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, self.context)
+
+    def post(self, request, *args, **kwargs):
+        recaptcha_form = RecaptchaFrom(request.POST)
+        if recaptcha_form.is_valid():
+            change_password_form = ChangePasswordForgotPasswordFrom(request.POST)
+            if change_password_form.is_valid():
+                code = change_password_form.cleaned_data['code']
+                otp = OTPCode.objects.filter(Q(code_type = 'forgot-password'), phone_number = self.phone_number)
+                otp_with_code  = otp.filter(code = code, expire_time__gte = timezone.now())
+                if otp_with_code.exists():
+                    user = User.objects.get(phone_number = otp_with_code.first().phone_number)
+                    user.set_password(change_password_form.cleaned_data['password1'])
+                    user.save()
+                    otp.delete()
+                    request.session.pop('phone_number')
+                    request.session.modified = True
+                    # TODO: Redirect to user panel
+                    # TODO: if on settings set can auto login after change password and redirect to user panel
+                    return redirect(request.GET.get('next', 'academy:login'))
+                else:
+                    self.context['msg'] = 'invalid code'
+            self.context['change_password_form'] = change_password_form
+        else:
+            self.context['msg'] = 'invalid recaptcha'
+        return render(request, self.template_name, self.context)

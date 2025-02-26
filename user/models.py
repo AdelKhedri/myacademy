@@ -36,7 +36,7 @@ class Profile(models.Model):
 class OTPCode(models.Model):
     code = models.IntegerField(_('کد'))
     phone_number = models.CharField(_('شماره تلفن'), max_length=11, validators=[validate_phone_number], unique=True)
-    time = models.DateTimeField(_('زمان ارسال کد'), auto_now_add=True)
+    expire_time = models.DateTimeField(_('زمان ارسال کد'))
     code_types = (('register', 'ثبت نام'),('forgot-password', 'فراموشی رمز عبور'))
     code_type = models.CharField(_('نوع کد تایید'), choices=code_types, max_length=15)
 
@@ -45,4 +45,4 @@ class OTPCode(models.Model):
         verbose_name_plural = 'کد های تایید '
 
     def __str__(self):
-        return '{}:{}:{}'.format(self.phone_number, self.code, self.time)
+        return '{}:{}:{}'.format(self.phone_number, self.code, self.expire_time)
