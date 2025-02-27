@@ -40,3 +40,34 @@ class UserProfileForm(forms.ModelForm):
         if self.user.username != username and User.objects.filter(username=username).exists():
             raise forms.ValidationError('نام کاربری تکراری است.')
         return username
+
+
+class PasswordChangeForm(forms.Form):
+    last_password = forms.CharField(max_length=100, label='پسورد قبلی', widget=forms.PasswordInput)
+    new_password1 = forms.CharField(
+        max_length=100, label='پسورد جدید',
+        widget=forms.PasswordInput,
+        help_text= 'پسورد باید ترکیبی از متن و عدد و بیشتر از ۷ کاراکتر باشد.'
+        )
+    new_password2 = forms.CharField(max_length=100, label='تکرار پسورد', widget=forms.PasswordInput)
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password1 = cleaned_data['new_password1']
+        new_password2 = cleaned_data['new_password2']
+        last_password = cleaned_data['last_password']
+
+        if not new_password1 or not last_password or new_password1 != new_password2 or len(new_password1) < 7:
+            raise forms.ValidationError('پسورد باید ترکیبی از متن و عدد و بیشتر از ۷ کاراکتر باشد.')
+        elif not self.user.check_password(self.cleaned_data['last_password']):
+            raise forms.ValidationError('پسورد قبلی اشتباه است.')
+        return cleaned_data
+
+    def save(self, commit = True):
+        self.user.set_password(self.cleaned_data['new_password1'])
+        self.user.save()
+        return self.user
