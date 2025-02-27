@@ -88,9 +88,10 @@ AUTH_USER_MODEL = 'user.User'
 RECAPTCHA_PUBLIC_KEY = ''
 RECAPTCHA_PRIVATE_KEY = ''
 
+LOGIN_AFTER_SIGNUP = True
+LOGIN_URL = 'academy:login'
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
-LOGIN_AFTER_SIGNUP = True
 LANGUAGE_CODE = 'fa'
 
 TIME_ZONE = 'UTC'
@@ -106,10 +107,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR / 'static')
 ]
+MEDIA_URL = 'media/'
+MEDIA_ROOT = 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

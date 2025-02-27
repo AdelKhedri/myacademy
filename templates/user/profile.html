@@ -1,0 +1,155 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block title %}پروفایل | آکادمی من{% endblock %}
+{% block content %}
+<script src="{% static 'js/vendor/jquery.js' %}"></script>
+
+<div class="row">
+    <div class="col-12">
+        <div class="tp-dashboard-tab mb-25">
+            <h2 class="tp-dashboard-tab-title">تنظیمات</h2>
+            <div class="tp-dashboard-tab-list">
+                <ul>
+                    <li><a class="active" href="{% url 'user:profile' %}">مشخصات</a>
+                    </li>
+                    <li><a href="instructor-setting-password.html">رمز عبور</a></li>
+                    <li><a href="instructor-setting-withdraw.html">برداشت</a></li>
+                    <li><a href="instructor-setting-social.html">نمایه اجتماعی</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <form method="post" class="tpd-setting-box profile">
+            {% csrf_token %}
+            <div class="tp-dashboard-banner-bg profile mb-100"
+                data-background="{% static 'img/dashboard/bg/dashboard-bg-1.jpg' %}">
+                <div class="tp-instructor-wrap d-flex justify-content-between">
+                    <div class="tp-instructor-info d-flex">
+                        <div class="tp-instructor-avatar p-relative profile">
+                            <img alt="" src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'img/event/user.jpg' %}{% endif %}">
+                            <span>
+                                <svg fill="none" height="38" viewbox="0 0 38 38" width="38" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="19" cy="19" fill="white" r="18" stroke="#E6E8F0"></circle>
+                                    <path
+                                        d="M23.352 13.5172L23.272 13.3463C23.056 12.9034 22.808 12.3907 22.656 12.0954C22.288 11.3962 21.656 11.0078 20.88 11H17.112C16.336 11.0078 15.712 11.3962 15.344 12.0954C15.184 12.4062 14.912 12.9656 14.688 13.424L14.64 13.5172C14.616 13.5794 14.552 13.6104 14.488 13.6104C12.56 13.6104 11 15.1332 11 16.9978V21.6127C11 23.4772 12.56 25 14.488 25H23.512C25.432 25 27 23.4772 27 21.6127V16.9978C27 15.1332 25.432 13.6104 23.512 13.6104C23.44 13.6104 23.384 13.5716 23.352 13.5172Z"
+                                        fill="#303651"></path>
+                                    <path
+                                        d="M19.0035 15.9806C19.8435 15.9806 20.6355 16.2992 21.2275 16.8741C21.8195 17.4568 22.1475 18.2259 22.1475 19.0339C22.1395 19.8808 21.7875 20.6421 21.2195 21.1937C20.6515 21.7454 19.8675 22.0872 19.0035 22.0872C18.1635 22.0872 17.3795 21.7687 16.7795 21.1937C16.1875 20.6111 15.8595 19.8497 15.8595 19.0339C15.8515 18.2259 16.1795 17.4646 16.7715 16.8819C17.3715 16.2992 18.1635 15.9806 19.0035 15.9806ZM19.0035 17.146C18.4835 17.146 17.9955 17.3402 17.6195 17.7054C17.2515 18.0628 17.0515 18.5367 17.0595 19.0262V19.0339C17.0595 19.5389 17.2595 20.0128 17.6275 20.3702C17.9955 20.7276 18.4835 20.9218 19.0035 20.9218C20.0755 20.9218 20.9395 20.075 20.9475 19.0339C20.9475 18.5289 20.7475 18.055 20.3795 17.6976C20.0115 17.3402 19.5235 17.146 19.0035 17.146ZM23.4915 15.7942C23.8915 15.7942 24.2195 16.1127 24.2195 16.5012C24.2195 16.8896 23.8915 17.2004 23.4915 17.2004C23.0915 17.2004 22.7715 16.8896 22.7715 16.5012C22.7715 16.1127 23.0915 15.7942 23.4915 15.7942Z"
+                                        fill="white"></path>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tpd-setting-from">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="row"> 
+                    <div class="col-lg-6">
+                        <div class="tpd-input">
+                            <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                            {{ form.first_name }}
+                        </div>
+                        {% for error in form.first_name.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="tpd-input">
+                            <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                            {{ form.last_name }}
+                        </div>
+                        {% for error in form.last_name.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="tpd-input">
+                            <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                            {{ form.username }}
+                        </div>
+                        {% for error in form.username.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="tpd-input">
+                            <label class="d-block" for="{{ form.aboute.id_for_label }}">{{ form.aboute.label }}</label>
+                            {{ form.aboute }}
+                        </div>
+                        {% for error in form.aboute.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="tpd-setting-cartificate">
+                <h5 class="tpd-setting-cartificate-title">عکس پروفایل</h5>
+                <div class="tpd-setting-cartificate-upload d-flex align-items-center">
+                    <div class="tpd-setting-cartificate-content">
+                        <!-- <p>اندازه: 700x430 پیکسل</p><span class="upload-btn"> -->
+                            {{ form.picture }}
+                            <!-- <input accept="image/png, image/jpeg" id="tpd-setting-cartificate-input" type="file"> -->
+                            {% for error in form.aboute.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                            {% endfor %}
+                        </span>
+                    </div>
+                </div>
+                <!-- <div class="tpd-setting-cartificate-btn"><button>ذخیره تغییرات</button>
+                </div> -->
+                <button type="button" style="display: none;" id="edit-profile" class="btn btn-info m-1 shadow border border-2 border-primary">ویرایش </button>
+                <button type="submit" id="submit-edit-profile" class="btn btn-success m-1 shadow border border-2 border-info">ذخیره</button>
+                <button type="reset" style="display: none;" id="reset-edit-profile" class="btn btn-danger m-1 shadow border border-2 border-warning">بازگشت</button>
+                <script>
+                    // If Jquery loaded submit and reset btns hided and edit btn showed
+                    // else only submit btn showed
+
+                    $(document).ready(function(){
+                        $(".input").each(function () {
+                            $(this).prop("disabled", true)
+                        })
+                        $("#edit-profile").toggle();
+                        $("#submit-edit-profile").toggle()
+                        $("#edit-profile").click(function() {
+                            $(this).toggle();
+                            $('#submit-edit-profile').toggle()
+                            $('#reset-edit-profile').toggle()
+                            $(".input").each(function () {
+                                $(this).prop("disabled", !$(this).prop("disabled"));
+                            });
+                        });
+                        $("#reset-edit-profile").click(function() {
+                            $(this).toggle();
+                            $('#submit-edit-profile').toggle()
+                            $('#edit-profile').toggle()
+                            $(".input").each(function () {
+                                $(this).prop("disabled", !$(this).prop("disabled"));
+                            });
+                        });
+                    });
+                </script>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
