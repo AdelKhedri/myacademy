@@ -21,8 +21,8 @@ class User(AbstractUser, PermissionsMixin):
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('کاربر'))
-    picture = models.ImageField('users/profile', blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('کاربر'))
+    picture = models.ImageField(_('تصویر'), upload_to='users/profile', blank=True)
     aboute = models.TextField(_('درباره'), blank=True)
 
     class Meta:
