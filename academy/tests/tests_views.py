@@ -353,3 +353,25 @@ class TestForgotPasswordChangePasswordView(BaseTestCase):
         with freeze_time(start_time, timedelta(minutes=4, seconds=1)):
             res = self.client.post(self.url, self.data)
             self.assertContains(res, 'کد اشتباه است یا منقضی شده.')
+
+
+class TestLogoutView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.url = reverse('academy:logout')
+        self.login()
+
+    def test_url(self):
+        res = self.client.get(self.url)
+        self.assertRedirects(res, reverse('academy:home'), 302)
+
+    def test_redirect_anonymous_user(self):
+        self.client.logout()
+        res = self.client.get(self.url)
+        self.assertRedirects(res, reverse('academy:login'), 302)
+
+    def test_logout_user(self):
+        res = self.client.get(self.url)
+        self.assertTrue(res.wsgi_request.user.is_anonymous)
+        self.assertRedirects(res, reverse('academy:home'))

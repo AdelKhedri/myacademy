@@ -1,14 +1,14 @@
 from random import randint
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views.generic import View
 from datetime import timedelta
 from django.utils import timezone
 from user.models import OTPCode, User
 from .forms import RecaptchaFrom, RegisterForm, LoginForm, ChangePasswordForgotPasswordFrom
 from django.conf import settings
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponse
-from django.db.models import Q, F
+from django.db.models import Q
 
 
 class RegisterView(View):
@@ -222,3 +222,11 @@ class ConfirmForgotPasswordView(View):
         else:
             self.context['msg'] = 'invalid recaptcha'
         return render(request, self.template_name, self.context)
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_anonymous:
+            return redirect('academy:login')
+        logout(request)
+        return redirect('academy:home')
