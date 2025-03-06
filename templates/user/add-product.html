@@ -1,0 +1,302 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block title %}افزودن دوره جدید | آکادمی من{% endblock %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="tpd-new-course-wrap">
+        <div class="tpd-new-course-box">
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button
+                            aria-controls="panelsStayOpen-collapseOne" aria-expanded="true"
+                            class="accordion-button tpd-new-course-heading-title"
+                            data-bs-target="#panelsStayOpen-collapseOne"
+                            data-bs-toggle="collapse" type="button">اطلاعات دوره</button></h2>
+                    <div class="accordion-collapse collapse show"
+                        id="panelsStayOpen-collapseOne">
+                        <div class="accordion-body">
+                            <div class="tpd-new-course-box-1">
+                                <div class="tpd-input">
+                                    <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                                    {{ form.name }}
+                                    {% for error in form.name.errors %}
+                                    <div class="alert alert-danger">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                                <div class="tpd-new-course-categories">
+                                    <div class="tpd-input">
+                                        <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+                                        <div class="tpd-select">
+                                            {{ form.category }}
+                                            {% for error in form.category.errors %}
+                                            <div class="alert alert-danger">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tpd-input">
+                                    <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                                    {{ form.description }}
+                                    {% for error in form.description.errors %}
+                                    <div class="alert alert-danger">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="tpd-new-course-box-2">
+                                <div class="tpd-input">
+                                    <div class="tpd-new-course-categories">
+                                        <div class="tpd-input">
+                                            <label for="{{ form.difficulty_level.id_for_label }}">{{ form.difficulty_level.label }}</label>
+                                            <div class="tpd-select">
+                                                {{ form.difficulty_level }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>
+                                        <span>
+                                            <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15Z"
+                                                    stroke="#8F9195" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                </path>
+                                                <path d="M8 5.19995V7.99995" stroke="#8F9195"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                </path>
+                                                <path d="M8 10.8H8.007" stroke="#8F9195"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                        سطح دشواری دوره
+                                    </p>
+                                </div>
+                                <div class="tpd-input">
+                                <label for="{{ form.is_certificate.id_for_label }}">{{ form.is_certificate.label }}</label>
+                                <div class="switcher">
+                                    <label for="{{ form.is_certificate.id_for_label }}">
+                                        {{ form.is_certificate }}
+                                        <span>
+                                            <small></small>
+                                        </span>
+                                    </label>
+                                    {% for error in form.is_certificate.errors %}
+                                    <div class="alert alert-danger">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div>
+                                    <p>
+                                        <span>
+                                            <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15Z"
+                                                    stroke="#8F9195" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                </path>
+                                                <path d="M8 5.19995V7.99995" stroke="#8F9195"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                </path>
+                                                <path d="M8 10.8H8.007" stroke="#8F9195"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                        این دوره دارای گواهی است
+                                    </p>
+                                </div>
+                                <div class="tpd-input">
+                                    <label for="{{ form.is_askable.id_for_label }}">{{ form.is_askable.label }}</label>
+                                    <div class="switcher">
+                                        <label for="{{ form.is_askable.id_for_label }}">
+                                            {{ form.is_askable }}
+                                            <span>
+                                                <small></small>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <p class="m-0">
+                                        <span>
+                                            <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15Z"
+                                                    stroke="#8F9195" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                </path>
+                                                <path d="M8 5.19995V7.99995" stroke="#8F9195"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                </path>
+                                                <path d="M8 10.8H8.007" stroke="#8F9195"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                </path>
+                                            </svg>
+                                        </span>بخش پرسش و پاسخ را برای دوره خود فعال کنید
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="tpd-new-course-box-3">
+                                <div class="tpd-new-course-categories">
+                                    <div class="tpd-input-box d-flex">
+                                        <div class="tpd-input">
+                                            <label for="{{ form.price.id_for_label }}">{{ form.price.label }}</label>
+                                            {{ form.price }}
+                                            {% for error in form.price.errors %}
+                                            <div class="alert alert-danger">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="tpd-input">
+                                            <label for="{{ form.price_with_discount.id_for_label }}">{{ form.price_with_discount.label }}</label>
+                                            {{ form.price_with_discount }}
+                                            {% for error in form.price_with_discount.errors %}
+                                            <div class="alert alert-danger">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="tpd-input-box d-flex">
+                                        <div class="tpd-input">
+                                            <label for="{{ form.tax.id_for_label }}">{{ form.tax.label }}</label>
+                                            {{ form.tax }}
+                                            {% for error in form.tax.errors %}
+                                            <div class="alert alert-danger">{{ error }}</div>
+                                            {% endfor %}
+                                            <p class="m-0">
+                                                <span>
+                                                    <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15Z"
+                                                            stroke="#8F9195" stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="1.5">
+                                                        </path>
+                                                        <path d="M8 5.19995V7.99995" stroke="#8F9195"
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="1.5">
+                                                        </path>
+                                                        <path d="M8 10.8H8.007" stroke="#8F9195"
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="1.5">
+                                                        </path>
+                                                    </svg>
+                                                </span>
+                                                واحد درصد است. مثال: 25
+                                            </p>
+                                        </div>
+                                        <div class="tpd-input">
+                                            <label for="{{ form.time.id_for_label }}">{{ form.time.label }}</label>
+                                            {{ form.time }}
+                                            {% for error in form.time.errors %}
+                                            <div class="alert alert-danger">{{ error }}</div>
+                                            {% endfor %}
+                                            <p class="m-0">
+                                                <span>
+                                                    <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15Z"
+                                                            stroke="#8F9195" stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="1.5">
+                                                        </path>
+                                                        <path d="M8 5.19995V7.99995" stroke="#8F9195"
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="1.5">
+                                                        </path>
+                                                        <path d="M8 10.8H8.007" stroke="#8F9195"
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="1.5">
+                                                        </path>
+                                                    </svg>
+                                                </span>فرمت زمان: 14:37:25 1403/12/15
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="tpd-input-box d-flex">
+                                        <div class="tpd-input">
+                                            <label>محصولات مرتبط رو انتخاب کنید</label>
+                                            {{ form.related_product }}
+                                        </div>
+                                    </div>
+
+                                    <div class="tpd-input course-file">
+                                        <label>تصویر دوره</label>
+                                        {{ form.thumbnail }}
+                                        <p>اندازه: مستطیلی</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button
+                            aria-controls="panelsStayOpen-collapseTwo" aria-expanded="false"
+                            class="accordion-button collapsed tpd-new-course-heading-title"
+                            data-bs-target="#panelsStayOpen-collapseTwo"
+                            data-bs-toggle="collapse" type="button">
+                            مهرفی دوره و سرفصل ها
+                        </button>
+                    </h2>
+                    <div class="accordion-collapse collapse" id="panelsStayOpen-collapseTwo">
+                        <div class="accordion-body">
+                            <div class="tpd-new-course-wrapper">
+                                <div class="tpd-new-course-categories" id="seasion-formset">
+                                    <div class="tpd-input course-file">
+                                        <label>تصویر دوره</label>
+                                        {{ form.trailer }}
+                                        <p>زمان: کمتر از 10 دقیقه</p>
+                                    </div>
+
+                                    {{ seasion_formset.management_form }}
+                                    <h4 class="mt-4">لیست سر فصل ها</h4>
+                                    {% for form in seasion_formset %}
+                                    <div class="tpd-input seasion-form">
+                                        <label for="{{ form.title.id_for_label }}">{{ form.title.label }} {{ forloop.counter }}</label>
+                                        {{ form.title }}
+                                    </div>
+                                    {% endfor %}
+                                    <button type="button" class="btn btn-info mt-3" id="add-seasion">افزودن فصل</button>
+                                </div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        let formsetDiv = document.getElementById("seasion-formset");
+                                        let addButton = document.getElementById("add-seasion");
+
+                                        let totalForms = document.getElementById("id_form-TOTAL_FORMS");
+
+                                        addButton.addEventListener("click", function () {
+                                            let formNum = parseInt(totalForms.value);
+                                            console.log(formsetDiv.getElementsByClassName("seasion-form")[0])
+                                            let newForm = formsetDiv.getElementsByClassName("seasion-form")[0].cloneNode(true);
+
+                                            newForm.innerHTML = newForm.innerHTML.replace(/-\d+-/g, `-${formNum}-`);
+
+                                            let label = newForm.querySelector("label")
+                                            if (label) {
+                                                label.innerText = `موضوع ${formNum + 1}`;
+                                            }
+                                            formsetDiv.insertBefore(newForm, addButton);
+                                            totalForms.value = formNum + 1;
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header p-2">
+                        <button type="submit" class="btn btn-success">ذخیره</button>
+                        <button type="reset" class="btn btn-danger">بازنشانی</button>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button></button>
+</form>
+{% endblock %}
