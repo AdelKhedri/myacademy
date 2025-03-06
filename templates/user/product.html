@@ -1,6 +1,12 @@
 {% extends 'user/base.html' %}
 {% load static %}
-{% block title %}افزودن دوره جدید | آکادمی من{% endblock %}
+{% block title %}
+{% if current_page == 'product-add' %}
+افزودن دوره جدید | آکادمی من
+{% else %}
+اپدیت دوره {{ object.name }} | آکادمی من
+{% endif %}
+{% endblock %}
 {% block content %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -246,11 +252,12 @@
                             <div class="tpd-new-course-wrapper">
                                 <div class="tpd-new-course-categories" id="seasion-formset">
                                     <div class="tpd-input course-file">
-                                        <label>تصویر دوره</label>
+                                        <label>ویدیوی معرفی دوره</label>
                                         {{ form.trailer }}
                                         <p>زمان: کمتر از 10 دقیقه</p>
                                     </div>
 
+                                    {% if current_page != 'product-update' %}
                                     {{ seasion_formset.management_form }}
                                     <h4 class="mt-4">لیست سر فصل ها</h4>
                                     {% for form in seasion_formset %}
@@ -260,6 +267,7 @@
                                     </div>
                                     {% endfor %}
                                     <button type="button" class="btn btn-info mt-3" id="add-seasion">افزودن فصل</button>
+                                    {% endif %}
                                 </div>
                                 <script>
                                     document.addEventListener("DOMContentLoaded", function () {
