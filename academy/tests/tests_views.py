@@ -1,12 +1,11 @@
 from unittest.mock import patch
 from django_recaptcha.client import RecaptchaResponse
 from django.test import TestCase
-from user.models import OTPCode, User
+from user.models import OTPCode, Profile, User
 from django.urls import reverse
 from freezegun import freeze_time
 from datetime import datetime, timedelta
 from django.utils import timezone
-from random import randint
 
 
 class BaseTestCase(TestCase):
@@ -15,7 +14,10 @@ class BaseTestCase(TestCase):
         self.user = User.objects.create(username='user1', email='user1@gmail.com', phone_number='09123456789')
         self.user.set_password('password')
         self.user.is_active = True
+        self.user.is_teacher = True
+        self.user.is_superuser = True
         self.user.save()
+        Profile.objects.create(user = self.user)
 
         self.user_data = {
             'username': 'user1',

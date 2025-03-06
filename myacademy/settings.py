@@ -89,6 +89,7 @@ RECAPTCHA_PUBLIC_KEY = ''
 RECAPTCHA_PRIVATE_KEY = ''
 
 LOGIN_AFTER_SIGNUP = True
+LOGIN_AFTER_SIGNUP_URL = '/profile/'
 LOGIN_URL = 'academy:login'
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

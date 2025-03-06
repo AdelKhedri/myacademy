@@ -12,8 +12,6 @@
     <link href="{% static 'css/font-awesome-pro.css' %}" rel="stylesheet">
     <link href="{% static 'css/spacing.rtl.css' %}" rel="stylesheet">
     <link href="{% static 'css/main.rtl.css' %}" rel="stylesheet">
-    <link href="{% static 'css/spacing.rtl.css' %}" rel="stylesheet">
-    <link href="{% static 'css/font-awesome-pro.css' %}" rel="stylesheet">
 </head>
 
 <body>
@@ -852,7 +850,7 @@
                                 </div>
                                 {% if user.is_teacher or user.is_superuser %}
                                 <div class="tp-instructor-course-btn">
-                                    <a class="tp-btn-add-course" href="#">
+                                    <a class="tp-btn-add-course" href="{% url 'user:product-add' %}">
                                         <i class="fa-regular fa-plus"></i>
                                         یک دوره جدید ایجاد کنید
                                     </a>
@@ -908,6 +906,24 @@
                                                         </svg>
                                                     </span>
                                                     نمایه من
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a {% if current_page == 'product-add' %} class="active" {% endif %} href="{% url 'user:product-add' %}">
+                                                    <span>
+                                                        <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M13.636 2.31542L8.94919 0.227943C8.26136 -0.075981 7.22162 -0.075981 6.53379 0.227943L1.84696 2.31542C0.663261 2.84329 0.487305 3.56311 0.487305 3.94701C0.487305 4.33092 0.663261 5.05074 1.84696 5.57861L6.53379 7.66608C6.87771 7.81805 7.3096 7.89803 7.74149 7.89803C8.17338 7.89803 8.60528 7.81805 8.94919 7.66608L13.636 5.57861C14.8197 5.05074 14.9957 4.33092 14.9957 3.94701C14.9957 3.56311 14.8277 2.84329 13.636 2.31542Z"
+                                                                fill="currentColor"></path>
+                                                            <path
+                                                                d="M7.74207 12.0329C7.43814 12.0329 7.13422 11.969 6.85429 11.849L1.46363 9.44958C0.63984 9.08168 0 8.09792 0 7.19415C0 6.86623 0.263934 6.60229 0.591852 6.60229C0.91977 6.60229 1.1837 6.86623 1.1837 7.19415C1.1837 7.62604 1.54361 8.1859 1.94351 8.36185L7.33417 10.7613C7.5901 10.8732 7.88603 10.8732 8.14196 10.7613L13.5326 8.36185C13.9325 8.1859 14.2924 7.63404 14.2924 7.19415C14.2924 6.86623 14.5564 6.60229 14.8843 6.60229C15.2122 6.60229 15.4761 6.86623 15.4761 7.19415C15.4761 8.08992 14.8363 9.08168 14.0125 9.44958L8.62185 11.849C8.34991 11.969 8.04599 12.0329 7.74207 12.0329Z"
+                                                                fill="currentColor" opacity="0.4"></path>
+                                                            <path
+                                                                d="M7.74207 15.9999C7.43814 15.9999 7.13422 15.9359 6.85429 15.8159L1.46363 13.4165C0.575856 13.0246 0 12.1368 0 11.1611C0 10.8331 0.263934 10.5692 0.591852 10.5692C0.91977 10.5692 1.1837 10.8331 1.1837 11.1611C1.1837 11.6649 1.47963 12.1208 1.94351 12.3288L7.33417 14.7282C7.5901 14.8401 7.88603 14.8401 8.14196 14.7282L13.5326 12.3288C13.9885 12.1288 14.2924 11.6649 14.2924 11.1611C14.2924 10.8331 14.5564 10.5692 14.8843 10.5692C15.2122 10.5692 15.4761 10.8331 15.4761 11.1611C15.4761 12.1368 14.9003 13.0166 14.0125 13.4165L8.62185 15.8159C8.34991 15.9359 8.04599 15.9999 7.74207 15.9999Z"
+                                                                fill="currentColor" opacity="0.4"></path>
+                                                        </svg>
+                                                    </span>
+                                                    افزودن دوره جدید
                                                 </a>
                                             </li>
                                             <li>
@@ -1279,6 +1295,7 @@
     <script src="{% static 'js/nice-select.js' %}"></script>
     <script src="{% static 'js/purecounter.js' %}"></script>
     <script src="{% static 'js/wow.js' %}"></script>
+    <script src="{% static 'js/select2.min.js' %}"></script>
     <script src="{% static 'js/imagesloaded-pkgd.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
 </body>

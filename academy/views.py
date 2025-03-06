@@ -71,7 +71,7 @@ class LoginView(View):
                 if user:
                     login(request, user)
                     # TODO: Add login redirect url
-                    return redirect(request.GET.get('next', 'academy:home'))
+                    return redirect(request.GET.get('next', 'user:profile'))
                 self.context['msg'] = 'authentication failed'
             self.context['login_form'] = login_form
         else:
@@ -92,6 +92,7 @@ class ActivateRegisterdAccountView(View):
             return redirect('academy:home')
         elif self.phone_number is None:
             return redirect('academy:register')
+
         self.context = {
             'msg': 'code sended',
             'recaptcha': RecaptchaFrom()
@@ -99,12 +100,14 @@ class ActivateRegisterdAccountView(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {})
+        return render(request, self.template_name, self.context)
 
     def post(self, request, *args, **kwargs):
-        self.context = {}
+        self.context = {
+            'recaptcha': RecaptchaFrom()
+        }
         recaptcha_form = RecaptchaFrom(request.POST)
-        if recaptcha_form:
+        if recaptcha_form.is_valid():
             code = request.POST.get('code', None)
             if code and code.isnumeric():
                 otp = OTPCode.objects.filter(code = code, phone_number = self.phone_number, expire_time__gte = timezone.now())
@@ -117,10 +120,16 @@ class ActivateRegisterdAccountView(View):
                     request.session.modified = True
                     if settings.LOGIN_AFTER_SIGNUP:
                         login(request, user)
+                    if settings.LOGIN_AFTER_SIGNUP_URL:
+                        return redirect(settings.LOGIN_AFTER_SIGNUP_URL)
+                    else:
+                        return redirect('academy:home')
                 else:
                     self.context['msg'] = 'code failed'
             else:
                 self.context['msg'] = 'code must be integer'
+        else:
+            self.context['msg'] = 'invalid captcha'
         return render(request, self.template_name, self.context)
 
 

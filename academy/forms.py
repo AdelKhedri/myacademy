@@ -1,5 +1,6 @@
 from random import randint
 from django import forms
+from .models import Product, Seasion
 from user.models import Profile, User, OTPCode
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
@@ -68,3 +69,36 @@ class ChangePasswordForgotPasswordFrom(forms.Form):
         if password1 != password2:
             raise ValidationError('پسورد ها با هم مطابقت ندارند.')
         return cleaned_data
+
+
+class ProductForm(forms.ModelForm):
+    related_product = forms.ModelMultipleChoiceField(
+        required=False,
+        queryset = Product.objects.filter(is_active = True),
+        widget = forms.SelectMultiple(attrs={'class': 'tpd-select2 form-select'}))
+
+    class Meta:
+        model = Product
+        fields = ['name', 'category', 'description', 'price', 'price_with_discount', 'tax', 'related_product', 'thumbnail', 'time', 'difficulty_level', 'is_certificate', 'trailer', 'is_askable',]
+
+    def save(self, user, commit = True):
+        form = super().save(False)
+        form.teacher = user
+        related_product = self.cleaned_data['related_product']
+        category = self.cleaned_data['category']
+
+        if commit:
+            form.save()
+            form.related_product.set(related_product)
+            form.category.set(category)
+            form.save()
+        return form
+
+
+class SeasionAddForm(forms.ModelForm):
+    class Meta:
+        model = Seasion
+        fields = ['title']
+
+
+SeasionFormSet = forms.formset_factory(SeasionAddForm, extra=2)
