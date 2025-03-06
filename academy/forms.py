@@ -81,9 +81,9 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ['name', 'category', 'description', 'price', 'price_with_discount', 'tax', 'related_product', 'thumbnail', 'time', 'difficulty_level', 'is_certificate', 'trailer', 'is_askable',]
 
-    def save(self, user, commit = True):
+    def save(self, teacher = None, commit = True):
         form = super().save(False)
-        form.teacher = user
+        form.teacher = teacher
         related_product = self.cleaned_data['related_product']
         category = self.cleaned_data['category']
 

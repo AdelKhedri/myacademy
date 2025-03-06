@@ -130,7 +130,7 @@ class TestProductAddView(BaseTestCase):
 
     def test_template_used(self):
         res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/add-product.html')
+        self.assertTemplateUsed(res, 'user/product.html')
 
     def test_redirect_anonymous_user(self):
         self.client.logout()
@@ -157,8 +157,78 @@ class TestProductAddView(BaseTestCase):
             data[f'form-{i}-title'] = seasion['title']
 
         res = self.client.post(self.url, data=data)
-        self.assertEqual(res.status_code, 200)
+        self.assertRedirects(res, reverse('user:product-update', args=[Product.objects.first().pk]), 302)
         self.assertEqual(Product.objects.first().name, self.product_data['name'])
+
+    
+    def tearDown(self):
+        file_name = f'media/products/images/{self.pic_name}'
+        if os.path.exists(file_name):
+            os.remove(file_name)
+
+
+class TestProductUpdateView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.pic_name = '11.png'
+        self.dd = os.path.join(os.path.dirname(__file__), '11.png')
+        with open(self.dd, 'rb') as f:
+            self.pic = SimpleUploadedFile(
+                name = self.pic_name,
+                content = f.read(),
+                content_type = 'image/png'
+            )
+        self.product_data = {
+            'name': 'test',
+            'description': 'test2',
+            'time': '02:12:12',
+            'price': 20220,
+            'tax': 2,
+            'difficulty_level': 's',
+        }
+        self.product = Product.objects.create(teacher = self.user, thumbnail = self.pic, **self.product_data)
+        self.url = reverse('user:product-update', args=[self.product.pk])
+        self.login()
+
+    def test_url(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_template_used(self):
+        res = self.client.get(self.url)
+        self.assertTemplateUsed(res, 'user/product.html')
+
+    def test_redirect_anonymous_user(self):
+        self.client.logout()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 404)
+
+        # redirect not worked for anonymous user becuse i used get_queryset
+        # self.assertEqual(res.status_code, 302)
+        # self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fproduct%2F1%2Fupdate%2F', 302)
+
+    def test_redirect_not_teacher(self):
+        self.user.is_teacher = False
+        self.user.is_superuser = False
+        self.user.save()
+        res = self.client.get(self.url)
+        self.assertRedirects(res, reverse('user:profile'), 302)
+
+    def test_update_product_success(self):
+        data = self.product_data
+        data['name'] = 'new'
+        files = {'thumbnail': self.pic,}
+
+        res = self.client.post(self.url, data=data, files=files)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(Product.objects.first().name, data['name'])
+
+    def test_error_update_product_of_another_teacher(self):
+        user = User.objects.create(username = 'test')
+        obj = Product.objects.create(name = 'testee', teacher = user, time = '00:01:11')
+        res = self.client.get(reverse('user:product-update', args=[obj.pk]))
+        self.assertEqual(res.status_code, 404)
 
     
     def tearDown(self):

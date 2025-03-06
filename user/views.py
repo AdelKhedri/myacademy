@@ -58,7 +58,7 @@ class ProductAddView(CreateView):
     model = Product
     form_class = ProductForm
     success_url = '/'
-    template_name = 'user/add-product.html'
+    template_name = 'user/product.html'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -77,7 +77,7 @@ class ProductAddView(CreateView):
     def form_valid(self, form):
         seasion_formset = SeasionFormSet(self.request.POST)
         if seasion_formset.is_valid():
-            self.object = form.save(user = self.request.user)
+            self.object = form.save(teacher = self.request.user)
 
             seasion_instances = []
             for seasion_form in seasion_formset:
@@ -88,7 +88,38 @@ class ProductAddView(CreateView):
             seasion_instances = Seasion.objects.bulk_create(seasion_instances)
             self.object.seasions.set(seasion_instances)
 
-            messages.success(self.request, 'success')
-            return self.render_to_response(self.get_context_data(form=form))
+            return redirect(reverse('user:product-update', args=[self.object.pk]))
         else:
             return self.form_invalid(form)
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'user/product.html'
+
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse('academy:login') + '?next=' + reverse('user:product-update', args=[self.get_object().pk]))
+        elif not request.user.is_teacher:
+            if not request.user.is_superuser:
+                return redirect('user:profile')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_page'] = 'product-update'
+        return context
+
+    def get_success_url(self):
+        return reverse('user:product-update', args=[self.get_object().pk])
+
+    def form_valid(self, form):
+        form.save(teacher = self.request.user)
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Product.objects.none()
+        return Product.objects.filter(teacher = self.request.user)
