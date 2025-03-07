@@ -9,8 +9,8 @@
                                 <h2 class="tp-dashboard-tab-title">دوره های من</h2>
                                 <div class="tp-dashboard-tab-list">
                                     <ul>
-                                        <li><a href="{% url 'user:my-courses' %}" class="active" >دوره های متنشر شده<span>({{ active_courses }})</span></a></li>
-                                        <li><a >در انتظار انتشار<span>({{ inactive_courses }})</span></a></li>
+                                        <li><a href="{% url 'user:my-courses' %}" {% if active_tab == 'published' %} class="active" {% endif %} >دوره های متنشر شده<span>({{ active_courses }})</span></a></li>
+                                        <li><a href="{% url 'user:my-courses-not-published' %}" {% if active_tab == 'not-published' %} class="active" {% endif %}>در انتظار انتشار<span>({{ inactive_courses }})</span></a></li>
                                     </ul>
                                 </div>
                             </div>

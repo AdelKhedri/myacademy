@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.views.generic import UpdateView, FormView, CreateView, ListView
+from django.views.generic import UpdateView, FormView, CreateView, ListView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
@@ -143,6 +143,32 @@ class MyCourseView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_page'] = 'my-course'
+        context['active_tab'] = 'published'
+        context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
+        context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()
+        return context
+
+# Yes i know but,
+# i cannot have 2 pagination
+# i cannot modified inactive pagination and active pagination
+class MyCourseNotPublishedView(ListView):
+    template_name = 'user/my-courses.html'
+    paginate_by = 9
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse('academy:login') + '?next=' + reverse('user:my-courses-not-published'))
+        elif not request.user.is_teacher and not request.user.is_superuser:
+            return redirect('user:profile')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Course.objects.filter(teacher = self.request.user, is_active = False).prefetch_related('seasions', 'related_course').annotate(lessons_count = Count('seasions__lessons')).order_by('name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_page'] = 'my-course'
+        context['active_tab'] = 'not-published'
         context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
         context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()
         return context
