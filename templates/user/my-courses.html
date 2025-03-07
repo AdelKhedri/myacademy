@@ -1,0 +1,163 @@
+{% extends 'user/base.html' %}
+{% block title %}مدیریت دوره های من | آکادمی من{% endblock %}
+{% block content %}
+
+                <div class="col">
+                    <div class="tpd-content-layout">
+                        <div class="dashboader-area mb-30">
+                            <div class="tp-dashboard-tab">
+                                <h2 class="tp-dashboard-tab-title">دوره های من</h2>
+                                <div class="tp-dashboard-tab-list">
+                                    <ul>
+                                        <li><a href="{% url 'user:my-courses' %}" class="active" >دوره های متنشر شده<span>({{ active_courses }})</span></a></li>
+                                        <li><a >در انتظار انتشار<span>({{ inactive_courses }})</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-area">
+                            <div class="row">
+                                {% for course in object_list %}
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="tp-dashboard-course tp-dashboard-course-2 mb-25">
+                                        <div class="tp-dashboard-course-thumb">
+                                            <a href="#">
+                                                <img alt="" src="{{ course.thumbnail.url }}">
+                                            </a>
+                                        </div>
+                                        <div class="tp-dashboard-course-content">
+                                            <!-- TODO: create logic in view -->
+                                            <div class="tp-dashboard-rating">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <span>(15 بررسی)</span>
+                                            </div>
+
+                                            <h4 class="tp-dashboard-course-title"><a href="#">{{ course.name }}</a></h4>
+                                            <div class="tp-dashboard-course-meta">
+                                                <span>
+                                                    <span>
+                                                        <svg fill="none" height="14" viewbox="0 0 15 14" width="15" xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M13.9228 10.0426V2.29411C13.9228 1.51825 13.2949 0.953997 12.5252 1.01445H12.4847C11.1276 1.12529 9.07163 1.82055 7.91706 2.53596L7.80567 2.6065C7.62337 2.71733 7.30935 2.71733 7.11692 2.6065L6.9549 2.50573C5.81046 1.79033 3.75452 1.1152 2.3974 1.00437C1.62768 0.943911 0.999756 1.51827 0.999756 2.28405V10.0426C0.999756 10.6573 1.50613 11.2417 2.12393 11.3122L2.30622 11.3425C3.70386 11.5238 5.87126 12.2392 7.10685 12.9143L7.1372 12.9244C7.30937 13.0252 7.59293 13.0252 7.75498 12.9244C8.99057 12.2393 11.1681 11.5339 12.5758 11.3425L12.7885 11.3122C13.4164 11.2417 13.9228 10.6674 13.9228 10.0426Z"
+                                                                stroke="#94928E" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="1.2"></path>
+                                                            <path d="M7.46118 2.81787V12.4506" stroke="#94928E"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="1.2"></path>
+                                                        </svg>
+                                                    </span>
+                                                    {{ course.lessons_count }} درس
+                                                </span>
+                                                <!-- TODO: add students count -->
+                                                <!-- <span>
+                                                    <span>
+                                                        <svg fill="none"
+                                                            height="15" viewbox="0 0 13 15" width="13"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M6.57134 7.5C8.36239 7.5 9.81432 6.04493 9.81432 4.25C9.81432 2.45507 8.36239 1 6.57134 1C4.7803 1 3.32837 2.45507 3.32837 4.25C3.32837 6.04493 4.7803 7.5 6.57134 7.5Z"
+                                                                stroke="#94928E" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="1.2"></path>
+                                                            <path
+                                                                d="M12.1426 14C12.1426 11.4845 9.64553 9.44995 6.57119 9.44995C3.49684 9.44995 0.999756 11.4845 0.999756 14"
+                                                                stroke="#94928E" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="1.2"></path>
+                                                        </svg>
+                                                    </span>
+                                                    45 دانش آموز
+                                                </span> -->
+                                            </div>
+                                            <div
+                                                class="tp-dashboard-btn d-flex align-items-center justify-content-between">
+                                                <div class="tp-course-pricing text-start">
+                                                    {% if course.price == 0 %}
+                                                    <span>رایگان !</span>
+                                                    {% elif course.price_with_discount != 0 %}
+                                                    <del>{{ course.price }} تومان</del>
+                                                    <span>{{ course.price_with_discount }} تومان</span>
+                                                    {% else %}
+                                                    <span>{{ couse.price }} تومان</span>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="tp-course-action d-flex align-items-center">
+                                                    <div class="tpd-action-inexact-btn">
+                                                        <a href="{% url 'user:course-update' course.pk %}">
+                                                            <svg fill="none" height="15" viewbox="0 0 15 15" width="15" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M8.74422 2.63127C9.19134 2.14685 9.41489 1.90464 9.65245 1.76336C10.2256 1.42246 10.9315 1.41185 11.5142 1.73539C11.7557 1.86948 11.9862 2.10487 12.447 2.57566C12.9079 3.04644 13.1383 3.28183 13.2696 3.52856C13.5863 4.12387 13.5759 4.84487 13.2422 5.43042C13.1039 5.67309 12.8668 5.90146 12.3926 6.35821L6.75038 11.7926C5.85173 12.6581 5.4024 13.0909 4.84084 13.3102C4.27927 13.5296 3.66192 13.5134 2.42722 13.4811L2.25923 13.4768C1.88334 13.4669 1.6954 13.462 1.58615 13.338C1.4769 13.214 1.49182 13.0226 1.52165 12.6397L1.53785 12.4318C1.6218 11.3541 1.66378 10.8153 1.87422 10.3309C2.08466 9.84657 2.44766 9.45328 3.17366 8.6667L8.74422 2.63127Z"
+                                                                    stroke="currentColor" stroke-linejoin="round"
+                                                                    stroke-width="1.5"></path>
+                                                                <path d="M8.09375 2.69922L12.2938 6.89922"
+                                                                    stroke="currentColor" stroke-linejoin="round"
+                                                                    stroke-width="1.5"></path>
+                                                                <path d="M8.69531 13.5L13.4953 13.5"
+                                                                    stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="1.5">
+                                                                </path>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                    <div class="tpd-action-inexact-btn">
+                                                        <button class="click">
+                                                            <svg fill="none" height="30" viewbox="0 0 30 30" width="30" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M15 10.5C15.8284 10.5 16.5 9.82843 16.5 9C16.5 8.17157 15.8284 7.5 15 7.5C14.1716 7.5 13.5 8.17157 13.5 9C13.5 9.82843 14.1716 10.5 15 10.5Z"
+                                                                    fill="currentColor"></path>
+                                                                <path
+                                                                    d="M15 16.5C15.8284 16.5 16.5 15.8284 16.5 15C16.5 14.1716 15.8284 13.5 15 13.5C14.1716 13.5 13.5 14.1716 13.5 15C13.5 15.8284 14.1716 16.5 15 16.5Z"
+                                                                    fill="currentColor"></path>
+                                                                <path
+                                                                    d="M15 22.5C15.8284 22.5 16.5 21.8284 16.5 21C16.5 20.1716 15.8284 19.5 15 19.5C14.1716 19.5 13.5 20.1716 13.5 21C13.5 21.8284 14.1716 22.5 15 22.5Z"
+                                                                    fill="currentColor"></path>
+                                                            </svg>
+                                                        </button>
+                                                        <div class="tpd-action-click-tooltip">
+                                                            <button class="btn btn-danger" data-bs-target="#deleteModal{{ forloop.counter}}" data-bs-toggle="modal" data-bs-whatever="@fat" type="button">
+                                                                <span>
+                                                                    <svg fill="none" height="14" viewbox="0 0 14 14" width="14" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M12 3.09998L11.5869 9.11504C11.4813 10.6519 11.4285 11.4203 11.0005 11.9727C10.7889 12.2458 10.5164 12.4764 10.2005 12.6496C9.56141 13 8.706 13 6.99517 13C5.28208 13 4.42554 13 3.78604 12.6489C3.46987 12.4754 3.19733 12.2445 2.98579 11.9709C2.55792 11.4175 2.5063 10.648 2.40307 9.10907L2 3.09998"
+                                                                            stroke="currentColor"
+                                                                            stroke-linecap="round"
+                                                                            stroke-width="1.5"></path>
+                                                                        <path d="M13 3.09998H1"
+                                                                            stroke="currentColor"
+                                                                            stroke-linecap="round"
+                                                                            stroke-width="1.5"></path>
+                                                                        <path
+                                                                            d="M9.70239 3.1L9.24728 2.25504C8.94496 1.69375 8.7938 1.41311 8.53305 1.23808C8.47521 1.19926 8.41397 1.16473 8.34992 1.13482C8.06118 1 7.71465 1 7.02159 1C6.31113 1 5.95589 1 5.66236 1.14047C5.59731 1.1716 5.53523 1.20754 5.47677 1.2479C5.213 1.43002 5.06566 1.72093 4.77098 2.30276L4.36719 3.1"
+                                                                            stroke="currentColor"
+                                                                            stroke-linecap="round"
+                                                                            stroke-width="1.5"></path>
+                                                                        <path d="M5.33594 9.70007L5.33594 6.10007"
+                                                                            stroke="currentColor"
+                                                                            stroke-linecap="round"
+                                                                            stroke-width="1.5"></path>
+                                                                        <path d="M8.66406 9.69998L8.66406 6.09998"
+                                                                            stroke="currentColor"
+                                                                            stroke-linecap="round"
+                                                                            stroke-width="1.5"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                حذف کنید
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        {% include 'components/pagination.html' with object=page_obj %}
+                    </div>
+                </div>
+{% endblock %}

@@ -235,3 +235,60 @@ class TestCourseUpdateView(BaseTestCase):
         file_name = f'media/courses/images/{self.pic_name}'
         if os.path.exists(file_name):
             os.remove(file_name)
+
+
+class TestMyCourseView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.pic_name = '11.png'
+        dd = os.path.join(os.path.dirname(__file__), '11.png')
+        with open(dd, 'rb') as f:
+            pic = SimpleUploadedFile(
+                name = self.pic_name,
+                content = f.read(),
+                content_type = 'image/png'
+            )
+        self.course_data = {
+            'name': 'test',
+            'description': 'test2',
+            'time': '02:12:12',
+            'price': 20220,
+            'tax': 2,
+            'difficulty_level': 's',
+            'thumbnail': pic,
+            'is_active': True,
+            'teacher': self.user
+        }
+        courses = [Course(**self.course_data) for _ in range(5)]
+        Course.objects.bulk_create(courses)
+        self.url = reverse('user:my-courses')
+        self.login()
+
+    def test_url(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_template_used(self):
+        res = self.client.get(self.url)
+        self.assertTemplateUsed(res, 'user/my-courses.html')
+
+    def test_redirect_anonymous_user(self):
+        self.client.logout()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fmy-course%2F', 302)
+
+    def test_redirect_not_teacher(self):
+        self.user.is_teacher = False
+        self.user.is_superuser = False
+        self.user.save()
+        res = self.client.get(self.url)
+        self.assertRedirects(res, reverse('user:profile'), 302)
+    
+    def tearDown(self):
+        file_name = f'media/courses/images/{self.pic_name}'
+        if os.path.exists(file_name):
+            os.remove(file_name)
+
+

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProfileView, ChangePasswordView, CourseAddView, CourseUpdateView
+from .views import ProfileView, ChangePasswordView, CourseAddView, CourseUpdateView, MyCourseView
 
 
 app_name = 'user'
@@ -8,4 +8,5 @@ urlpatterns = [
     path('change-password/', ChangePasswordView.as_view(), name = 'change-password'),
     path('course/add/', CourseAddView.as_view(), name='course-add'),
     path('course/<int:pk>/update/', CourseUpdateView.as_view(), name='course-update'),
+    path('my-course/', MyCourseView.as_view(), name='my-courses'),
 ]

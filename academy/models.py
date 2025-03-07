@@ -81,7 +81,7 @@ class Lesson(models.Model):
     title = models.CharField(_('نام درس'), max_length=200)
     description = models.TextField(_('درباره این قسمت'))
     file_name = models.FileField(_('فلیم'), upload_to='courses/lessons/files/')
-    attached = models.FileField(_('پیوست'))
+    attached = models.FileField(_('پیوست'), blank=True)
     time = models.TimeField(_('درس'), blank=True, null=True)
     teacher = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('مدرس'))
 

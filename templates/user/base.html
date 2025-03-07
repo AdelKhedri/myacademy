@@ -1007,9 +1007,10 @@
                                                 </a>
                                             </li>
 
+                                            {% if request.user.is_teacher or request.user.is_superuser %}
                                             <li class="tp-user-menu-title space-gap">مربی</li>
                                             <li>
-                                                <a {% if current_page == 'my_course' %} class="active" {% endif %} href="#">
+                                                <a {% if current_page == 'my-courses' %} class="active" {% endif %} href="{% url 'user:my-courses' %}">
                                                     <span>
                                                         <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -1026,6 +1027,7 @@
                                                     دوره های من
                                                 </a>
                                             </li>
+                                            {% endif %}
                                             <li>
                                                 <a {% if current_page == 'notifications' %} class="active" {% endif %} href="#">
                                                     <span>

@@ -1,10 +1,11 @@
 from django.shortcuts import redirect, render
 from django.views.generic import UpdateView, FormView, CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.urls import reverse, reverse_lazy
+from django.db.models import Count
 from .forms import UserProfileForm, PasswordChangeForm
 from .models import Profile
-from django.urls import reverse, reverse_lazy
-from django.contrib import messages
 from academy.models import Course, Seasion
 from academy.forms import CourseForm, SeasionFormSet
 
@@ -123,3 +124,25 @@ class CourseUpdateView(UpdateView):
         if not self.request.user.is_authenticated:
             return Course.objects.none()
         return Course.objects.filter(teacher = self.request.user)
+
+
+class MyCourseView(ListView):
+    template_name = 'user/my-courses.html'
+    paginate_by = 9
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse('academy:login') + '?next=' + reverse('user:my-courses'))
+        elif not request.user.is_teacher and not request.user.is_superuser:
+            return redirect('user:profile')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Course.objects.filter(teacher = self.request.user, is_active = True).prefetch_related('seasions', 'related_course').annotate(lessons_count = Count('seasions__lessons')).order_by('name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_page'] = 'my-course'
+        context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
+        context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()
+        return context
