@@ -1,0 +1,20 @@
+<nav aria-label="Page navigation example">
+    <ul class="pagination pagination-lg justify-content-center">
+      <li class="page-item {% if not object.has_previous %} disabled {% endif %}">
+        <a class="page-link" href="?page=1">اول</a>
+      </li>
+      {% if object.has_previous and object.previous_page_number > 1 %}
+      <li class="page-item"><a class="page-link" href="?page={{ object.previous_page_number }}">{{ object.previous_page_number }}</a></li>
+      {% endif %}
+
+      <li class="page-item active"><a class="page-link" href="?page={{ object.number }}">{{ object.number }}</a></li>
+
+      {% if object.has_next  %}
+      <li class="page-item"><a class="page-link" href="?page={{ object.next_page_number }}">{{ object.next_page_number }}</a></li>
+      {% endif %}
+
+      <li class="page-item {% if not object.next_page %} disabled {% endif %}">
+        <a class="page-link" href="?page={{ object.num_pages }}">آخر</a>
+      </li>
+    </ul>
+</nav>

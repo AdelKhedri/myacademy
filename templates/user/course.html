@@ -1,7 +1,7 @@
 {% extends 'user/base.html' %}
 {% load static %}
 {% block title %}
-{% if current_page == 'product-add' %}
+{% if current_page == 'course-add' %}
 افزودن دوره جدید | آکادمی من
 {% else %}
 اپدیت دوره {{ object.name }} | آکادمی من
@@ -223,7 +223,7 @@
                                     <div class="tpd-input-box d-flex">
                                         <div class="tpd-input">
                                             <label>محصولات مرتبط رو انتخاب کنید</label>
-                                            {{ form.related_product }}
+                                            {{ form.related_course }}
                                         </div>
                                     </div>
 
@@ -257,7 +257,7 @@
                                         <p>زمان: کمتر از 10 دقیقه</p>
                                     </div>
 
-                                    {% if current_page != 'product-update' %}
+                                    {% if current_page != 'course-update' %}
                                     {{ seasion_formset.management_form }}
                                     <h4 class="mt-4">لیست سر فصل ها</h4>
                                     {% for form in seasion_formset %}

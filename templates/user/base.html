@@ -850,7 +850,7 @@
                                 </div>
                                 {% if user.is_teacher or user.is_superuser %}
                                 <div class="tp-instructor-course-btn">
-                                    <a class="tp-btn-add-course" href="{% url 'user:product-add' %}">
+                                    <a class="tp-btn-add-course" href="{% url 'user:course-add' %}">
                                         <i class="fa-regular fa-plus"></i>
                                         یک دوره جدید ایجاد کنید
                                     </a>
@@ -909,7 +909,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a {% if current_page == 'product-add' %} class="active" {% endif %} href="{% url 'user:product-add' %}">
+                                                <a {% if current_page == 'course-add' %} class="active" {% endif %} href="{% url 'user:course-add' %}">
                                                     <span>
                                                         <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -1007,9 +1007,10 @@
                                                 </a>
                                             </li>
 
+                                            {% if request.user.is_teacher or request.user.is_superuser %}
                                             <li class="tp-user-menu-title space-gap">مربی</li>
                                             <li>
-                                                <a {% if current_page == 'my_course' %} class="active" {% endif %} href="#">
+                                                <a {% if current_page == 'my-courses' %} class="active" {% endif %} href="{% url 'user:my-courses' %}">
                                                     <span>
                                                         <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -1026,6 +1027,7 @@
                                                     دوره های من
                                                 </a>
                                             </li>
+                                            {% endif %}
                                             <li>
                                                 <a {% if current_page == 'notifications' %} class="active" {% endif %} href="#">
                                                     <span>

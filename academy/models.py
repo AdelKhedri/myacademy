@@ -4,7 +4,7 @@ from user.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-class Product(models.Model):
+class Course(models.Model):
     name = models.CharField(_("نام"), max_length=300)
     category = models.ManyToManyField('Category', blank=True, verbose_name=_('دسته بندی'))
     teacher = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('مدرس'))
@@ -13,13 +13,13 @@ class Product(models.Model):
     price= models.IntegerField(_('قیمت'), default=0)
     price_with_discount = models.IntegerField(_('قیمت با تخفیف'), blank=True, null=True)
     tax = models.DecimalField(_('مالیات'), max_digits=4, decimal_places=2, default=0.0, help_text='درصد مالیات')
-    related_product = models.ManyToManyField('self', blank=True, verbose_name=_('دوره های مرتبط'))
-    thumbnail = models.ImageField(_('عکس'), upload_to='products/images/')
+    related_course = models.ManyToManyField('self', blank=True, verbose_name=_('دوره های مرتبط'))
+    thumbnail = models.ImageField(_('عکس'), upload_to='courses/images/')
     time = models.TimeField(_('زمان'))
     skils_type = (('j', 'مبتدی'), ('m', 'متوسط'), ('s', 'پیشرفته'))
     difficulty_level = models.CharField(_('سظح مهارت'), default='j', choices=skils_type, max_length=1)
     is_certificate = models.BooleanField(_('دارای مدرک'), default=True)
-    trailer = models.FileField(_('ویدیو معرفی'), blank=True, upload_to='products/trailer/')
+    trailer = models.FileField(_('ویدیو معرفی'), blank=True, upload_to='courses/trailer/')
     is_askable = models.BooleanField(_('اجازه پرسش و پاسخ'), default=True)
     is_active = models.BooleanField(_('فعال'), help_text='وضعیت نمایش به دانشجو', default=False)
     updated_at = models.DateTimeField(_('اپدیت شده در'), auto_now=True)
@@ -27,8 +27,8 @@ class Product(models.Model):
 
 
     class Meta:
-        verbose_name = 'محصول'
-        verbose_name_plural = 'محصولات'
+        verbose_name = 'دوره'
+        verbose_name_plural = 'دوره ها'
         ordering = ['is_active', 'created_at']
 
     def get_final_price(self):
@@ -39,9 +39,9 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
-    comment_class = (('product', 'محصول'),)
+    comment_class = (('course', 'دوره'),)
     media_id = models.IntegerField(_('ایدی مدیا'))
-    media_type = models.CharField(_('نوع محصول'), default='product', max_length=10, choices=comment_class)
+    media_type = models.CharField(_('نوع'), default='course', max_length=10, choices=comment_class)
     message = models.TextField(_('پیام'))
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('کامنت والد'))
     time = models.DateTimeField(_('زمان ارسال'), auto_now_add=True)
@@ -51,7 +51,7 @@ class Comment(models.Model):
 
     def get_media(self, obj):
         objects = {
-            'product': Product,
+            'course': Course,
         }
         return objects[obj].objects.get(id = self.media_id)
     
@@ -80,8 +80,8 @@ class Category(models.Model):
 class Lesson(models.Model):
     title = models.CharField(_('نام درس'), max_length=200)
     description = models.TextField(_('درباره این قسمت'))
-    file_name = models.FileField(_('فلیم'), upload_to='products/lessons/files/')
-    attached = models.FileField(_('پیوست'))
+    file_name = models.FileField(_('فلیم'), upload_to='courses/lessons/files/')
+    attached = models.FileField(_('پیوست'), blank=True)
     time = models.TimeField(_('درس'), blank=True, null=True)
     teacher = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('مدرس'))
 

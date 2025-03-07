@@ -1,12 +1,13 @@
 from django.shortcuts import redirect, render
-from django.views.generic import UpdateView, FormView, CreateView
+from django.views.generic import UpdateView, FormView, CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.urls import reverse, reverse_lazy
+from django.db.models import Count
 from .forms import UserProfileForm, PasswordChangeForm
 from .models import Profile
-from django.urls import reverse, reverse_lazy
-from django.contrib import messages
-from academy.models import Product, Seasion
-from academy.forms import ProductForm, SeasionFormSet
+from academy.models import Course, Seasion
+from academy.forms import CourseForm, SeasionFormSet
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
@@ -54,15 +55,15 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
         return redirect('academy:login')
 
 
-class ProductAddView(CreateView):
-    model = Product
-    form_class = ProductForm
+class CourseAddView(CreateView):
+    model = Course
+    form_class = CourseForm
     success_url = '/'
-    template_name = 'user/product.html'
+    template_name = 'user/course.html'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect(reverse('academy:login') + '?next=' + reverse('user:product-add'))
+            return redirect(reverse('academy:login') + '?next=' + reverse('user:course-add'))
         elif not request.user.is_teacher:
             if not request.user.is_superuser:
                 return redirect('user:profile')
@@ -70,7 +71,7 @@ class ProductAddView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['current_page'] = 'product-add'
+        context['current_page'] = 'course-add'
         context['seasion_formset'] = SeasionFormSet(self.request.POST) if self.request.method == 'POST' else SeasionFormSet()
         return context
 
@@ -88,20 +89,20 @@ class ProductAddView(CreateView):
             seasion_instances = Seasion.objects.bulk_create(seasion_instances)
             self.object.seasions.set(seasion_instances)
 
-            return redirect(reverse('user:product-update', args=[self.object.pk]))
+            return redirect(reverse('user:course-update', args=[self.object.pk]))
         else:
             return self.form_invalid(form)
 
 
-class ProductUpdateView(UpdateView):
-    model = Product
-    form_class = ProductForm
-    template_name = 'user/product.html'
+class CourseUpdateView(UpdateView):
+    model = Course
+    form_class = CourseForm
+    template_name = 'user/course.html'
 
     
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect(reverse('academy:login') + '?next=' + reverse('user:product-update', args=[self.get_object().pk]))
+            return redirect(reverse('academy:login') + '?next=' + reverse('user:course-update', args=[self.get_object().pk]))
         elif not request.user.is_teacher:
             if not request.user.is_superuser:
                 return redirect('user:profile')
@@ -109,11 +110,11 @@ class ProductUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['current_page'] = 'product-update'
+        context['current_page'] = 'course-update'
         return context
 
     def get_success_url(self):
-        return reverse('user:product-update', args=[self.get_object().pk])
+        return reverse('user:course-update', args=[self.get_object().pk])
 
     def form_valid(self, form):
         form.save(teacher = self.request.user)
@@ -121,5 +122,27 @@ class ProductUpdateView(UpdateView):
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
-            return Product.objects.none()
-        return Product.objects.filter(teacher = self.request.user)
+            return Course.objects.none()
+        return Course.objects.filter(teacher = self.request.user)
+
+
+class MyCourseView(ListView):
+    template_name = 'user/my-courses.html'
+    paginate_by = 9
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse('academy:login') + '?next=' + reverse('user:my-courses'))
+        elif not request.user.is_teacher and not request.user.is_superuser:
+            return redirect('user:profile')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Course.objects.filter(teacher = self.request.user, is_active = True).prefetch_related('seasions', 'related_course').annotate(lessons_count = Count('seasions__lessons')).order_by('name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_page'] = 'my-course'
+        context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
+        context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()
+        return context
