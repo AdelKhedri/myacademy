@@ -356,3 +356,71 @@ class TestMyCourseNotPublishedView(BaseTestCase):
                 os.remove(file)
             except:
                 pass
+
+
+class TestCourseDeleteView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.pic_name = 'image_test_for_test_in_tests_.png'
+        dd = os.path.join(os.path.dirname(__file__), 'image_test_for_test_in_tests_.png')
+        with open(dd, 'rb') as f:
+            pic = SimpleUploadedFile(
+                name = self.pic_name,
+                content = f.read(),
+                content_type = 'image/png'
+            )
+        self.course_data = {
+            'name': 'test',
+            'description': 'test2',
+            'time': '02:12:12',
+            'price': 20220,
+            'tax': 2,
+            'difficulty_level': 's',
+            'thumbnail': pic,
+            'is_active': False,
+            'teacher': self.user
+        }
+        courses = [Course(**self.course_data) for _ in range(5)]
+        Course.objects.bulk_create(courses)
+        self.url = reverse('user:course-delete', args=[1])
+        self.login()
+
+    def test_url(self):
+        res = self.client.post(self.url)
+        self.assertEqual(res.status_code, 302)
+
+    def test_redirect_anonymous_user(self):
+        self.client.logout()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fmy-course%2F', 302)
+
+    def test_redirect_not_teacher(self):
+        self.user.is_teacher = False
+        self.user.is_superuser = False
+        self.user.save()
+        res = self.client.get(self.url)
+        self.assertRedirects(res, reverse('user:profile'), 302)
+
+    def test_delete_success(self):
+        res = self.client.post(self.url)
+        self.assertRedirects(res, reverse('user:my-courses'), 302)
+
+    def test_404_for_not_course_teacher(self):
+
+        c = Course.objects.get(id=1)
+        c.teacher = User.objects.create(username = 'user4')
+        c.save()
+        res = self.client.post(self.url)
+        self.assertEqual(res.status_code, 404)
+
+    def tearDown(self):
+        folder = f'media/courses/images'
+        pattern = os.path.join(folder, 'image_test_for_test_in_tests_*.png')
+
+        for file in glob.glob(pattern):
+            try:
+                os.remove(file)
+            except:
+                pass

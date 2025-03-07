@@ -142,11 +142,12 @@ class MyCourseView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['current_page'] = 'my-course'
+        context['current_page'] = 'my-courses'
         context['active_tab'] = 'published'
         context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
         context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()
         return context
+
 
 # Yes i know but,
 # i cannot have 2 pagination
@@ -167,8 +168,22 @@ class MyCourseNotPublishedView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['current_page'] = 'my-course'
+        context['current_page'] = 'my-courses'
         context['active_tab'] = 'not-published'
         context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
         context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()
         return context
+
+
+class CourseDeleteView(DeleteView):
+    success_url = reverse_lazy('user:my-courses')
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse('academy:login') + '?next=' + reverse('user:my-courses'))
+        elif not request.user.is_teacher and not request.user.is_superuser:
+            return redirect('user:profile')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Course.objects.filter(teacher = self.request.user)
