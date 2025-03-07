@@ -1,6 +1,6 @@
 from random import randint
 from django import forms
-from .models import Product, Seasion
+from .models import Course, Seasion
 from user.models import Profile, User, OTPCode
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
@@ -71,25 +71,25 @@ class ChangePasswordForgotPasswordFrom(forms.Form):
         return cleaned_data
 
 
-class ProductForm(forms.ModelForm):
-    related_product = forms.ModelMultipleChoiceField(
+class CourseForm(forms.ModelForm):
+    related_course = forms.ModelMultipleChoiceField(
         required=False,
-        queryset = Product.objects.filter(is_active = True),
+        queryset = Course.objects.filter(is_active = True),
         widget = forms.SelectMultiple(attrs={'class': 'tpd-select2 form-select'}))
 
     class Meta:
-        model = Product
-        fields = ['name', 'category', 'description', 'price', 'price_with_discount', 'tax', 'related_product', 'thumbnail', 'time', 'difficulty_level', 'is_certificate', 'trailer', 'is_askable',]
+        model = Course
+        fields = ['name', 'category', 'description', 'price', 'price_with_discount', 'tax', 'related_course', 'thumbnail', 'time', 'difficulty_level', 'is_certificate', 'trailer', 'is_askable',]
 
     def save(self, teacher = None, commit = True):
         form = super().save(False)
         form.teacher = teacher
-        related_product = self.cleaned_data['related_product']
+        related_course = self.cleaned_data['related_course']
         category = self.cleaned_data['category']
 
         if commit:
             form.save()
-            form.related_product.set(related_product)
+            form.related_course.set(related_course)
             form.category.set(category)
             form.save()
         return form

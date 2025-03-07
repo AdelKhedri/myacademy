@@ -1,5 +1,5 @@
 import os
-from academy.models import Product
+from academy.models import Course
 from academy.tests.tests_views import BaseTestCase
 from django.urls import reverse
 from user.models import Profile, User
@@ -94,7 +94,7 @@ class TestChangePasswordView(BaseTestCase):
         self.assertContains(res, 'پسورد باید ترکیبی از متن و عدد و بیشتر از ۷ کاراکتر باشد.')
 
 
-class TestProductAddView(BaseTestCase):
+class TestCourseAddView(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.pic_name = '11.png'
@@ -106,7 +106,7 @@ class TestProductAddView(BaseTestCase):
                 content_type = 'image/png'
             )
 
-        self.product_data = {
+        self.course_data = {
             'name': 'test',
             'description': 'test',
             'price': 250000,
@@ -121,7 +121,7 @@ class TestProductAddView(BaseTestCase):
                 'title': 'test1'
             }
         ]
-        self.url = reverse('user:product-add')
+        self.url = reverse('user:course-add')
         self.login()
 
     def test_url(self):
@@ -130,13 +130,13 @@ class TestProductAddView(BaseTestCase):
 
     def test_template_used(self):
         res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/product.html')
+        self.assertTemplateUsed(res, 'user/course.html')
 
     def test_redirect_anonymous_user(self):
         self.client.logout()
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, 302)
-        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fproduct%2Fadd%2F', 302)
+        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fcourse%2Fadd%2F', 302)
 
     def test_redirect_not_teacher(self):
         self.user.is_teacher = False
@@ -145,8 +145,8 @@ class TestProductAddView(BaseTestCase):
         res = self.client.get(self.url)
         self.assertRedirects(res, reverse('user:profile'), 302)
 
-    def test_add_product_success(self):
-        data = self.product_data
+    def test_add_course_success(self):
+        data = self.course_data
         total_forms = len(self.seasion_data)
         data['form-TOTAL_FORMS'] = total_forms
         data['form-INITIAL_FORMS'] = 0
@@ -157,17 +157,17 @@ class TestProductAddView(BaseTestCase):
             data[f'form-{i}-title'] = seasion['title']
 
         res = self.client.post(self.url, data=data)
-        self.assertRedirects(res, reverse('user:product-update', args=[Product.objects.first().pk]), 302)
-        self.assertEqual(Product.objects.first().name, self.product_data['name'])
+        self.assertRedirects(res, reverse('user:course-update', args=[Course.objects.first().pk]), 302)
+        self.assertEqual(Course.objects.first().name, self.course_data['name'])
 
     
     def tearDown(self):
-        file_name = f'media/products/images/{self.pic_name}'
+        file_name = f'media/courses/images/{self.pic_name}'
         if os.path.exists(file_name):
             os.remove(file_name)
 
 
-class TestProductUpdateView(BaseTestCase):
+class TestCourseUpdateView(BaseTestCase):
     def setUp(self):
         super().setUp()
 
@@ -179,7 +179,7 @@ class TestProductUpdateView(BaseTestCase):
                 content = f.read(),
                 content_type = 'image/png'
             )
-        self.product_data = {
+        self.course_data = {
             'name': 'test',
             'description': 'test2',
             'time': '02:12:12',
@@ -187,8 +187,8 @@ class TestProductUpdateView(BaseTestCase):
             'tax': 2,
             'difficulty_level': 's',
         }
-        self.product = Product.objects.create(teacher = self.user, thumbnail = self.pic, **self.product_data)
-        self.url = reverse('user:product-update', args=[self.product.pk])
+        self.course = Course.objects.create(teacher = self.user, thumbnail = self.pic, **self.course_data)
+        self.url = reverse('user:course-update', args=[self.course.pk])
         self.login()
 
     def test_url(self):
@@ -197,7 +197,7 @@ class TestProductUpdateView(BaseTestCase):
 
     def test_template_used(self):
         res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/product.html')
+        self.assertTemplateUsed(res, 'user/course.html')
 
     def test_redirect_anonymous_user(self):
         self.client.logout()
@@ -206,7 +206,7 @@ class TestProductUpdateView(BaseTestCase):
 
         # redirect not worked for anonymous user becuse i used get_queryset
         # self.assertEqual(res.status_code, 302)
-        # self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fproduct%2F1%2Fupdate%2F', 302)
+        # self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fcourse%2F1%2Fupdate%2F', 302)
 
     def test_redirect_not_teacher(self):
         self.user.is_teacher = False
@@ -215,23 +215,23 @@ class TestProductUpdateView(BaseTestCase):
         res = self.client.get(self.url)
         self.assertRedirects(res, reverse('user:profile'), 302)
 
-    def test_update_product_success(self):
-        data = self.product_data
+    def test_update_course_success(self):
+        data = self.course_data
         data['name'] = 'new'
         files = {'thumbnail': self.pic,}
 
         res = self.client.post(self.url, data=data, files=files)
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(Product.objects.first().name, data['name'])
+        self.assertEqual(Course.objects.first().name, data['name'])
 
-    def test_error_update_product_of_another_teacher(self):
+    def test_error_update_course_of_another_teacher(self):
         user = User.objects.create(username = 'test')
-        obj = Product.objects.create(name = 'testee', teacher = user, time = '00:01:11')
-        res = self.client.get(reverse('user:product-update', args=[obj.pk]))
+        obj = Course.objects.create(name = 'testee', teacher = user, time = '00:01:11')
+        res = self.client.get(reverse('user:course-update', args=[obj.pk]))
         self.assertEqual(res.status_code, 404)
 
     
     def tearDown(self):
-        file_name = f'media/products/images/{self.pic_name}'
+        file_name = f'media/courses/images/{self.pic_name}'
         if os.path.exists(file_name):
             os.remove(file_name)

@@ -1,16 +1,16 @@
 from django.contrib import admin
-from .models import Product, Seasion, Lesson, Category, Comment
+from .models import Course, Seasion, Lesson, Category, Comment
 from django.utils.html import format_html
 
-@admin.register(Product)
-class ProductRegister(admin.ModelAdmin):
+@admin.register(Course)
+class CourseRegister(admin.ModelAdmin):
     list_display = ['name', 'get_category', 'teacher', 'get_final_price', 'is_active', 'get_thumbnail']
     list_filter = ['is_active', 'is_askable', 'is_certificate']
     list_select_related = ['teacher',]
-    filter_horizontal = ['category', 'seasions', 'related_product']
+    filter_horizontal = ['category', 'seasions', 'related_course']
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related('category', 'seasions', 'related_product')
+        return super().get_queryset(request).prefetch_related('category', 'seasions', 'related_course')
 
     @admin.display
     def get_thumbnail(self, obj):
