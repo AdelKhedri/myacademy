@@ -189,3 +189,18 @@ class CourseDeleteView(DeleteView):
 
     def get_queryset(self):
         return Course.objects.filter(teacher = self.request.user)
+
+
+class MyBookmarkListView(LoginRequiredMixin, ListView):
+    template_name = 'user/my-bookmark.html'
+    paginate_by = 9
+
+    def get_queryset(self):
+        courses_list = [course.pk for course in self.request.user.profile.bookmarks.all()]
+        return Course.objects.filter(is_active = True, pk__in = courses_list).select_related('teacher').prefetch_related('related_course', 'seasions', 'category').annotate(lessons_count = Count('seasions__lessons')).order_by('created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_url'] = self.request.get_full_path()
+        context['current_page'] = 'my_bookmarked_courses'
+        return context

@@ -1,0 +1,125 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block title %}دوره های پسندیده | آکادمی من{% endblock %}
+{% block content %}
+                    <div class="col">
+                        <div class="tpd-content-layout">
+                            <div class="course-area">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="tp-dashboard-section">
+                                            <h2 class="tp-dashboard-title">لیست خواسته</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    {% for course in object_list %}
+                                    <div class="col-xl-4 col-sm-6">
+                                        <div class="tp-dashboard-course tp-dashboard-course-2 mb-25">
+                                            <div class="tp-course-teacher mb-15">
+                                                <span>
+                                                    <img alt="" src="{% if course.teacher.profile.picture %}{{ course.teacher.profile.picture.url }}{% else %}{% static 'img/event/user.jpg' %}{% endif %}">{{ course.teacher.get_full_name|default:course.teacher.username }}
+                                                </span>
+                                            </div>
+                                            <div class="tp-dashboard-course-thumb">
+                                                <a href="#">
+                                                    <img alt="" src="{{ course.thumbnail.url }}">
+                                                </a>
+                                            </div>
+                                            <div class="tp-dashboard-course-content">
+                                                <div class="tp-dashboard-rating">
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <span>(15 بررسی)</span>
+                                                </div>
+                                                <h4 class="tp-dashboard-course-title"><a href="#">{{ course.name }}</a></h4>
+                                                <div class="tp-dashboard-course-meta">
+                                                    <span>
+                                                        <span>
+                                                            <svg fill="none" height="14" viewbox="0 0 15 14" width="15" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M13.9228 10.0426V2.29411C13.9228 1.51825 13.2949 0.953997 12.5252 1.01445H12.4847C11.1276 1.12529 9.07163 1.82055 7.91706 2.53596L7.80567 2.6065C7.62337 2.71733 7.30935 2.71733 7.11692 2.6065L6.9549 2.50573C5.81046 1.79033 3.75452 1.1152 2.3974 1.00437C1.62768 0.943911 0.999756 1.51827 0.999756 2.28405V10.0426C0.999756 10.6573 1.50613 11.2417 2.12393 11.3122L2.30622 11.3425C3.70386 11.5238 5.87126 12.2392 7.10685 12.9143L7.1372 12.9244C7.30937 13.0252 7.59293 13.0252 7.75498 12.9244C8.99057 12.2393 11.1681 11.5339 12.5758 11.3425L12.7885 11.3122C13.4164 11.2417 13.9228 10.6674 13.9228 10.0426Z"
+                                                                    stroke="#94928E" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="1.2"></path>
+                                                                <path d="M7.46118 2.81787V12.4506" stroke="#94928E"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="1.2"></path>
+                                                            </svg>
+                                                        </span>
+                                                        {{ course.lessons_count }}
+                                                    </span>
+                                                    <span>
+                                                        <span>
+                                                            <svg fill="none" height="15" viewbox="0 0 13 15" width="13" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M6.57134 7.5C8.36239 7.5 9.81432 6.04493 9.81432 4.25C9.81432 2.45507 8.36239 1 6.57134 1C4.7803 1 3.32837 2.45507 3.32837 4.25C3.32837 6.04493 4.7803 7.5 6.57134 7.5Z"
+                                                                    stroke="#94928E" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="1.2"></path>
+                                                                <path
+                                                                    d="M12.1426 14C12.1426 11.4845 9.64553 9.44995 6.57119 9.44995C3.49684 9.44995 0.999756 11.4845 0.999756 14"
+                                                                    stroke="#94928E" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="1.2"></path>
+                                                            </svg>
+                                                        </span>
+                                                        45 دانش آموز
+                                                    </span>
+                                                </div>
+                                                <div class="tp-dashboard-btn d-flex align-items-center justify-content-between">
+                                                    <a class="tpd-btn-border" href="#">
+                                                        <span>
+                                                            <svg fill="none" height="18" viewbox="0 0 17 18" width="17" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M5.07918 12.2H10.8141C14.3574 12.2 14.8963 9.94466 15.5499 6.65524C15.7384 5.70647 15.8327 5.23208 15.606 4.91603C15.3793 4.59998 14.9448 4.59998 14.0758 4.59998H3.5"
+                                                                    stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-width="1.5"></path>
+                                                                <path
+                                                                    d="M5.08297 12.2L3.01325 2.21194C2.8375 1.49968 2.20585 1 1.48122 1H0.740234"
+                                                                    stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-width="1.5"></path>
+                                                                <path
+                                                                    d="M5.77401 12.2H5.44916C4.37267 12.2 3.5 13.121 3.5 14.2571C3.5 14.4465 3.64544 14.6 3.82486 14.6H12.5803"
+                                                                    stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="1.5"></path>
+                                                                <ellipse cx="7.05938" cy="15.8" rx="1.18438" ry="1.2"
+                                                                    stroke="currentColor" stroke-width="1.5"></ellipse>
+                                                                <ellipse cx="12.5809" cy="15.8" rx="1.18438" ry="1.2"
+                                                                    stroke="currentColor" stroke-width="1.5"></ellipse>
+                                                            </svg>
+                                                        </span>
+                                                        سبد خرید
+                                                    </a>
+                                                    <div class="tp-dashboard-course-free"><span>رایگان</span></div>
+                                                </div>
+                                                <div class="tp-dashboard-btn d-flex align-items-center justify-content-between">
+                                                    <a href="{% url 'academy:bookmarker' course.id %}?next={{ current_url}}"
+                                                            {% if course in user.profile.bookmarks.all %}
+                                                            class="btn btn-info my-1" style="width: 100%;"
+                                                            {% else %}
+                                                            class="btn btn-success my-1" style="width: 100%;"
+                                                            {% endif %}>
+                                                            {% if course in user.profile.bookmarks.all %}
+                                                            <span class="ml-4">
+                                                                <i class="fa-solid fa-bookmark"></i>
+                                                            </span>
+                                                            ذخیره شده
+                                                            {% else %}
+                                                            <span class="ml-4">
+                                                                <i class="fa-solid fa-bookmark-slash"></i>
+                                                            </span>
+                                                            ذخیره نشده
+                                                            {% endif %}
+                                                            </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% include 'components/pagination.html' with object=page_obj %}
+                        </div>
+                    </div>
+{% endblock %}

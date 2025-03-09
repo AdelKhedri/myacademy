@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import ProfileView, ChangePasswordView, CourseAddView, CourseUpdateView, MyCourseView, MyCourseNotPublishedView, CourseDeleteView
+from .views import (ProfileView, ChangePasswordView, CourseAddView, CourseUpdateView, MyCourseView, MyCourseNotPublishedView, CourseDeleteView,
+                    MyBookmarkListView)
 
 
 app_name = 'user'
@@ -11,4 +12,5 @@ urlpatterns = [
     path('course/<int:pk>/delete/', CourseDeleteView.as_view(), name='course-delete'),
     path('my-course/', MyCourseView.as_view(), name='my-courses'),
     path('my-course/pending/', MyCourseNotPublishedView.as_view(), name='my-courses-not-published'),
+    path('bookmarks', MyBookmarkListView.as_view(), name='my-bookmarked-courses'),
 ]

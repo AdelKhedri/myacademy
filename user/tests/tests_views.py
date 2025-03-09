@@ -3,7 +3,7 @@ import os
 from academy.models import Course
 from academy.tests.tests_views import BaseTestCase
 from django.urls import reverse
-from user.models import Profile, User
+from user.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 
@@ -424,3 +424,38 @@ class TestCourseDeleteView(BaseTestCase):
                 os.remove(file)
             except:
                 pass
+
+
+class TestMyBookmarkView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.file_name = 'image_test_for_test_in_tests_.png'
+        with open(f'user/tests/{self.file_name}', 'rb') as f:
+            pic = SimpleUploadedFile(
+                name = self.file_name,
+                content = f.read(),
+                content_type = 'image/png'
+            )
+        self.course = Course.objects.create(
+            name = 'test',
+            teacher = self.user,
+            time = '02:02:00',
+            thumbnail = pic
+        )
+        self.url = reverse('user:my-bookmarked-courses')
+        self.login()
+
+    def test_url(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_template_used(self):
+        res = self.client.get(self.url)
+        self.assertTemplateUsed(res, 'user/my-bookmark.html')
+
+    def test_redirect_anonymous_user(self):
+        self.client.logout()
+        res = self.client.get(self.url)
+        # Note: in client url the %2F is mean /
+        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fbookmarks', 302)
