@@ -377,3 +377,19 @@ class TestLogoutView(BaseTestCase):
         res = self.client.get(self.url)
         self.assertTrue(res.wsgi_request.user.is_anonymous)
         self.assertRedirects(res, reverse('academy:home'))
+
+
+class TestCourseFilterView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.url = reverse('academy:courseslist')
+        self.login()
+
+    def test_url(self):
+        res = self.client.get(self.url)
+        self.assertRedirects(res, reverse('academy:courseslist'), 200)
+
+    def test_template_used(self):
+            res = self.client.get(self.url)
+            self.assertTemplateUsed(res, 'academy/course.html')

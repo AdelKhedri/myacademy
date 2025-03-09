@@ -72,17 +72,16 @@
                                                     45 دانش آموز
                                                 </span> -->
                                             </div>
-                                            <div
-                                                class="tp-dashboard-btn d-flex align-items-center justify-content-between">
+                                            <div class="tp-dashboard-btn d-flex align-items-center justify-content-between">
                                                 <div class="tp-course-pricing text-start">
-                                                    {% if course.price == 0 %}
-                                                    <span>رایگان !</span>
-                                                    {% elif course.price_with_discount != 0 %}
-                                                    <del>{{ course.price }} تومان</del>
-                                                    <span>{{ course.price_with_discount }} تومان</span>
-                                                    {% else %}
-                                                    <span>{{ couse.price }} تومان</span>
-                                                    {% endif %}
+                                                {% if course.price == 0 %}
+                                                <span>رایگان !</span>
+                                                {% elif course.price_with_discount != 0 %}
+                                                <del>{{ course.price }} تومان</del>
+                                                <span>{{ course.price_with_discount }} تومان</span>
+                                                {% else %}
+                                                <span>{{ couse.price }} تومان</span>
+                                                {% endif %}
                                                 </div>
                                                 <div class="tp-course-action d-flex align-items-center">
                                                     <div class="tpd-action-inexact-btn">

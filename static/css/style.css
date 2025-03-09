@@ -1,0 +1,10 @@
+.tp-course-tag a {
+    display: inline-block;
+    border-radius: 3px;
+    background: rgba(23,162,184,.08);
+    color: #17a2b8;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 10px;
+    line-height: 1;
+  }
