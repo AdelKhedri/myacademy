@@ -549,7 +549,7 @@
                                                     </span>دوره های ثبت نام شده</a>
                                                 </li>
                                             <li>
-                                                <a {% if current_page == 'bookmarked_courses' %} class="active" {% endif %} href="#">
+                                                <a {% if current_page == 'my_bookmarked_courses' %} class="active" {% endif %} href="{% url 'user:my-bookmarked-courses' %}">
                                                     <span>
                                                         <svg fill="none" height="18" viewbox="0 0 16 18" width="16" xmlns="http://www.w3.org/2000/svg">
                                                             <path
