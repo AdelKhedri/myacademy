@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (RegisterView, ActivateRegisterdAccountView, LoginView, Home, ForgotPasswordView, ConfirmForgotPasswordView,
-                    LogoutView, CourseFilterView, CourseCategoryView)
+                    LogoutView, CourseFilterView, CourseCategoryView, BookmarkView)
 
 
 app_name = 'academy'
@@ -13,5 +13,6 @@ urlpatterns = [
     path('forgot-password/confirm/', ConfirmForgotPasswordView.as_view(), name='confirm-forgot-password'),
     path('courses', CourseFilterView.as_view(), name='courseslist'),
     path('category/<slug:category_slug>', CourseCategoryView.as_view(), name='category'),
+    path('bookmarker/<int:course_id>', BookmarkView.as_view(), name='bookmarker'),
     path('', Home, name = 'home')
 ]

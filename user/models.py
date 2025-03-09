@@ -21,9 +21,11 @@ class User(AbstractUser, PermissionsMixin):
 
 
 class Profile(models.Model):
+    from academy.models import Course
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('کاربر'))
     picture = models.ImageField(_('تصویر'), upload_to='users/profile', blank=True)
     aboute = models.TextField(_('درباره'), blank=True)
+    bookmarks = models.ManyToManyField(Course, blank=True, verbose_name=_('ذخیره شده ها'))
 
     class Meta:
         verbose_name = 'پروفایل'

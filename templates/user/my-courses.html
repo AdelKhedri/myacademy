@@ -120,6 +120,24 @@
                                                             </svg>
                                                         </button>
                                                         <div class="tpd-action-click-tooltip">
+                                                            <a href="{% url 'academy:bookmarker' course.id %}?next={{ current_url}}"
+                                                            {% if course in user.profile.bookmarks.all %}
+                                                            class="btn btn-info my-1" style="width: 100%;"
+                                                            {% else %}
+                                                            class="btn btn-success my-1" style="width: 100%;"
+                                                            {% endif %}>
+                                                            {% if course in user.profile.bookmarks.all %}
+                                                            <span class="ml-4">
+                                                                <i class="fa-solid fa-bookmark"></i>
+                                                            </span>
+                                                            ذخیره شده
+                                                            {% else %}
+                                                            <span class="ml-4">
+                                                                <i class="fa-solid fa-bookmark-slash"></i>
+                                                            </span>
+                                                            ذخیره نشده
+                                                            {% endif %}
+                                                            </a>
                                                             <button class="btn btn-danger" data-bs-target="#deleteModal{{ forloop.counter}}" data-bs-toggle="modal" data-bs-whatever="@fat" type="button">
                                                                 <span>
                                                                     <svg fill="none" height="14" viewbox="0 0 14 14" width="14" xmlns="http://www.w3.org/2000/svg">
