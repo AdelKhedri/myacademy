@@ -3,12 +3,14 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 from datetime import timedelta
 from django.utils import timezone
+from .models import Course
 from user.models import OTPCode, User
 from .forms import RecaptchaFrom, RegisterForm, LoginForm, ChangePasswordForgotPasswordFrom
 from django.conf import settings
 from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponse
-from django.db.models import Q
+from django.db.models import Q, Count
+from django.core.paginator import Paginator
 
 
 class RegisterView(View):
@@ -231,6 +233,28 @@ class ConfirmForgotPasswordView(View):
         else:
             self.context['msg'] = 'invalid recaptcha'
         return render(request, self.template_name, self.context)
+
+
+class CourseFilterView(View):
+    template_name = 'academy/course.html'
+
+    def get(self, request, *args, **kwargs):
+        courses = Course.objects.filter(is_active = True).select_related('teacher').prefetch_related('category', 'seasions').annotate(lessons_count = Count('seasions__lessons')).order_by('updated_at')
+        course_name = request.GET.get('name', None)
+        if course_name:
+            courses = courses.filter(name__contains = course_name)
+
+        page = str(request.GET.get('page', 1))
+        if not page.isnumeric():
+            page = 1
+        paginator = Paginator(courses, 9)
+        page_with_courses = paginator.page(page)
+
+        context = {
+            'courses': page_with_courses,
+            'page_name': 'تمام دوره ها | آکادمی من'
+            }
+        return render(request, self.template_name, context)
 
 
 class LogoutView(View):

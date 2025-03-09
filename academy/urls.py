@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (RegisterView, ActivateRegisterdAccountView, LoginView, Home, ForgotPasswordView, ConfirmForgotPasswordView,
-                    LogoutView )
+                    LogoutView, CourseFilterView)
 
 
 app_name = 'academy'
@@ -11,5 +11,6 @@ urlpatterns = [
     path('register/active-account/', ActivateRegisterdAccountView.as_view(), name='active-account'),
     path('forgot-password/', ForgotPasswordView.as_view(), name='forgot-password'),
     path('forgot-password/confirm/', ConfirmForgotPasswordView.as_view(), name='confirm-forgot-password'),
+    path('courses/', CourseFilterView.as_view(), name='courseslist'),
     path('', Home, name = 'home')
 ]
