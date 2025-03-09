@@ -1,5 +1,6 @@
 from random import randint
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from django.views.generic import View
 from datetime import timedelta
 from django.utils import timezone
@@ -11,6 +12,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponse
 from django.db.models import Q, Count
 from django.core.paginator import Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def paginate(queryset, per_page, request):
@@ -254,6 +256,7 @@ class CourseFilterView(View):
 
         context = {
             'courses': paginate(courses, 9, request),
+            'current_url': request.get_full_path(),
             'page_name': 'تمام دوره ها | آکادمی من'
             }
         return render(request, self.template_name, context)
@@ -274,6 +277,15 @@ class CourseCategoryView(View):
             'page_name': f'دوره های {category.title} | آکادمی من'
             }
         return render(request, self.template_name, context)
+
+
+class BookmarkView(LoginRequiredMixin, View):
+    def get(self, request, course_id, *args, **kwargs):
+        course = get_object_or_404(Course, id = course_id)
+        profile = request.user.profile
+        profile.bookmarks.add(course) if course not in profile.bookmarks.all() else profile.bookmarks.remove(course)
+        next = request.GET.get('next', reverse('academy:courseslist'))
+        return redirect(next)
 
 
 class LogoutView(View):

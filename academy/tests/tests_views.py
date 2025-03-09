@@ -428,3 +428,48 @@ class TestCourseCategoryView(BaseTestCase):
     def test_not_found_category_with_code_404(self):
         res = self.client.get(reverse('academy:category', kwargs={'category_slug': 'sss'}))
         self.assertEqual(res.status_code, 404)
+
+
+class TestBookmarkerView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.file_name = 'image_test_for_test_in_tests_.png'
+        with open(f'user/tests/{self.file_name}', 'rb') as f:
+            pic = f.read()
+        pic = SimpleUploadedFile(name=self.file_name, content=pic, content_type='image/png')
+
+        self.course = Course.objects.create(
+            name = 'test',
+            teacher = self.user,
+            thumbnail = pic,
+            is_active = True,
+            time = '02:02:02'
+        )
+        category = Category.objects.create(title = 'test1', slug = 'title')
+        self.course.category.add(category)
+        self.url = reverse('academy:bookmarker', args=[self.course.id])
+        self.login()
+
+    def test_url(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+
+
+    def test_redirect_anonymous_user(self):
+        self.client.logout()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fbookmarker%2F1', 302)
+
+    def test_bookmark_success(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(self.user.profile.bookmarks.first(), self.course)
+        self.assertRedirects(res, reverse('academy:courseslist'), 302)
+
+    def test_bookmark_failed_404_course_not_cound(self):
+        res = self.client.get(reverse('academy:bookmarker', args=[2]))
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(self.user.profile.bookmarks.first(), None)
+        self.assertEqual(self.user.profile.bookmarks.count(), 0)

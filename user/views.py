@@ -143,6 +143,7 @@ class MyCourseView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_page'] = 'my-courses'
+        context['current_url'] = self.request.get_full_path()
         context['active_tab'] = 'published'
         context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
         context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()
@@ -169,6 +170,7 @@ class MyCourseNotPublishedView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_page'] = 'my-courses'
+        context['current_url'] = self.request.get_full_path()
         context['active_tab'] = 'not-published'
         context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
         context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()

@@ -754,7 +754,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tp-course-btn"><a href="#">پیش نمایش این دوره</a>
+                                    <div class="tp-course-btn">
+                                        <div class="row justify-content-between">
+                                            <a class="col-7" href="#">جزیات دوره</a>
+                                            {% if course in user.profile.bookmarks.all %} 
+                                            <a class="col-4"  style="background-color: #5169F1;" href="{% url 'academy:bookmarker' course.id %}?next={{ current_url }}">ذخیره شده</a>
+                                            {% else %}
+                                            <a class="col-4" style="background-color: #FF5E74;" href="{% url 'academy:bookmarker' course.id %}?next={{ current_url }}">ذخیره نشده</a>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
