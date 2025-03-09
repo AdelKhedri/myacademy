@@ -27,6 +27,11 @@
                                             </a>
                                         </div>
                                         <div class="tp-dashboard-course-content">
+                                            <div class="tp-course-tag mb-10">
+                                                {% for category in course.category.all %}
+                                                <a href="{% url 'academy:category' category.slug %}">{{ category.title }}</a>
+                                                {% endfor %}
+                                            </div>
                                             <!-- TODO: create logic in view -->
                                             <div class="tp-dashboard-rating">
                                                 <i class="fa-solid fa-star"></i>
@@ -36,7 +41,6 @@
                                                 <i class="fa-solid fa-star"></i>
                                                 <span>(15 بررسی)</span>
                                             </div>
-
                                             <h4 class="tp-dashboard-course-title"><a href="#">{{ course.name }}</a></h4>
                                             <div class="tp-dashboard-course-meta">
                                                 <span>
