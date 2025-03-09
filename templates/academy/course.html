@@ -696,7 +696,7 @@
                                     <div class="tp-course-content">
                                         <div class="tp-course-tag mb-10">
                                             {% for category in course.category.all %}
-                                            <a href="#">{{ category.title }}</a>
+                                            <a href="{% url 'academy:category' category.slug %}">{{ category.title }}</a>
                                             {% endfor %}
                                         </div>
                                         <div class="tp-course-meta">

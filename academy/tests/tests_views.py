@@ -1,11 +1,13 @@
 from unittest.mock import patch
 from django_recaptcha.client import RecaptchaResponse
 from django.test import TestCase
+from academy.models import Category, Course
 from user.models import OTPCode, Profile, User
 from django.urls import reverse
 from freezegun import freeze_time
 from datetime import datetime, timedelta
 from django.utils import timezone
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class BaseTestCase(TestCase):
@@ -388,8 +390,41 @@ class TestCourseFilterView(BaseTestCase):
 
     def test_url(self):
         res = self.client.get(self.url)
-        self.assertRedirects(res, reverse('academy:courseslist'), 200)
+        self.assertEqual(res.status_code, 200)
 
     def test_template_used(self):
             res = self.client.get(self.url)
             self.assertTemplateUsed(res, 'academy/course.html')
+
+
+class TestCourseCategoryView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.file_name = 'image_test_for_test_in_tests_.png'
+        with open(f'user/tests/{self.file_name}', 'rb') as f:
+            pic = f.read()
+        pic = SimpleUploadedFile(name=self.file_name, content=pic, content_type='image/png')
+
+        course = Course.objects.create(
+            name = 'test',
+            teacher = self.user,
+            thumbnail = pic,
+            is_active = True,
+            time = '02:02:02'
+        )
+        category = Category.objects.create(title = 'test1', slug = 'title')
+        course.category.add(category)
+        self.url = reverse('academy:category', args=[category.slug])
+
+    def test_url(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_template_used(self):
+        res = self.client.get(self.url)
+        self.assertTemplateUsed(res, 'academy/course.html')
+
+    def test_not_found_category_with_code_404(self):
+        res = self.client.get(reverse('academy:category', kwargs={'category_slug': 'sss'}))
+        self.assertEqual(res.status_code, 404)
