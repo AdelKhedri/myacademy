@@ -1,7 +1,10 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from user.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from .managers import CommentManager
+from django.db.models import Count
 
 
 class Course(models.Model):
@@ -31,8 +34,14 @@ class Course(models.Model):
         verbose_name_plural = 'دوره ها'
         ordering = ['is_active', 'created_at']
 
+    def lessons_count(self):
+        return self.seasions.annotate(lessons_count = Count('lessons')).aggregate(count = Count('lessons_count'))['count']
+    
     def get_final_price(self):
         return self.price_with_discount + (self.price // 100 * self.tax) if self.price_with_discount else self.price + (self.price // 100 * self.tax)
+
+    def get_absolute_url(self):
+        return reverse('academy:course-details', args=[self.pk])
 
     def __str__(self):
         return self.name
@@ -43,11 +52,11 @@ class Comment(models.Model):
     media_id = models.IntegerField(_('ایدی مدیا'))
     media_type = models.CharField(_('نوع'), default='course', max_length=10, choices=comment_class)
     message = models.TextField(_('پیام'))
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('کامنت والد'))
-    time = models.DateTimeField(_('زمان ارسال'), auto_now_add=True)
+    parent  = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('کامنت والد'))
+    created_at = models.DateTimeField(_('زمان ارسال'), auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('کاربر'))
-    point = models.IntegerField(_('امتیاز'), validators=[MaxValueValidator(5), MinValueValidator(0)])
     active = models.BooleanField(_('وضعیت'), default=False)
+    objects = CommentManager()
 
     def get_media(self, obj):
         objects = {
@@ -58,10 +67,10 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'کامنت'
         verbose_name_plural = 'کامنت ها'
-        ordering = ['active', 'time']
+        ordering = ['active', 'created_at']
 
     def __str__(self):
-        return self.user.__str__()
+        return f'{self.user.__str__()}:{self.pk}'
 
 
 class Category(models.Model):
@@ -80,10 +89,11 @@ class Category(models.Model):
 class Lesson(models.Model):
     title = models.CharField(_('نام درس'), max_length=200)
     description = models.TextField(_('درباره این قسمت'))
-    file_name = models.FileField(_('فلیم'), upload_to='courses/lessons/files/')
+    file = models.FileField(_('فلیم'), upload_to='courses/lessons/files/')
     attached = models.FileField(_('پیوست'), blank=True)
-    time = models.TimeField(_('درس'), blank=True, null=True)
+    time = models.TimeField(_('زمان'), blank=True, null=True)
     teacher = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('مدرس'))
+    is_free = models.BooleanField(_('رایگان'), default=False)
 
     class Meta:
         verbose_name = 'درس'
@@ -98,11 +108,25 @@ class Seasion(models.Model):
     title = models.CharField(_('موضوع'), max_length=250)
     lessons = models.ManyToManyField(Lesson, blank=True, verbose_name=_('درس ها'))
 
-
     class Meta:
         verbose_name = 'فصل'
         verbose_name_plural = 'فصل ها'
-        ordering = ['title']
+        ordering = ['id']
 
     def __str__(self):
         return self.title
+
+
+class PurchedCourse(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('دانشجو'))
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name=_('دروه'))
+    amount = models.IntegerField(_('قیمت'))
+    time = models.DateTimeField(_('زمان خرید'), auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'دروه خریداری شده'
+        verbose_name_plural = 'دروه های خریداری شده'
+        ordering = ['time']
+
+    def __str__(self):
+        return self.user.__str__()

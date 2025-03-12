@@ -22,7 +22,7 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <form method="post" class="tpd-setting-box profile">
+        <form method="post" enctype="multipart/form-data" class="tpd-setting-box profile">
             {% csrf_token %}
             <div class="tp-dashboard-banner-bg profile mb-100"
                 data-background="{% static 'img/dashboard/bg/dashboard-bg-1.jpg' %}">

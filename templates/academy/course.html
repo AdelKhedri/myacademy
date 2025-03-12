@@ -689,7 +689,7 @@
                                         </span>
                                     </div>
                                     <div class="tp-course-thumb">
-                                        <a href="#">
+                                        <a href="{{ course.get_absolute_url }}">
                                             <img alt="" class="course-pink" src="{{ course.thumbnail.url }}">
                                         </a>
                                     </div>
@@ -730,17 +730,17 @@
                                                 45 دانش آموز
                                             </span>
                                         </div>
-                                        <h4 class="tp-course-title"><a href="#">{{ course.name }}</a></h4>
+                                        <h4 class="tp-course-title"><a href="{{ course.get_absolute_url }}">{{ course.name }}</a></h4>
                                         <div class="tp-course-rating d-flex align-items-end justify-content-between">
                                             <div class="tp-course-rating-star">
-                                                <!-- <p>5.0<span>/5</span></p>
+                                                <p>5.0<span>/5</span></p>
                                                 <div class="tp-course-rating-icon">
                                                     <i class="fa-solid fa-star"></i>
                                                     <i class="fa-solid fa-star"></i>
                                                     <i class="fa-solid fa-star"></i>
                                                     <i class="fa-solid fa-star"></i>
                                                     <i class="fa-solid fa-star"></i>
-                                                </div> -->
+                                                </div>
                                             </div>
                                             <div class="tp-course-pricing">
                                                 {% if course.price == 0 %}
@@ -756,7 +756,8 @@
                                     </div>
                                     <div class="tp-course-btn">
                                         <div class="row justify-content-between">
-                                            <a class="col-7" href="#">جزیات دوره</a>
+                                            <a class="col-7" href="{{ course.get_absolute_url }}">جزیات دوره</a>
+                                            
                                             {% if course in user.profile.bookmarks.all %} 
                                             <a class="col-4"  style="background-color: #5169F1;" href="{% url 'academy:bookmarker' course.id %}?next={{ current_url }}">ذخیره شده</a>
                                             {% else %}

@@ -16,6 +16,9 @@ class User(AbstractUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email', 'phone_number']
     objects = UserManager()
 
+    def get_photo(self):
+        return self.profile.picture.url if self.profile.picture else '/static/img/event/user.jpg'
+
     def __str__(self):
         return self.get_full_name() if self.get_full_name() else self.username
 
