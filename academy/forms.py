@@ -1,6 +1,6 @@
 from random import randint
 from django import forms
-from .models import Course, Seasion
+from .models import Course, Seasion, Comment
 from user.models import Profile, User, OTPCode
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
@@ -102,3 +102,12 @@ class SeasionAddForm(forms.ModelForm):
 
 
 SeasionFormSet = forms.formset_factory(SeasionAddForm, extra=2)
+
+class CommentForm(forms.Form):
+    message = forms.CharField(widget=forms.Textarea(), label='پیام')
+    parent_id = forms.ModelChoiceField(
+        label='ایدی والد',
+        widget=forms.HiddenInput(),
+        queryset=Comment.objects.filter(media_type = 'course', ),
+        required=False
+        )

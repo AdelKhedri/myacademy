@@ -1,18 +1,19 @@
 from random import randint
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
-from django.views.generic import View
+from django.views.generic import View, DetailView, FormView
 from datetime import timedelta
 from django.utils import timezone
 from .models import Category, Course
 from user.models import OTPCode, User
-from .forms import RecaptchaFrom, RegisterForm, LoginForm, ChangePasswordForgotPasswordFrom
+from .forms import CommentForm, RecaptchaFrom, RegisterForm, LoginForm, ChangePasswordForgotPasswordFrom
 from django.conf import settings
 from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponse
 from django.db.models import Q, Count
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
+from academy.models import Comment
 
 
 def paginate(queryset, per_page, request):
@@ -294,3 +295,39 @@ class LogoutView(View):
             return redirect('academy:login')
         logout(request)
         return redirect('academy:home')
+
+
+class ProductDetailsView(View):
+    template_name = 'academy/course-details.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.course = get_object_or_404(
+            Course.objects.prefetch_related('category', 'seasions', 'seasions__lessons').select_related('teacher').annotate(lessons_count = Count('seasions__lessons')),
+            is_active = True,
+            id = kwargs['course_id']
+            )
+        self.context = {
+            'course': self.course,
+            'comments': Comment.objects.filter(active = True, media_type = 'course', parent__isnull = True, media_id = self.course.pk),
+            'form': CommentForm(),
+        }
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, course_id, *args, **kwargs):
+        return render(request, self.template_name, self.context)
+
+    def post(self, request, course_id, *args, **kwargs):
+        if request.user.is_authenticated:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                Comment.objects.create(
+                    user = request.user,
+                    media_id = self.course.id,
+                    media_type = 'course',
+                    message = form.cleaned_data['message'],
+                    parent = form.cleaned_data['parent_id'])
+                self.context['msg'] = 'success'
+            else:
+                self.context['msg'] = 'failed'
+            return render(request, self.template_name, self.context)
+        return redirect('academy:login')
