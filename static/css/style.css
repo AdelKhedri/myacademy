@@ -8,3 +8,11 @@
     padding: 6px 10px;
     line-height: 1;
   }
+
+.card {
+  background-color: white;
+}
+
+.body {
+  background-color: aliceblue;
+}

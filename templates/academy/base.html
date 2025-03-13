@@ -1,40 +1,34 @@
 {% load static %}
-<!doctype html>
-<html class="no-js" lang="fa">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta content="ie=edge" http-equiv="x-ua-compatible">
-    <title>{{ page_name }}</title>
-    <meta content="" name="description">
-    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دوره {{ course.name }}</title>
     <link href="{% static 'img/logo/favicon.png' %}" rel="shortcut icon" type="image/x-icon">
     <link href="{% static 'css/bootstrap.rtl.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/swiper-bundle.rtl.css' %}" rel="stylesheet">
+    <link href="{% static 'css/slick.css' %}" rel="stylesheet">
+    <link href="{% static 'css/magnific-popup.css' %}" rel="stylesheet">
     <link href="{% static 'css/font-awesome-pro.css' %}" rel="stylesheet">
     <link href="{% static 'css/spacing.rtl.css' %}" rel="stylesheet">
     <link href="{% static 'css/main.rtl.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
-
 <body>
     <div id="loading">
         <div id="loading-center">
             <div id="loading-center-absolute">
                 <div class="tp-preloader-content">
                     <div class="tp-preloader-logo">
-                        <div class="tp-preloader-circle">
-                            <svg fill="none" height="190" viewbox="0 0 380 380" width="190"
+                        <div class="tp-preloader-circle"><svg fill="none" height="190" viewbox="0 0 380 380" width="190"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="190" cy="190" r="180" stroke="#D9D9D9" stroke-linecap="round"
-                                    stroke-width="6">
-
-                                </circle>
+                                    stroke-width="6"></circle>
                                 <circle cx="190" cy="190" r="180" stroke="red" stroke-linecap="round" stroke-width="6">
-
                                 </circle>
-                            </svg>
-                        </div>
-                        <img alt="" src="assets/img/logo/preloader/preloader-icon.png">
+                            </svg></div><img alt="" src="assets/img/logo/preloader/preloader-icon.png">
                     </div>
                     <p class="tp-preloader-subtitle">بارگیری ...</p>
                 </div>
@@ -44,10 +38,7 @@
     <div class="back-to-top-wrapper">
         <button class="back-to-top-btn" id="back_to_top" type="button">
             <svg fill="none" height="7" viewbox="0 0 12 7" width="12" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11 6L6 1L1 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="1.5">
-
-                </path>
+                <path d="M11 6L6 1L1 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
             </svg>
         </button>
     </div>
@@ -260,257 +251,6 @@
             </div>
         </div>
     </div>
-    <div class="cartmini__area">
-        <div class="cartmini__wrapper p-relative d-flex justify-content-between flex-column">
-            <div class="cartmini__close"><button class="cartmini__close-btn cartmini-close-btn" type="button"><i
-                        class="fal fa-times"></i></button></div>
-            <div class="cartmini__top-wrapper">
-                <div class="cartmini__top p-relative">
-                    <div class="cartmini__top-title">
-                        <h4>سبد خرید</h4>
-                    </div>
-                </div>
-                <div class="cartmini__shipping home-2">
-                    <p>حمل و نقل رایگان برای همه سفارشات<span>50 تومان</span></p>
-                    <div class="progress">
-                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="70"
-                            class="progress-bar progress-bar-striped progress-bar-animated" data-width="70%"
-                            role="progressbar"></div>
-                    </div>
-                </div>
-                <div class="cartmini__widget">
-                    <div class="cartmini__widget-item">
-                        <div class="cartmini__thumb"><a href="shop-details.html"><img alt=""
-                                    src="assets/img/shop/product/shop-product-1.jpg"></a></div>
-                        <div class="cartmini__content">
-                            <h5 class="cartmini__title home-2"><a href="shop-details.html">لورم ایپسوم متن</a></h5>
-                            <div class="cartmini__price-wrapper"><span class="cartmini__price home-2">108.00
-                                    تومان</span> <span class="cartmini__quantity">x2</span></div>
-                        </div><a class="cartmini__del home-2" href="course-with-filter.html#"><i
-                                class="fa-regular fa-xmark"></i></a>
-                    </div>
-                </div>
-                <div class="cartmini__empty text-center d-none"><img alt="" src="assets/img/shop/empty-cart.png">
-                    <p>سبد خرید شما خالی است</p><a class="tp-btn" href="shop.html">برو به فروشگاه</a>
-                </div>
-            </div>
-            <div class="cartmini__checkout">
-                <div class="cartmini__checkout-title mb-30">
-                    <h4>زیرنویس:</h4><span>113.00 تومان</span>
-                </div>
-                <div class="cartmini__checkout-btn home-2"><a class="tp-btn mb-10 w-100" href="cart.html">مشاهده سبد
-                        خرید</a> <a class="tp-btn tp-btn-border w-100" href="checkout.html">پرداخت</a></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="filter__area d-md-none">
-        <div class="filter__wrapper p-relative d-flex justify-content-between flex-column">
-            <div class="filter__close"><button class="filter__close-btn filter-close-btn" type="button"><i
-                        class="fal fa-times"></i></button></div>
-            <div class="tp-filter-dropdown-offcanvas">
-                <div class="row row-cols-lg-5 row-cols-md-3 row-cols-sm-1 row-cols-1">
-                    <div class="col">
-                        <h4 class="tp-filter-widget-title">مرتب سازی بر اساس</h4>
-                        <div class="tp-filter-widget-content">
-                            <div class="tp-filter-widget-radio">
-                                <ul>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault12"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault12">آخرین</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault22"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault22">پرطرفدار</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault32"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault32">محبوبیت</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault42"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault42">قیمت: کم به بالا</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault52"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault52">قیمت: بالا به پایین</label></div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <h4 class="tp-filter-widget-title">همه دسته ها</h4>
-                        <div class="tp-filter-widget-content">
-                            <div class="tp-filter-widget-checkbox">
-                                <ul>
-                                    <li>
-                                        <div class="from-checkbox"><input id="remeber2" type="checkbox"> <label
-                                                for="remeber2">طراحی (9)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Business2" type="checkbox"> <label
-                                                for="Business2">تجارت (12)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Development2" type="checkbox"> <label
-                                                for="Development2">توسعه (10)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Music2" type="checkbox"> <label
-                                                for="Music2">موسیقی (8)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Marketing2" type="checkbox"> <label
-                                                for="Marketing2">بازاریابی (8)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Data2" type="checkbox"> <label
-                                                for="Data2">علم داده (7)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Lifestyle2" type="checkbox"> <label
-                                                for="Lifestyle2">سبک زندگی (9)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="remeber12" type="checkbox"> <label
-                                                for="remeber12">موسیقی (8)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="remeber22" type="checkbox"> <label
-                                                for="remeber22">بازاریابی (8)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="remeber32" type="checkbox"> <label
-                                                for="remeber32">علم داده (7)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="remeber42" type="checkbox"> <label
-                                                for="remeber42">سبک زندگی (9)</label></div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <h4 class="tp-filter-widget-title">مربیان</h4>
-                        <div class="tp-filter-widget-content">
-                            <div class="tp-filter-widget-checkbox">
-                                <ul>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Alex2" type="checkbox"> <label
-                                                for="Alex2">الکس ایتزل (6)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Emilee2" type="checkbox"> <label
-                                                for="Emilee2">امیلی لوگان (12)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Donald2" type="checkbox"> <label
-                                                for="Donald2">دونالد لوگان (11)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Oliver2" type="checkbox"> <label
-                                                for="Oliver2">الیور پورتر (9)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Jane2" type="checkbox"> <label
-                                                for="Jane2">جین کوپر (10)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Angela2" type="checkbox"> <label
-                                                for="Angela2">آنجلا (9)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="Patrick2" type="checkbox"> <label
-                                                for="Patrick2">پاتریک (10)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="remeber82" type="checkbox"> <label
-                                                for="remeber82">موسیقی (8)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="remeber92" type="checkbox"> <label
-                                                for="remeber92">بازاریابی (8)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="remeber102" type="checkbox"> <label
-                                                for="remeber102">علم داده (7)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="from-checkbox"><input id="remeber112" type="checkbox"> <label
-                                                for="remeber112">سبک زندگی (9)</label></div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <h4 class="tp-filter-widget-title">قیمت</h4>
-                        <div class="tp-filter-widget-content">
-                            <div class="tp-filter-widget-radio">
-                                <ul>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault62"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault62">همه (20)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault72"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault72">رایگان (2)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault82"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault82">پرداخت شده (18)</label></div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <h4 class="tp-filter-widget-title">زبان</h4>
-                        <div class="tp-filter-widget-content">
-                            <div class="tp-filter-widget-radio">
-                                <ul>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault92"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault92">انگلیسی (21)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault102"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault102">روسی (1)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault112"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault112">آلمانی (5)</label></div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check"><input class="form-check-input" id="flexRadioDefault122"
-                                                name="flexRadioDefault" type="radio"> <label class="form-check-label"
-                                                for="flexRadioDefault122">ایتالیایی (6)</label></div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="filter-overlay d-md-none"></div>
-
-    {% include 'components/navbar.html' %}
-
     <div class="offcanvas__area offcanvas__2">
         <div class="offcanvas__wrapper">
             <div class="offcanvas__close"><button class="offcanvas__close-btn offcanvas-close-btn"><svg fill="none"
@@ -530,23 +270,23 @@
                         <h3 class="offcanvas-title">ما همراه شما هستیم</h3>
                         <p>بهترین شرکت راه اندازی استارت آپ دیجیتال در جهان<br>با ما دنیای دیجیتال را بسازید</p>
                     </div>
-                    <div class="tp-main-menu-mobile d-xl-none"></div>
-                    <div class="offcanvas-gallery">
+                    <div class="tp-main-menu-mobile d-xxl-none"></div>
+                    <div class="offcanvas-gallery home-2">
                         <div class="row gx-2">
                             <div class="col-md-3 col-3">
-                                <div class="offcanvas-gallery-img fix"><a href="course-with-filter.html#"><img alt=""
+                                <div class="offcanvas-gallery-img fix"><a href="index-6.html#"><img alt=""
                                             src="assets/img/menu/offcanvas/offcanvas-1.jpg"></a></div>
                             </div>
                             <div class="col-md-3 col-3">
-                                <div class="offcanvas-gallery-img fix"><a href="course-with-filter.html#"><img alt=""
+                                <div class="offcanvas-gallery-img fix"><a href="index-6.html#"><img alt=""
                                             src="assets/img/menu/offcanvas/offcanvas-2.jpg"></a></div>
                             </div>
                             <div class="col-md-3 col-3">
-                                <div class="offcanvas-gallery-img fix"><a href="course-with-filter.html#"><img alt=""
+                                <div class="offcanvas-gallery-img fix"><a href="index-6.html#"><img alt=""
                                             src="assets/img/menu/offcanvas/offcanvas-3.jpg"></a></div>
                             </div>
                             <div class="col-md-3 col-3">
-                                <div class="offcanvas-gallery-img fix"><a href="course-with-filter.html#"><img alt=""
+                                <div class="offcanvas-gallery-img fix"><a href="index-6.html#"><img alt=""
                                             src="assets/img/menu/offcanvas/offcanvas-4.jpg"></a></div>
                             </div>
                         </div>
@@ -556,14 +296,14 @@
                         <ul>
                             <li><a href="tel:1245654">+ 4 20 7700 1007</a></li>
                             <li><a href="mailto:hello@acadia.com">hello@acadia.com</a></li>
-                            <li><a href="course-with-filter.html#">خیابان رم 158b ، لیسبو</a></li>
+                            <li><a href="index-6.html#">خیابان رم 158b ، لیسبو</a></li>
                         </ul>
                     </div>
                     <div class="offcanvas-social">
                         <h3 class="offcanvas-title sm">ما را دنبال کنید</h3>
                         <ul>
-                            <li><a href="course-with-filter.html#"><svg fill="none" height="16" viewbox="0 0 16 16"
-                                        width="16" xmlns="http://www.w3.org/2000/svg">
+                            <li><a href="index-6.html#"><svg fill="none" height="16" viewbox="0 0 16 16" width="16"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M11.25 1.5H4.75C2.95507 1.5 1.5 2.95507 1.5 4.75V11.25C1.5 13.0449 2.95507 14.5 4.75 14.5H11.25C13.0449 14.5 14.5 13.0449 14.5 11.25V4.75C14.5 2.95507 13.0449 1.5 11.25 1.5Z"
                                             stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -575,8 +315,8 @@
                                         <path d="M11.5742 4.42578H11.5842" stroke="currentColor" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="1.5"></path>
                                     </svg></a></li>
-                            <li><a href="course-with-filter.html#"><svg fill="none" height="18" viewbox="0 0 18 18"
-                                        width="18" xmlns="http://www.w3.org/2000/svg">
+                            <li><a href="index-6.html#"><svg fill="none" height="18" viewbox="0 0 18 18" width="18"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M2.50589 12.7494C4.57662 16.336 9.16278 17.5648 12.7494 15.4941C14.2113 14.65 15.2816 13.388 15.8962 11.9461C16.7895 9.85066 16.7208 7.37526 15.4941 5.25063C14.2674 3.12599 12.1581 1.82872 9.89669 1.55462C8.34063 1.366 6.71259 1.66183 5.25063 2.50589C1.66403 4.57662 0.435172 9.16278 2.50589 12.7494Z"
                                             stroke="currentColor" stroke-width="1.5"></path>
@@ -584,8 +324,8 @@
                                             d="M12.7127 15.4292C12.7127 15.4292 12.0086 10.4867 10.5011 7.87559C8.99362 5.26451 5.28935 2.57155 5.28935 2.57155M5.68449 15.6124C6.79553 12.2606 12.34 8.54524 16.3975 9.43537M12.311 2.4082C11.1953 5.72344 5.75732 9.38453 1.71875 8.58915"
                                             stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
                                     </svg></a></li>
-                            <li><a href="course-with-filter.html#"><svg fill="none" height="11" viewbox="0 0 18 11"
-                                        width="18" xmlns="http://www.w3.org/2000/svg">
+                            <li><a href="index-6.html#"><svg fill="none" height="11" viewbox="0 0 18 11" width="18"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M1 5.5715H6.33342C7.62867 5.5715 8.61917 6.56199 8.61917 7.85725C8.61917 9.15251 7.62867 10.143 6.33342 10.143H1.76192C1.30477 10.143 1 9.83823 1 9.38108V1.76192C1 1.30477 1.30477 1 1.76192 1H5.5715C6.86676 1 7.85725 1.99049 7.85725 3.28575C7.85725 4.58101 6.86676 5.5715 5.5715 5.5715H1Z"
                                             stroke="currentColor" stroke-miterlimit="10" stroke-width="1.5"></path>
@@ -596,8 +336,8 @@
                                         <path d="M16.1125 1.44434H11.668" stroke="currentColor" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.2"></path>
                                     </svg></a></li>
-                            <li><a href="course-with-filter.html#"><svg fill="none" height="14" viewbox="0 0 18 14"
-                                        width="18" xmlns="http://www.w3.org/2000/svg">
+                            <li><a href="index-6.html#"><svg fill="none" height="14" viewbox="0 0 18 14" width="18"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M12.75 13H5.25C3 13 1.5 11.5 1.5 9.25V4.75C1.5 2.5 3 1 5.25 1H12.75C15 1 16.5 2.5 16.5 4.75V9.25C16.5 11.5 15 13 12.75 13Z"
                                             stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -612,122 +352,12 @@
             </div>
         </div>
     </div>
+    
     <div class="body-overlay"></div>
-    <main>
-        <section class="tp-course-filter-area tp-course-filter-bg p-relative pt-180 pb-220">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="tp-breadcrumb__content-filter mb-50">
-                            <div class="tp-breadcrumb__list">
-                                <span>
-                                    <a href="index.html">
-                                        <svg fill="none" height="14" viewbox="0 0 17 14" width="17" xmlns="http://www.w3.org/2000/svg">
-                                            <path clip-rule="evenodd" d="M8.07207 0C8.19331 0 8.31107 0.0404348 8.40664 0.114882L16.1539 6.14233L15.4847 6.98713L14.5385 6.25079V12.8994C14.538 13.1843 14.4243 13.4574 14.2225 13.6589C14.0206 13.8604 13.747 13.9738 13.4616 13.9743H2.69231C2.40688 13.9737 2.13329 13.8603 1.93146 13.6588C1.72962 13.4573 1.61597 13.1843 1.61539 12.8994V6.2459L0.669148 6.98235L0 6.1376L7.7375 0.114882C7.83308 0.0404348 7.95083 0 8.07207 0ZM8.07694 1.22084L2.69231 5.40777V12.8994H13.4616V5.41341L8.07694 1.22084Z" fill="currentColor" fill-rule="evenodd"></path>
-                                        </svg>
-                                    </a>
-                                </span>
-                                <a href="{% url 'academy:courseslist' %}" class="color">همه دوره ها</a>
-                            </div>
-                            <h3 class="tp-breadcrumb__title">همه دوره ها</h3>
-                            <p>ما بزرگترین مجموعه را داریم
-                                <br>
-                                <span>4650</span>دوره
-                            </p>
-                        </div>
-                        <div class="tp-course-filter-wrap p-relative">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="tp-course-filter-top-left d-flex align-items-center">
-                                        <div class="tp-course-filter-top-result mb-20">
-                                            <p>نمایش 1-14 از 26 نتیجه</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <form method="get" class="col-lg-6">
-                                    <div class="tp-course-filter-top-right d-flex align-items-center justify-content-start justify-content-lg-end">
-                                        <div class="tp-course-filter-top-right-search d-none d-lg-block mb-20">
-                                                <input name="name" placeholder="جستجو برای دوره های ..." type="text"> <button class="tp-course-filter-top-right-search-btn" type="submit">
-                                                    <span>
-                                                        <svg fill="none" height="17" viewbox="0 0 17 17" width="17" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M12.625 12.625L16 16" stroke="#8B8B8B"
-                                                                stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="1.5"></path>
-                                                            <path
-                                                                d="M14.5 7.75C14.5 4.02208 11.4779 1 7.75 1C4.02208 1 1 4.02208 1 7.75C1 11.4779 4.02208 14.5 7.75 14.5C11.4779 14.5 14.5 11.4779 14.5 7.75Z"
-                                                                stroke="#8B8B8B" stroke-linejoin="round"
-                                                                stroke-width="1.5"></path>
-                                                        </svg>
-                                                    </span>
-                                                </button>
-                                        </div>
-                                        <div class="tp-course-filter-btn mb-20">
-                                            <button class="tp-filter-btn filter-show-dropdown-btn filter-open-btn" type="submit">
-                                                 جستوجو
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="tp-filter-mt-2">
-            <div class="container">
-                <div class="tab-content" id="myTabContent">
-                    <div aria-labelledby="home-tab" class="tab-pane fade show active" id="home" role="tabpanel">
-                        <div class="row">
-                            {% for course in courses %}
-                            {% include 'components/course.html' %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="tp-event-inner-pagination pb-100">
-                            <div class="tp-dashboard-pagination pt-20">
-                                {% include 'components/pagination.html' with object=courses %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="banner-area pb-40">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="tp-banner-sm-2-wrap mb-60">
-                            <h3 class="tp-banner-sm-2-title">کسب درآمد<br><span>گواهی<img alt=""
-                                        class="tp-underline-shape-11 wow bounceIn" data-wow-delay=".4s"
-                                        data-wow-duration="1.5s" src="assets/img/unlerline/banner-2-svg-1.svg"></span>
-                            </h3>
-                            <div class="tp-banner-sm-2-btn"><a href="course-with-filter.html">مشاهده برنامه ها</a></div>
-                            <div class="tp-banner-sm-2-shape-1"><img alt=""
-                                    src="assets/img/banner/banner-2-thumb-1.png"></div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="tp-banner-sm-2-wrap tp-banner-sm-2-bg-2 mb-60">
-                            <h3 class="tp-banner-sm-2-title">بهترین<br>دوره های <span>رتبه بندی شده <img alt=""
-                                        class="tp-underline-shape-11 wow bounceIn" data-wow-delay=".4s"
-                                        data-wow-duration="1.5s" src="assets/img/unlerline/banner-2-svg-2.svg"></span>
-                            </h3>
-                            <div class="tp-banner-sm-2-btn"><a href="course-with-filter.html">مشاهده برنامه ها</a></div>
-                            <div class="tp-banner-sm-2-shape-1"><img alt=""
-                                    src="assets/img/banner/banner-2-thumb-2.png"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
+    {% include 'components/navbar.html' %}
+    <div class="body-overlay"></div>
+    {% block content %}{% endblock %}
     {% include 'components/footer.html' %}
-
     <script src="{% static 'js/vendor/jquery.js' %}"></script>
     <script src="{% static 'js/bootstrap-bundle.js' %}"></script>
     <script src="{% static 'js/swiper-bundle.js' %}"></script>
@@ -739,6 +369,7 @@
     <script src="{% static 'js/select2.min.js' %}"></script>
     <script src="{% static 'js/imagesloaded-pkgd.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/range-slider.js' %}"></script>
 </body>
 
 </html>

@@ -1,19 +1,6 @@
+{% extends 'academy/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دوره {{ course.name }}</title>
-    <link href="{% static 'img/logo/favicon.png' %}" rel="shortcut icon" type="image/x-icon">
-    <link href="{% static 'css/bootstrap.rtl.css' %}" rel="stylesheet">
-    <link href="{% static 'css/font-awesome-pro.css' %}" rel="stylesheet">
-    <link href="{% static 'css/spacing.rtl.css' %}" rel="stylesheet">
-    <link href="{% static 'css/main.rtl.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-</head>
-<body>
-    {% include 'components/navbar.html' %}
+{% block content %}
     <main>
         <section class="tp-breadcrumb__area pt-110 pb-90 p-relative z-index-1">
             <div class="tp-breadcrumb__bg details3" data-background="assets/img/breadcrumb/breadcrumb-bg-3.jpg"></div>
@@ -45,7 +32,7 @@
                                     <div class="tp-course-details-2-meta">
                                         <div class="tp-course-details-2-author d-flex align-items-center">
                                             <div class="tp-course-details-2-author-avater">
-                                                <img alt="Salim Rana" src="{{ user.get_photo }}">
+                                                <img style="border-radius: 50%;" alt="Salim Rana" src="{{ user.get_photo }}">
                                             </div>
                                             <div class="tp-course-details-2-author-content">
                                                 <span class="tp-course-details-2-author-designation">{% if user.is_teacher %}معلم{% elif user.is_superuser %}مدیر سایت{% endif %}</span>
@@ -782,29 +769,4 @@
             </div>
         </section>
     </main>
-    {% include 'components/footer.html' %}
-    <script src="{% static 'js/vendor/jquery.js' %}"></script>
-    <script src="{% static 'js/bootstrap-bundle.js' %}"></script>
-    <script src="{% static 'js/swiper-bundle.js' %}"></script>
-    <script src="{% static 'js/slick.js' %}"></script>
-    <script src="{% static 'js/magnific-popup.js' %}"></script>
-    <script src="{% static 'js/nice-select.js' %}"></script>
-    <script src="{% static 'js/purecounter.js' %}"></script>
-    <script src="{% static 'js/wow.js' %}"></script>
-    <script src="{% static 'js/select2.min.js' %}"></script>
-    <script src="{% static 'js/imagesloaded-pkgd.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-
-    <script src="assets/js/vendor/waypoints.js"></script>
-    <script src="assets/js/range-slider.js"></script>
-    <script src="assets/js/countdown.js"></script>
-    <script src="assets/js/jquery-one-page-nav.js"></script>
-    <script src="assets/js/isotope-pkgd.js"></script>
-    <script src="assets/js/flatpickr.js"></script>
-    <script src="assets/js/date.js"></script>
-    <script src="assets/js/datepicker.js"></script>
-    <script src="assets/js/fa.js"></script>
-    <script src="assets/js/ajax-form.js"></script>
-</body>
-
-</html>
+{% endblock %}
