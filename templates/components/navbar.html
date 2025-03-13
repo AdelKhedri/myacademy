@@ -243,7 +243,9 @@
                                         </path>
                                     </svg>
                                 </span>
-                                <i>1</i>
+                                {% if cart_courses|length > 0 %}
+                                <i>{{ cart_courses|length }}</i>
+                                {% endif %}
                             </button>
                         </div>
 

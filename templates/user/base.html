@@ -298,33 +298,7 @@
             </div>
         </div>
     </div>
-    <div class="cartmini__area">
-        <div class="cartmini__wrapper p-relative d-flex justify-content-between flex-column">
-            <div class="cartmini__close"><button class="cartmini__close-btn cartmini-close-btn" type="button"><i
-                        class="fal fa-times"></i></button></div>
-            <div class="cartmini__top-wrapper">
-                <div class="cartmini__top p-relative">
-                    <div class="cartmini__top-title">
-                        <h4>سبد خرید</h4>
-                    </div>
-                </div>
-                <div class="cartmini__shipping home-2">
-                    <p>حمل و نقل رایگان برای همه سفارشات<span>50 تومان</span></p>
-                    <div class="progress">
-                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="70"
-                            class="progress-bar progress-bar-striped progress-bar-animated" data-width="70%"
-                            role="progressbar"></div>
-                    </div>
-                </div>
-                <div class="cartmini__empty text-center">
-                    <img alt="" src="{% static 'img/shop/empty-cart.png' %}">
-                    <p>سبد خرید شما خالی است</p>
-                    <a class="tp-btn" href="shop.html">برو به فروشگاه</a>
-                </div>
-            </div>
-            
-        </div>
-    </div>
+    {% include 'components/cart.html' %}
     <div class="body-overlay"></div>
 
     {% include 'components/navbar.html' %}

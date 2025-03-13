@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from django.db.models import Count
+from academy.card import Cart
 from .forms import UserProfileForm, PasswordChangeForm
 from .models import Profile
 from academy.models import Course, Seasion
@@ -19,6 +20,15 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_page'] = 'profile'
+
+        cart = Cart(self.request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
+        context['cart_courses'] = cart_courses
+        context['total_price'] = total_price
         return context
 
     def get_object(self):
@@ -43,6 +53,16 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_page'] = 'profile'
+
+        # cart
+        cart = Cart(self.request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
+        context['cart_courses'] = cart_courses
+        context['total_price'] = total_price
         return context
 
     def get_form_kwargs(self):
@@ -73,6 +93,16 @@ class CourseAddView(CreateView):
         context = super().get_context_data(**kwargs)
         context['current_page'] = 'course-add'
         context['seasion_formset'] = SeasionFormSet(self.request.POST) if self.request.method == 'POST' else SeasionFormSet()
+        
+        # cart
+        cart = Cart(self.request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
+        context['cart_courses'] = cart_courses
+        context['total_price'] = total_price
         return context
 
     def form_valid(self, form):
@@ -99,7 +129,6 @@ class CourseUpdateView(UpdateView):
     form_class = CourseForm
     template_name = 'user/course.html'
 
-    
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect(reverse('academy:login') + '?next=' + reverse('user:course-update', args=[self.get_object().pk]))
@@ -111,6 +140,16 @@ class CourseUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_page'] = 'course-update'
+
+        # cart
+        cart = Cart(self.request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
+        context['cart_courses'] = cart_courses
+        context['total_price'] = total_price
         return context
 
     def get_success_url(self):
@@ -147,6 +186,16 @@ class MyCourseView(ListView):
         context['active_tab'] = 'published'
         context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
         context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()
+
+        # cart
+        cart = Cart(self.request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
+        context['cart_courses'] = cart_courses
+        context['total_price'] = total_price
         return context
 
 
@@ -174,6 +223,16 @@ class MyCourseNotPublishedView(ListView):
         context['active_tab'] = 'not-published'
         context['active_courses'] = Course.objects.filter(teacher = self.request.user, is_active = True).count()
         context['inactive_courses'] = Course.objects.filter(teacher = self.request.user, is_active = False).count()
+
+        # cart
+        cart = Cart(self.request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
+        context['cart_courses'] = cart_courses
+        context['total_price'] = total_price
         return context
 
 
@@ -203,4 +262,14 @@ class MyBookmarkListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['current_url'] = self.request.get_full_path()
         context['current_page'] = 'my_bookmarked_courses'
+
+        # cart
+        cart = Cart(self.request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
+        context['cart_courses'] = cart_courses
+        context['total_price'] = total_price
         return context

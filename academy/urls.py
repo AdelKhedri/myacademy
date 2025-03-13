@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (RegisterView, ActivateRegisterdAccountView, LoginView, Home, ForgotPasswordView, ConfirmForgotPasswordView,
-                    LogoutView, CourseFilterView, CourseCategoryView, BookmarkView, ProductDetailsView)
+                    LogoutView, CourseFilterView, CourseCategoryView, BookmarkView, CourseDetailsView, course_add)
 
 
 app_name = 'academy'
@@ -14,6 +14,7 @@ urlpatterns = [
     path('courses', CourseFilterView.as_view(), name='courseslist'),
     path('category/<slug:category_slug>', CourseCategoryView.as_view(), name='category'),
     path('bookmarker/<int:course_id>', BookmarkView.as_view(), name='bookmarker'),
-    path('courses/<int:course_id>', ProductDetailsView.as_view(), name='course-details'),
-    path('', Home.as_view(), name = 'home')
+    path('courses/<int:course_id>', CourseDetailsView.as_view(), name='course-details'),
+    path('', Home.as_view(), name = 'home'),
+    path('cart/add/<int:course_id>', course_add, name='cart-add'),
 ]
