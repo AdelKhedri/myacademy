@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دوره {{ course.name }}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link href="{% static 'img/logo/favicon.png' %}" rel="shortcut icon" type="image/x-icon">
     <link href="{% static 'css/bootstrap.rtl.css' %}" rel="stylesheet">
     <link href="{% static 'css/animate.css' %}" rel="stylesheet">
@@ -251,6 +251,7 @@
             </div>
         </div>
     </div>
+    {% include 'components/cart.html' %}
     <div class="offcanvas__area offcanvas__2">
         <div class="offcanvas__wrapper">
             <div class="offcanvas__close"><button class="offcanvas__close-btn offcanvas-close-btn"><svg fill="none"

@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.views.generic import View, DetailView, FormView
 from datetime import timedelta
 from django.utils import timezone
+from .card import Cart
 from .models import Category, Course, MainPageCategoryAdd, MainPageCourseAdd, Team
 from user.models import OTPCode, User
 from .forms import CommentForm, RecaptchaFrom, RegisterForm, LoginForm, ChangePasswordForgotPasswordFrom
@@ -96,10 +97,18 @@ class Home(View):
     template_name = 'academy/home.html'
 
     def get(self, request, *args, **kwargs):
+        cart = Cart(request)
+        courses = cart.get_courses()
+        total_price = 0
+        for course in courses:
+            total_price += course.get_final_price()
+
         context = {
             'mainpage_categorys': MainPageCategoryAdd.objects.all()[:4],
             'mainpage_tabs_courses': MainPageCourseAdd.objects.all()[:4],
             'team': Team.objects.all(),
+            'total_price': total_price,
+            'cart_courses': courses,
         }
         return render(request, self.template_name, context)
 
@@ -258,6 +267,12 @@ class CourseFilterView(View):
     template_name = 'academy/course.html'
 
     def get(self, request, *args, **kwargs):
+        cart = Cart(request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
         courses = Course.objects.filter(is_active = True).select_related('teacher').prefetch_related('category', 'seasions').annotate(lessons_count = Count('seasions__lessons')).order_by('updated_at')
         course_name = request.GET.get('name', None)
         if course_name:
@@ -266,7 +281,9 @@ class CourseFilterView(View):
         context = {
             'courses': paginate(courses, 9, request),
             'current_url': request.get_full_path(),
-            'page_name': 'تمام دوره ها | آکادمی من'
+            'page_name': 'تمام دوره ها | آکادمی من',
+            'cart_courses': cart_courses,
+            'total_price': total_price,
             }
         return render(request, self.template_name, context)
 
@@ -275,6 +292,12 @@ class CourseCategoryView(View):
     template_name = 'academy/course.html'
 
     def get(self, request, category_slug, *args, **kwargs):
+        cart = Cart(request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
         category = get_object_or_404(Category, slug = category_slug)
         courses = Course.objects.filter(is_active = True, category__slug = category_slug).select_related('teacher').prefetch_related('category', 'seasions').annotate(lessons_count = Count('seasions__lessons')).order_by('updated_at')
         course_name = request.GET.get('name', None)
@@ -283,7 +306,9 @@ class CourseCategoryView(View):
 
         context = {
             'courses': paginate(courses, 9, request),
-            'page_name': f'دوره های {category.title} | آکادمی من'
+            'page_name': f'دوره های {category.title} | آکادمی من',
+            'cart_courses': cart_courses,
+            'total_price': total_price,
             }
         return render(request, self.template_name, context)
 
@@ -305,10 +330,16 @@ class LogoutView(View):
         return redirect('academy:home')
 
 
-class ProductDetailsView(View):
+class CourseDetailsView(View):
     template_name = 'academy/course-details.html'
 
     def dispatch(self, request, *args, **kwargs):
+        cart = Cart(request)
+        cart_courses = cart.get_courses()
+        total_price = 0
+        for course in cart_courses:
+            total_price += course.get_final_price()
+
         self.course = get_object_or_404(
             Course.objects.prefetch_related('category', 'seasions', 'seasions__lessons').select_related('teacher').annotate(lessons_count = Count('seasions__lessons')),
             is_active = True,
@@ -318,6 +349,8 @@ class ProductDetailsView(View):
             'course': self.course,
             'comments': Comment.objects.filter(active = True, media_type = 'course', parent__isnull = True, media_id = self.course.pk),
             'form': CommentForm(),
+            'cart_courses': cart_courses,
+            'total_price': total_price,
         }
         return super().dispatch(request, *args, **kwargs)
 
@@ -339,3 +372,10 @@ class ProductDetailsView(View):
                 self.context['msg'] = 'failed'
             return render(request, self.template_name, self.context)
         return redirect('academy:login')
+
+
+def course_add(request, course_id):
+    course = get_object_or_404(Course, is_active = True, id = course_id)
+    cart = Cart(request)
+    cart.add(course.id)
+    return redirect(course.get_absolute_url())

@@ -1,5 +1,6 @@
 {% extends 'academy/base.html' %}
 {% load static %}
+{% block title %}دوره {{ course.name }}{% endblock %}
 {% block content %}
     <main>
         <section class="tp-breadcrumb__area pt-110 pb-90 p-relative z-index-1">
@@ -150,8 +151,7 @@
                                     </div>
                                 </div>
                                 <div class="tp-course-details-2-widget-btn">
-                                    <a href="cart.html">افزودن به سبد خرید</a>
-                                    <!-- <a class="active" href="course-with-filter.html">خرید دوره</a> -->
+                                    <a href="{{ course.get_purch_url }}">افزودن به سبد خرید</a>
                                     <p>برای تکمیل خرید از سبد خرید اقدام کنید.</p>
                                 </div>
                                 <div class="tp-course-details-2-instructor-social text-center"><a
