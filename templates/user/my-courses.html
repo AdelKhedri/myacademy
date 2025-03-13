@@ -22,7 +22,7 @@
                                 <div class="col-xl-4 col-md-6">
                                     <div class="tp-dashboard-course tp-dashboard-course-2 mb-25">
                                         <div class="tp-dashboard-course-thumb">
-                                            <a href="#">
+                                            <a href="{{ course.get_absolute_url }}">
                                                 <img alt="" src="{{ course.thumbnail.url }}">
                                             </a>
                                         </div>
@@ -41,7 +41,7 @@
                                                 <i class="fa-solid fa-star"></i>
                                                 <span>(15 بررسی)</span>
                                             </div>
-                                            <h4 class="tp-dashboard-course-title"><a href="#">{{ course.name }}</a></h4>
+                                            <h4 class="tp-dashboard-course-title"><a href="{{ couorse.get_absolute_url }}">{{ course.name }}</a></h4>
                                             <div class="tp-dashboard-course-meta">
                                                 <span>
                                                     <span>
