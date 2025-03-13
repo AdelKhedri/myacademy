@@ -379,3 +379,9 @@ def course_add(request, course_id):
     cart = Cart(request)
     cart.add(course.id)
     return redirect(course.get_absolute_url())
+
+def course_remove(request, course_id):
+    course = get_object_or_404(Course, is_active= True, id = course_id)
+    cart = Cart(request)
+    cart.remove(course.id)
+    return redirect(course.get_absolute_url())

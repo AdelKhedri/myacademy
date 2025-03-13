@@ -27,7 +27,7 @@
                             <span class="cartmini__price home-2">{{ course.get_final_price }} تومان</span>
                         </div>
                     </div>
-                    <a class="cartmini__del home-2" href="index-6.html#"><i class="fa-regular fa-xmark"></i></a>
+                    <a class="cartmini__del home-2" href="{{ course.get_remove_from_cart }}"><i class="fa-regular fa-xmark"></i></a>
                 </div>
                 {% endfor %}
             </div>
