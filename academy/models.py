@@ -1,15 +1,16 @@
 from django.db import models
+from django.forms import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from user.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from .managers import CommentManager
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 
 class Course(models.Model):
     name = models.CharField(_("نام"), max_length=300)
-    category = models.ManyToManyField('Category', blank=True, verbose_name=_('دسته بندی'))
+    category = models.ManyToManyField('Category', blank=True, related_name='courses', verbose_name=_('دسته بندی'))
     teacher = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('مدرس'))
     description = models.TextField(_('درباره دوره'))
     seasions = models.ManyToManyField('Seasion', blank=True, verbose_name=_('فصل ها'))
@@ -35,7 +36,7 @@ class Course(models.Model):
         ordering = ['is_active', 'created_at']
 
     def lessons_count(self):
-        return self.seasions.annotate(lessons_count = Count('lessons')).aggregate(count = Count('lessons_count'))['count']
+        return self.seasions.annotate(lessons_count = Count('lessons')).aggregate(count = Sum('lessons_count'))['count'] or 0
     
     def get_final_price(self):
         return self.price_with_discount + (self.price // 100 * self.tax) if self.price_with_discount else self.price + (self.price // 100 * self.tax)
@@ -82,8 +83,32 @@ class Category(models.Model):
         verbose_name_plural = 'دسته بندی ها'
         ordering = ['title']
 
+    def get_active_courses_count(self):
+        return self.courses.filter(is_active = True).count()
+
+    def get_absolute_url(self):
+        return reverse('academy:category', args=[self.slug])
+
     def __str__(self):
         return self.title
+
+
+class Team(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('کاربر'))
+    social_telegram = models.URLField(_('ادرس تلگرام'), blank=True)
+    social_rubika = models.URLField(_('ادرس روبیکا'), blank=True)
+    social_instagram = models.URLField(_('ادرس اینستاگرام'), blank=True)
+    social_github = models.URLField(_('ادرس گیتهاب'), blank=True)
+    image = models.ImageField(_('عکس کاربر'), blank=True, upload_to='users/team/profiles/', help_text='260px * 350px none background')
+    position = models.TextField(_('سِمَت'), max_length=150)
+
+    class Meta:
+        verbose_name = 'عضو تیم'
+        verbose_name_plural = 'اعضای تیم'
+        ordering = ['id']
+
+    def __str__(self):
+        return self.user.__str__()
 
 
 class Lesson(models.Model):
@@ -111,6 +136,33 @@ class Seasion(models.Model):
     class Meta:
         verbose_name = 'فصل'
         verbose_name_plural = 'فصل ها'
+        ordering = ['id']
+
+    def __str__(self):
+        return self.title
+
+
+class MainPageCategoryAdd(models.Model):
+    title = models.CharField(_('نام تبلیغاتی دسته بندی '), max_length=150)
+    image = models.ImageField(_('عکس تبلیغاتی دسته بندی'), upload_to='categorys/images/')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('دسته بندی'))
+
+    class Meta:
+        verbose_name = 'دسته بندی تبلیغاتی صفحه خانه'
+        verbose_name_plural = 'دسته بندی های تبلیغاتی صفحه خانه'
+        ordering = ['id']
+
+    def __str__(self):
+        return self.title
+
+
+class MainPageCourseAdd(models.Model):
+    title = models.CharField(_('نام تب محصولات '), max_length=150)
+    courses = models.ManyToManyField(Course, verbose_name=_('دسته بندی'))
+
+    class Meta:
+        verbose_name = 'محصول تبلیغاتی صفحه خانه'
+        verbose_name_plural = 'محصولات تبلیغاتی صفحه خانه'
         ordering = ['id']
 
     def __str__(self):

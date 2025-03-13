@@ -1,0 +1,611 @@
+{% extends 'academy/base.html' %}
+{% load static %}
+{% block content %}
+    <main class="body">
+        <div class="tp-hero-6-area lightblue-bg tp-hero-2-bg fix">
+            <div class="container custom-container-1300">
+                <div class="tp-hero-6-wrap">
+                    <div class="row align-items-end">
+                        <div class="col-xxl-7 col-xl-6 col-lg-7 col-md-12">
+                            <div class="tp-hero-6-content">
+                                <span class="tp-hero-6-subtitle wow fadeInUp" data-wow-delay=".3s">
+                                    <svg fill="none" height="15" viewbox="0 0 14 15" width="14" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M13.1291 14.5H0.525163C0.238074 14.5 0 14.2619 0 13.9748C0 13.6877 0.238074 13.4496 0.525163 13.4496H13.1291C13.4162 13.4496 13.6542 13.6877 13.6542 13.9748C13.6542 14.2619 13.4162 14.5 13.1291 14.5Z"
+                                            fill="#5956E9"></path>
+                                        <path
+                                            d="M11.7432 1.53199C10.3848 0.173566 9.05439 0.138555 7.66096 1.53199L6.8137 2.37925C6.74368 2.44927 6.71567 2.56131 6.74368 2.65934C7.27584 4.51491 8.7603 5.99937 10.6159 6.53153C10.6439 6.53854 10.6719 6.54554 10.6999 6.54554C10.7769 6.54554 10.8469 6.51753 10.903 6.46151L11.7432 5.61425C12.4364 4.92804 12.7725 4.26283 12.7725 3.59062C12.7795 2.89741 12.4434 2.2252 11.7432 1.53199Z"
+                                            fill="#FFC221"></path>
+                                        <path
+                                            d="M9.35439 7.16872C9.15133 7.07069 8.95527 6.97266 8.76621 6.86062C8.61217 6.7696 8.46512 6.67156 8.31807 6.56653C8.19904 6.48951 8.05899 6.37747 7.92595 6.26544C7.91195 6.25844 7.86293 6.21642 7.80692 6.16041C7.57584 5.96435 7.31676 5.71227 7.08569 5.43218C7.06469 5.41818 7.02968 5.36916 6.98066 5.30614C6.91064 5.22212 6.7916 5.08207 6.68657 4.92102C6.60254 4.81599 6.50451 4.66194 6.41348 4.50789C6.30145 4.31884 6.20342 4.12978 6.10539 3.93372C5.97686 3.65829 5.61537 3.57648 5.40045 3.79139L1.46295 7.72889C1.37192 7.81992 1.2879 7.99497 1.26689 8.11401L0.888773 10.7958C0.818751 11.272 0.951793 11.7201 1.24588 12.0212C1.49796 12.2663 1.84807 12.3993 2.22619 12.3993C2.31021 12.3993 2.39424 12.3923 2.47827 12.3783L5.1671 12.0002C5.29314 11.9792 5.46819 11.8952 5.55222 11.8042L9.49622 7.86016C9.70683 7.64954 9.6277 7.28715 9.35439 7.16872Z"
+                                            fill="#5956E9"></path>
+                                    </svg>آموزش در سطح جهانی</span>
+                                <h2 class="tp-hero-6-title wow fadeInUp" data-wow-delay=".5s">
+                                    بیش از<span>2500
+                                        <img alt="" class="wow bounceIn" data-wow-delay=".4s" data-wow-duration="1.5s" src="{% static 'img/hero/home/title-vector.png' %}">
+                                    </span>دوره رایگان<br>از
+                                    آکادیادریافت کنید</h2>
+                                <p class="wow fadeInUp" data-wow-delay=".7s">دانش جهانی را به دست آورید و مهارت های حرفه
+                                    ای خود را بسازید</p>
+                                <div class="tp-hero-6-btn-box d-flex align-items-center wow fadeInUp"
+                                    data-wow-delay=".9s">
+                                    <div class="tp-hero-6-btn">
+                                        <a class="tp-btn-inner" href="{% url 'academy:courseslist' %}">دوره ها را پیدا کنید<span>
+                                            <svg fill="none" height="11" viewbox="0 0 14 11" width="14" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M8.71533 1L13 5.28471L8.71533 9.56941"
+                                                        stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2">
+                                                    </path>
+                                                    <path d="M1 5.28473H12.88" stroke="currentColor"
+                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-miterlimit="10" stroke-width="2"></path>
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    <div class="tp-hero-6-video">
+                                        <a class="video-border-animation popup-video" href="https://www.youtube.com/watch?v=LlCwHnp3kL4">
+                                            <span>
+                                                <svg fill="none" height="12" viewbox="0 0 11 12" width="11" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M0.0399028 0.755673C0.0421193 0.177043 0.67266 -0.187 1.17488 0.100395L10.2148 5.27351C10.717 5.56091 10.7142 6.2842 10.2098 6.57543L1.12999 11.8177C0.62556 12.1089 -0.00221065 11.7496 5.85292e-06 11.171L0.0399028 0.755673Z"
+                                                        fill="#031F42"></path>
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-5 col-xl-4 col-lg-5 col-md-6">
+                            <div class="tp-hero-6-wrap p-relative wow fadeInUp" data-wow-delay=".5s">
+                                <div class="tp-hero-6-bg"></div>
+                                <div class="tp-hero-6-shape">
+                                    <div class="shape-1">
+                                        <img alt="" src="{% static 'img/hero/home/hero-thumb-shape-1.png' %}">
+                                    </div>
+                                    <div class="shape-2">
+                                        <img alt="" src="{% static 'img/hero/home/hero-thumb-shape-2.png' %}">
+                                    </div>
+                                    <div class="shape-3">
+                                        <img alt="" src="{% static 'img/hero/home/hero-thumb-shape-3.png' %}">
+                                    </div>
+                                </div>
+                                <div class="tp-hero-6-user"><span>مربی</span>
+                                    <div class="tp-hero-6-user-content d-flex align-items-center">
+                                        <div class="tp-hero-6-user-thumb">
+                                            <img alt="" src="{% static 'img/hero/home/hero-user-1.jpg' %}">
+                                            <img alt="" src="{% static 'img/hero/home/hero-user-2.jpg' %}">
+                                            <img alt="" src="{% static 'img/hero/home/hero-user-3.jpg' %}">
+                                            <img alt="" src="{% static 'img/hero/home/hero-user-4.jpg' %}">
+                                        </div>
+                                        <div class="tp-hero-6-user-text">
+                                            <p><i>200+</i><br>مربیان</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tp-hero-6-thumb"><img alt="" src="{% static 'img/hero/home/hero-thumb.png' %}"></div>
+                </div>
+            </div>
+            <div class="tp-hero-2-shape">
+                <div class="tp-hero-2-shape-2"><img alt="" src="{% static 'img/hero/hero-6-shape-2.png' %}"></div>
+                <div class="tp-hero-2-shape-3"><img alt="" src="{% static 'img/hero/hero-2-shape-3.png' %}"></div>
+            </div>
+        </div>
+        <section class="tp-funfact-6-ptb">
+            <div class="container custom-container-1300">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="tp-funfact-item d-flex align-items-center">
+                            <div class="tp-funfact-icon"><span><img alt="icon" src="{% static 'img/icon/funfact/funfact-2-icon-1.svg' %}"></span></div>
+                            <div class="tp-funfact-content">
+                                <h4 class="tp-funfact-title">کلاس های انعطاف پذیر</h4><span>شما برنامه را انتخاب می
+                                    کنید</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="tp-funfact-item tp-funfact-item-2 d-flex align-items-center">
+                            <div class="tp-funfact-icon"><span><img alt="icon"
+                                        src="{% static 'img/icon/funfact/funfact-2-icon-2.svg' %}"></span></div>
+                            <div class="tp-funfact-content">
+                                <h4 class="tp-funfact-title">حالت آفلاین</h4><span>دانلود کلاس ها</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="tp-funfact-item tp-funfact-item-3 d-flex align-items-center">
+                            <div class="tp-funfact-icon"><span><img alt="icon"
+                                        src="{% static 'img/icon/funfact/funfact-2-icon-3.svg' %}"></span></div>
+                            <div class="tp-funfact-content">
+                                <h4 class="tp-funfact-title">10 هزار دوره آنلاین</h4><span>موضوعات تازه را کاوش
+                                    کنید</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="tp-funfact-item d-flex align-items-center justify-content-lg-end">
+                            <div class="tp-funfact-icon"><span><img alt="icon"
+                                        src="{% static 'img/icon/funfact/funfact-2-icon-4.svg' %}"></span></div>
+                            <div class="tp-funfact-content">
+                                <h4 class="tp-funfact-title">کمک مربی</h4><span>همیشه جواب بگیرید</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="tp-category-6-ptb pb-120 pt-120 body">
+            <div class="container custom-container-1300">
+                <div class="row justify-content-center">
+                    <div class="col-xl-8 col-lg-10">
+                        <div class="tp-category-6-heading mb-50 text-center wow fadeInUp" data-wow-delay=".4s">
+                            <h5 class="tp-section-3-subtitle color-9">دسته بندی های برتر</h5>
+                            <h3 class="tp-section-3-title color-9">محبوب ترین<span>دسته بندی ها<img alt="" class="tp-underline-shape-5 wow bounceIn" data-wow-delay=".4s" data-wow-duration="1.5s" src="{% static 'img/shape/bottom-line/line-2-category-2.svg' %}"></span></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row tp-gx-20">
+                    {% for category in mainpage_categorys %}
+                    <div class="col-xl-3 col-lg-6 col-md-6">
+                        <div class="tp-category-6-item card mb-30 wow fadeInUp" data-wow-delay=".3s">
+                            <div class="tp-category-6-item-thumb">
+                                <a href="{{ category.category.get_absolute_url }}">
+                                    <img alt="" src="{{ category.image.url }}">
+                                </a>
+                            </div>
+                            <div class="tp-category-6-item-content text-center">
+                                <h4 class="tp-category-6-item-title">
+                                    <a href="{{ category.cateogry.get_absolute_url }}">{{ category.title }}</a></h4><span>{{ category.category.get_active_courses_count }} دوره</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="tp-category-6-btn text-center pt-40">
+                            <div class="tp-hero-6-btn">
+                                <a class="tp-btn-inner" href="course-with-filter.html">مشاهده همه دسته ها
+                                    <span>
+                                        <svg fill="none" height="11" viewbox="0 0 14 11" width="14" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8.71533 1L13 5.28471L8.71533 9.56941" stroke="currentColor"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                                                stroke-width="2"></path>
+                                            <path d="M1 5.28473H12.88" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="course-area tp-course-wrapper mt-100 mb-100 body">
+            <div class="container">
+                <div class="row align-items-end">
+                    <div class="col-xxl-5 col-xl-6 col-lg-7">
+                        <div class="tp-section mb-40">
+                            <h5 class="tp-section-3-subtitle">دوره های ما</h5>
+                            <h3 class="tp-section-3-title">
+                                محبوب ترین<span>دوره ها
+                                    <img alt="" class="tp-underline-shape-6 wow bounceIn" data-wow-delay=".4s" data-wow-duration="1.5s" src="{% static 'img/unlerline/course-2-svg-1.svg' %}"></span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-xxl-7 col-xl-6 col-lg-5">
+                        <div class="tp-course-tab d-flex justify-content-lg-end mb-40">
+                            <nav>
+                                <div class="nav" id="nav-tab" role="tablist">
+                                    {% for tab in mainpage_tabs_courses %}
+                                    <button aria-controls="nav-{{ tab.id }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" class="nav-link {% if forloop.first %}active{% endif %}" data-bs-target="#nav-{{ tab.id }}" data-bs-toggle="tab" id="nav-{{ tab.id }}-tab" role="tab" type="button">
+                                        {{ tab.title }}
+                                        <span>
+                                            <img alt="" src="{% static 'img/course/course-2-shape-1.png' %}">
+                                        </span>
+                                    </button>
+                                    {% endfor %}
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="tab-content wow fadeInUp" data-wow-delay=".3s" id="nav-tabContent">
+                            {% for tab in mainpage_tabs_courses %}
+                            <div aria-labelledby="nav-{{ tab.id }}-tab" class="tab-pane fade
+                            {% if forloop.first %} show active {% endif %}" id="nav-{{ tab.id }}"
+                            role="tabpanel" tabindex="0">
+                                <div class="row">
+                                    {% for course in tab.courses.all %}
+                                    {% include 'components/course.html' %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-xxl-6 col-lg-8">
+                        <div class="tp-category-6-banner d-flex align-items-center justify-content-between tp-category-banner-bg mt-35"
+                            data-background="{% static 'img/bg/category-shape-bg.png' %}">
+                            <div class="tp-category-banner-content d-flex align-items-center">
+                                <div class="tp-category-banner-shape"><img alt=""
+                                        src="{% static 'img/shape/category-2-shape-1.png' %}"></div>
+                                <div class="tp-category-banner-text"><span>به ما کمک کنید</span>
+                                    <h4 class="tp-category-banner-title">پیدا کردن دوره های مناسب شما</h4>
+                                </div>
+                            </div>
+                            <div class="tp-category-banner-btn"><a class="tp-btn-2" href="{% url 'academy:login' %}">شروع کنید</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="team-area pt-100 mb-100 body">
+            <div class="container">
+                <div class="row align-items-end">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="tp-section mb-45">
+                            <h5 class="tp-section-3-subtitle">تیم ما</h5>
+                            <h3 class="tp-section-3-title">تیم<span>اعضای<img alt=""
+                                        class="tp-underline-shape-9 wow bounceIn" data-wow-delay=".4s"
+                                        data-wow-duration="1.5s" src="{% static 'img/unlerline/team-2-svg-1.svg' %}"></span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4">
+                        <div class="tp-team-2-arrow d-flex align-items-center justify-content-md-end mb-55">
+                            <div class="tp-team-2-prev"><span><svg fill="none" height="12" viewbox="0 0 7 12" width="7"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1 11L6 6L1 1" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2"></path>
+                                    </svg></span></div>
+                            <div class="tp-team-2-next"><span><svg fill="none" height="12" viewbox="0 0 7 12" width="7"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 11L1 6L6 1" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2"></path>
+                                    </svg></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper tp-team-2-active wow fadeInUp" data-wow-delay=".5s">
+                    <div class="swiper-wrapper align-items-end">
+                        {% for person in team %}
+                        <div class="swiper-slide">
+                            <div class="tp-team-2-item">
+                                <div class="tp-team-2-bg"></div>
+                                <div class="tp-team-2-social">
+                                    <span class="tp-team-2-social-wrap">
+                                        <svg
+                                            class="feather feather-plus" fill="none" height="20" stroke="currentColor"
+                                            stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                                            <line x1="12" x2="12" y1="5" y2="19"></line>
+                                            <line x1="5" x2="19" y1="12" y2="12"></line>
+                                        </svg>
+                                    </span>
+                                    <div class="tp-team-2-social-icon">
+                                        <a href="{{ person.social_telegram }}"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a href="{{ person.social_instagram }}"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a href="{{ person.social_rubika }}"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a href="{{ person.social_githab }}"><i class="fa-brands fa-github-f"></i></a>
+                                    </div>
+                                </div>
+                            <div class="tp-team-2-thumb"><img alt=""
+                                {% if person.image %}
+                                 src="{{ person.image.url }}"
+                                {% else %} style="border-radius: 50%;" src="{{ person.user.get_photo }}"
+                                {% endif %}></div>
+                                <div class="tp-team-2-content">
+                                    <h4 class="tp-team-2-title"><a href="my-profile.html">{{ person.user }}</a></h4>
+                                    <span>{{ person.position|linebreaksbr }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="banner-area pb-60">
+            <div class="container custom-container-1300">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="tp-banner-sm-2-wrap mb-60 wow fadeInUp" data-wow-delay=".3s">
+                            <h3 class="tp-banner-sm-2-title">
+                                کسب درآمد<br><span>گواهی
+                                    <img alt="" class="tp-underline-shape-11 wow bounceIn" data-wow-delay=".4s" data-wow-duration="1.5s" src="{% static 'img/unlerline/banner-2-svg-1.svg' %}"></span>
+                            </h3>
+                            <div class="tp-banner-sm-2-btn"><a href="contact.html">مشاهده برنامه ها</a></div>
+                            <div class="tp-banner-sm-2-shape-1"><img alt=""
+                                    src="{% static 'img/banner/banner-2-thumb-1.png' %}"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="tp-banner-sm-2-wrap tp-banner-sm-2-bg-2 mb-60 wow fadeInUp" data-wow-delay=".3s">
+                            <h3 class="tp-banner-sm-2-title">بهترین<br>دوره های <span>رتبه بندی شده <img alt=""
+                                        class="tp-underline-shape-11 wow bounceIn" data-wow-delay=".4s"
+                                        data-wow-duration="1.5s" src="{% static 'img/unlerline/banner-2-svg-2.svg' %}"></span>
+                            </h3>
+                            <div class="tp-banner-sm-2-btn"><a href="course-with-filter.html">مشاهده برنامه ها</a></div>
+                            <div class="tp-banner-sm-2-shape-1"><img alt=""
+                                    src="{% static 'img/banner/banner-2-thumb-2.png' %}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tp-blog-6-ptb py-4">
+            <div class="container custom-container-1300">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="tp-team-6-heading mb-60 wow fadeInUp" data-wow-delay=".4s">
+                            <h5 class="tp-section-3-subtitle color-9">وبلاگ ما</h5>
+                            <h3 class="tp-section-3-title color-9">محبوب ترین ها را<span>ارسال میکنیم.<svg
+                                        class="tp-underline-shape-9 wow bounceIn" data-wow-delay=".4s"
+                                        data-wow-duration="1.5s" fill="none" height="15" viewbox="0 0 122 15"
+                                        width="122" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M68.5413 2.46413C66.3401 2.68509 57.7946 3.27171 49.5964 3.77416C28.1725 5.06268 19.149 5.84612 11.86 6.92924C6.17888 7.77609 0.803794 8.90046 0.521668 9.30659C0.470373 9.38043 0.447977 10.2819 0.456255 11.2903C0.458989 12.9113 0.549754 13.1964 1.16175 13.7514C1.55098 14.0981 2.07472 14.44 2.29373 14.5405C2.67667 14.7072 17.2211 13.1185 20.6754 12.5296C22.2027 12.2961 69.392 9.85568 80.9058 9.41758C85.049 9.2729 94.6883 9.15244 102.312 9.17441C109.936 9.19638 116.83 9.13577 117.609 9.07254C119.544 8.93293 121.221 7.61345 121.254 6.24332C121.252 5.41481 121.167 5.2737 120.547 5.25933C119.873 5.24683 119.872 5.21085 120.697 4.92985C121.841 4.52964 121.968 4.30905 121.278 3.8288C120.616 3.38358 120.487 2.77565 121.079 2.75498C121.294 2.74747 121.476 2.56098 121.47 2.38108C121.462 2.16519 121.323 2.02596 121.134 2.03253C120.973 2.03817 120.261 1.70278 119.573 1.29449L118.308 0.54611L95.438 1.30872C82.8724 1.71149 70.7693 2.24222 68.5413 2.46413ZM87.1555 3.25513C87.3219 3.39342 88.9412 3.48097 90.7976 3.41614C92.6552 3.3873 96.1578 3.40909 98.6124 3.5035C102.524 3.65512 102.094 3.70614 95.1211 3.80555C90.7601 3.88578 83.628 4.06279 79.2695 4.21499C74.911 4.3672 71.4109 4.41737 71.4622 4.34353C71.5392 4.23276 74.5218 4.02053 78.0988 3.8596C81.6745 3.66268 84.7366 3.41165 84.9186 3.22516C85.3109 2.88723 86.7381 2.87342 87.1555 3.25513ZM114.941 2.86125C114.405 2.952 113.544 2.98207 113.057 2.92702C112.598 2.87102 113.052 2.78309 114.075 2.74739C115.124 2.71075 115.503 2.76956 114.941 2.86125ZM55.814 5.17818C55.7627 5.25202 49.5516 5.577 41.994 5.91296C34.4646 6.28397 30.1586 6.39832 32.4417 6.21051C37.2488 5.79047 55.9679 4.95665 55.814 5.17818ZM69.2148 4.78226C69.1379 4.89303 68.897 4.93746 68.7049 4.8361C68.4859 4.73567 68.5629 4.6249 68.8588 4.61457C69.1535 4.56825 69.3187 4.67056 69.2148 4.78226ZM116.863 5.46C117.06 5.7053 116.283 5.80451 114.452 5.83241C112.97 5.81212 107.696 5.99627 102.747 6.20512C97.7982 6.41398 93.0618 6.54335 92.2521 6.49957C89.8488 6.33132 76.9066 6.74724 67.2274 7.26538C57.2804 7.82889 56.6553 7.67059 65.7326 6.88527C73.8695 6.16882 116.497 5.00446 116.863 5.46ZM51.902 8.08876C43.787 8.66034 35.4198 8.95253 37.3725 8.56011C38.1746 8.388 43.2019 8.10437 48.5289 7.91834C58.0274 7.62267 58.1081 7.61986 51.902 8.08876ZM87.427 7.17243C87.4332 7.35234 87.2474 7.43088 87.0284 7.33045C86.8082 7.19404 86.6148 7.05669 86.6123 6.98472C86.6098 6.91276 86.7956 6.83422 87.0108 6.8267C87.2261 6.81919 87.4194 6.95654 87.427 7.17243ZM88.2341 7.14424C88.2404 7.32415 88.1121 7.50876 87.9507 7.51439C87.8162 7.51909 87.7561 7.34106 87.8305 7.15833C87.9037 6.93963 88.0332 6.791 88.1139 6.78818C88.1677 6.7863 88.2265 6.92835 88.2341 7.14424ZM90.2519 7.07378C90.3389 7.25087 90.2376 7.43453 90.0223 7.44205C89.7802 7.45051 89.5856 7.27717 89.5793 7.09727C89.5717 6.88138 89.6743 6.73369 89.8089 6.72899C89.9703 6.72336 90.1636 6.86071 90.2519 7.07378ZM115.824 6.54105C116.318 6.81199 116.319 6.84798 115.699 6.8336C115.322 6.84676 114.672 6.72538 114.209 6.59742L113.392 6.33776L114.334 6.30487C114.845 6.28702 115.521 6.37148 115.824 6.54105ZM53.6027 8.96603C49.5696 9.17892 43.0319 9.40722 39.0744 9.47337C35.1183 9.57549 38.4262 9.42395 46.4168 9.14492C54.4074 8.86588 57.6371 8.78912 53.6027 8.96603ZM3.01039 11.9216C3.01667 12.1015 2.61939 12.2955 2.16076 12.2755C1.40744 12.3018 1.35112 12.2317 1.79969 11.9639C2.53794 11.5058 2.99531 11.4898 3.01039 11.9216ZM7.28062 11.5563C7.22933 11.6302 6.2658 11.8079 5.1665 11.9544C3.85321 12.1443 3.28697 12.1281 3.54847 11.9028C3.91382 11.5658 7.53836 11.2231 7.28062 11.5563ZM112.478 8.71133C112.077 8.79738 111.351 8.82275 110.864 8.7677C110.377 8.71264 110.698 8.62941 111.585 8.5984C112.473 8.5674 112.879 8.62527 112.478 8.71133Z"
+                                            fill="#FFD25D"></path>
+                                    </svg></span></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="tp-course-6-btn text-lg-end mb-60">
+                            <div class="tp-hero-6-btn"><a class="tp-btn-inner" href="blog-stories.html">مشاهده همه
+                                    مقالات<span> <svg fill="none" height="11" viewbox="0 0 14 11" width="14"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8.71533 1L13 5.28471L8.71533 9.56941" stroke="currentColor"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                                                stroke-width="2"></path>
+                                            <path d="M1 5.28473H12.88" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
+                                        </svg></span></a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="tp-blog-6-item">
+                            <div class="tp-blog-stories-item p-relative mb-50">
+                                <div class="tp-blog-stories-thumb"><a href="blog-details.html"><img alt=""
+                                            src="assets/img/blog/blog-stories/blog-stories-thumb-1.jpg"></a></div>
+                                <div class="tp-blog-stories-content">
+                                    <div class="tp-blog-stories-tag-wrap d-flex"><a href="index-6.html#">آموزش و
+                                            پرورش</a> <span>24 آذر 1403</span></div>
+                                    <h4 class="tp-blog-stories-title"><a href="blog-details.html">جایگزین بهتری برای
+                                            درجه بندی نوشتن دانش آموز.</a></h4>
+                                    <div class="tp-blog-stories-user-box d-flex align-items-center">
+                                        <div class="tp-blog-stories-user-thumb"><img alt=""
+                                                src="assets/img/blog/blog-stories/blog-stories-user-1.jpg"></div>
+                                        <span>آذرخش ایرانی</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="tp-blog-6-item">
+                            <div class="tp-blog-stories-item p-relative mb-50">
+                                <div class="tp-blog-stories-thumb"><a href="blog-details.html"><img alt=""
+                                            src="assets/img/blog/blog-stories/blog-stories-thumb-2.jpg"></a></div>
+                                <div class="tp-blog-stories-content">
+                                    <div class="tp-blog-stories-tag-wrap d-flex"><a class="sky"
+                                            href="index-6.html#">آموزش و پرورش</a> <span>24 آذر 1403</span></div>
+                                    <h4 class="tp-blog-stories-title"><a href="blog-details.html">آینده روندها و نوآوری
+                                            های یادگیری آنلاین</a></h4>
+                                    <div class="tp-blog-stories-user-box d-flex align-items-center">
+                                        <div class="tp-blog-stories-user-thumb"><img alt=""
+                                                src="assets/img/blog/blog-stories/blog-stories-user-2.jpg"></div>
+                                        <span>آذرخش ایرانی</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="tp-blog-6-item">
+                            <div class="tp-blog-stories-item p-relative mb-50">
+                                <div class="tp-blog-stories-thumb"><a href="blog-details.html"><img alt=""
+                                            src="assets/img/blog/blog-stories/blog-stories-thumb-3.jpg"></a></div>
+                                <div class="tp-blog-stories-content">
+                                    <div class="tp-blog-stories-tag-wrap d-flex"><a class="yeallow"
+                                            href="index-6.html#">آموزش و پرورش</a> <span>24 آذر 1403</span></div>
+                                    <h4 class="tp-blog-stories-title"><a href="blog-details.html">پیمایش نکات آموزش عالی
+                                            برای موفقیت</a></h4>
+                                    <div class="tp-blog-stories-user-box d-flex align-items-center">
+                                        <div class="tp-blog-stories-user-thumb"><img alt=""
+                                                src="assets/img/blog/blog-stories/blog-stories-user-3.jpg"></div>
+                                        <span>آذرخش ایرانی</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tp-testimonial-6-ptb pt-120 pb-120" data-bg-color="#F8F8FA">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="tp-testimonial-6-heading text-center mb-45">
+                            <div class="tp-team-6-heading">
+                                <h5 class="tp-section-3-subtitle color-9">گواهینامه ها</h5>
+                                <h3 class="tp-section-3-title color-9">مردم می گویند در مورد<span>آکادیا<svg
+                                            class="tp-underline-shape-9 wow bounceIn" data-wow-delay=".4s"
+                                            data-wow-duration="1.5s" fill="none" height="19" viewbox="0 0 161 19"
+                                            width="161" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M90.1361 2.60246C87.2358 2.89362 75.9758 3.66658 65.1734 4.32862C36.9444 6.02644 25.0546 7.05873 15.4502 8.48591C7.96449 9.60176 0.882022 11.0833 0.51028 11.6184C0.442691 11.7157 0.413181 12.9035 0.424088 14.2322C0.427691 16.3682 0.547287 16.7438 1.35368 17.4751C1.86655 17.9319 2.55666 18.3825 2.84523 18.5148C3.34981 18.7345 22.5142 16.6412 27.0658 15.8652C29.0782 15.5576 91.2571 12.3419 106.428 11.7647C111.888 11.574 124.589 11.4153 134.634 11.4442C144.68 11.4732 153.764 11.3933 154.79 11.31C157.339 11.1261 159.55 9.38745 159.593 7.58211C159.591 6.49042 159.478 6.30449 158.661 6.28555C157.773 6.26909 157.771 6.22168 158.859 5.85142C160.366 5.32408 160.534 5.03342 159.624 4.40062C158.752 3.81398 158.582 3.01295 159.362 2.98571C159.646 2.97581 159.885 2.73009 159.877 2.49303C159.867 2.20856 159.683 2.02511 159.435 2.03378C159.222 2.0412 158.284 1.59928 157.378 1.06129L155.711 0.0751953L125.576 1.08004C109.02 1.61076 93.0719 2.31007 90.1361 2.60246ZM114.663 3.64472C114.882 3.82694 117.016 3.94231 119.462 3.85689C121.91 3.81888 126.525 3.84759 129.759 3.97199C134.913 4.17178 134.347 4.23899 125.159 4.36998C119.413 4.47571 110.015 4.70894 104.272 4.90949C98.5292 5.11004 93.9173 5.17615 93.9849 5.07885C94.0863 4.9329 98.0163 4.65326 102.73 4.4412C107.441 4.18173 111.476 3.85096 111.716 3.60524C112.233 3.15997 114.113 3.14177 114.663 3.64472ZM151.274 3.12573C150.569 3.24531 149.434 3.28493 148.793 3.21239C148.187 3.13861 148.786 3.02274 150.133 2.9757C151.516 2.92742 152.015 3.00491 151.274 3.12573ZM73.3661 6.17863C73.2985 6.27593 65.1144 6.70413 55.1562 7.14682C45.2351 7.63567 39.5613 7.78634 42.5697 7.53888C48.9037 6.98541 73.5688 5.88674 73.3661 6.17863ZM91.0236 5.65695C90.9223 5.8029 90.6049 5.86145 90.3517 5.72788C90.0632 5.59555 90.1646 5.44961 90.5545 5.43599C90.9428 5.37496 91.1605 5.50977 91.0236 5.65695ZM153.807 6.54997C154.067 6.87318 153.042 7.00391 150.63 7.04068C148.677 7.01394 141.729 7.25658 135.208 7.53178C128.686 7.80697 122.445 7.97744 121.379 7.91975C118.212 7.69806 101.159 8.2461 88.4049 8.92882C75.2982 9.67133 74.4746 9.46274 86.4352 8.42797C97.1568 7.48394 153.325 5.94972 153.807 6.54997ZM68.2114 10.0137C57.5187 10.7669 46.4936 11.1519 49.0666 10.6348C50.1235 10.408 56.7477 10.0343 63.7669 9.78919C76.2825 9.39961 76.3889 9.39589 68.2114 10.0137ZM115.021 8.80634C115.029 9.0434 114.784 9.14689 114.496 9.01456C114.205 8.83481 113.951 8.65384 113.947 8.55901C113.944 8.46419 114.189 8.3607 114.472 8.3508C114.756 8.3409 115.011 8.52187 115.021 8.80634ZM116.084 8.7692C116.093 9.00626 115.924 9.2495 115.711 9.25693C115.534 9.26312 115.454 9.02854 115.553 8.78777C115.649 8.49959 115.82 8.30376 115.926 8.30004C115.997 8.29757 116.074 8.48474 116.084 8.7692ZM118.743 8.67636C118.858 8.9097 118.724 9.15171 118.441 9.16161C118.122 9.17275 117.865 8.94436 117.857 8.7073C117.847 8.42284 117.982 8.22824 118.159 8.22205C118.372 8.21463 118.627 8.3956 118.743 8.67636ZM152.437 7.97441C153.089 8.33142 153.09 8.37883 152.273 8.35989C151.777 8.37722 150.92 8.21729 150.31 8.04869L149.234 7.70654L150.474 7.66321C151.148 7.63969 152.039 7.75097 152.437 7.97441ZM70.4524 11.1697C65.1382 11.4502 56.5237 11.751 51.3092 11.8382C46.0964 11.9727 50.4551 11.7731 60.9839 11.4054C71.5126 11.0377 75.7683 10.9366 70.4524 11.1697ZM3.78953 15.0641C3.79781 15.3011 3.27433 15.5567 2.67002 15.5304C1.67741 15.565 1.6032 15.4727 2.19427 15.1198C3.16701 14.5162 3.76966 14.4951 3.78953 15.0641ZM9.4162 14.5828C9.34861 14.6801 8.07902 14.9143 6.63053 15.1073C4.90008 15.3576 4.15397 15.3362 4.49854 15.0393C4.97994 14.5953 9.7558 14.1437 9.4162 14.5828ZM148.03 10.8341C147.501 10.9475 146.544 10.9809 145.903 10.9083C145.261 10.8358 145.683 10.7261 146.853 10.6853C148.023 10.6444 148.558 10.7207 148.03 10.8341Z"
+                                                fill="#FFD25D"></path>
+                                        </svg></span></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tp-testimonial-6-wrapper p-relative"
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="tp-testimonial-6-slider">
+                            <div class="tp-testimonial-6-active swiper pb-10">
+                                <div class="swiper-wrapper slide-transtion">
+                                    <div class="swiper-slide">
+                                        <div class="tp-testimonial-6-item p-relative">
+                                            <div class="tp-testimonial-6-item-shape"><img alt=""
+                                                    src="assets/img/testimonial/home-6/queto.png"></div>
+                                            <div class="tp-testimonial-6-item-content">
+                                                <h4 class="tp-testimonial-6-item-title">بهترین کیفیت</h4>
+                                                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
+                                                    استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در
+                                                    ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی</p>
+                                            </div>
+                                            <div class="tp-testimonial-6-item-user d-flex align-items-center">
+                                                <div class="tp-testimonial-6-item-user-thumb"><img alt=""
+                                                        src="assets/img/testimonial/home-6/user-1.png"></div>
+                                                <div class="tp-testimonial-6-item-user-content">
+                                                    <p>هیلاری اوس</p><span>طراحی، منچستر</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="tp-testimonial-6-item p-relative">
+                                            <div class="tp-testimonial-6-item-shape"><img alt=""
+                                                    src="assets/img/testimonial/home-6/queto.png"></div>
+                                            <div class="tp-testimonial-6-item-content">
+                                                <h4 class="tp-testimonial-6-item-title">بهترین دوره آموزشی راستچین!</h4>
+                                                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
+                                                    استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در
+                                                    ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی</p>
+                                            </div>
+                                            <div class="tp-testimonial-6-item-user d-flex align-items-center">
+                                                <div class="tp-testimonial-6-item-user-thumb"><img alt=""
+                                                        src="assets/img/testimonial/home-6/user-2.png"></div>
+                                                <div class="tp-testimonial-6-item-user-content">
+                                                    <p>هیلاری اوس</p><span>طراحی، منچستر</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="tp-testimonial-6-item p-relative">
+                                            <div class="tp-testimonial-6-item-shape"><img alt=""
+                                                    src="assets/img/testimonial/home-6/queto.png"></div>
+                                            <div class="tp-testimonial-6-item-content">
+                                                <h4 class="tp-testimonial-6-item-title">کیفیت عالی!</h4>
+                                                <p>پشتیبانی بسیار خوب و سریع در طول هفته آنها می دانند آنچه شما نیاز
+                                                    دارید،</p>
+                                            </div>
+                                            <div class="tp-testimonial-6-item-user d-flex align-items-center">
+                                                <div class="tp-testimonial-6-item-user-thumb"><img alt=""
+                                                        src="assets/img/testimonial/home-6/user-3.png"></div>
+                                                <div class="tp-testimonial-6-item-user-content">
+                                                    <p>هیلاری اوس</p><span>طراحی، منچستر</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="tp-testimonial-6-item p-relative">
+                                            <div class="tp-testimonial-6-item-shape"><img alt=""
+                                                    src="assets/img/testimonial/home-6/queto.png"></div>
+                                            <div class="tp-testimonial-6-item-content">
+                                                <h4 class="tp-testimonial-6-item-title">دوره خوب!</h4>
+                                                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
+                                                    استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در
+                                                    ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی</p>
+                                            </div>
+                                            <div class="tp-testimonial-6-item-user d-flex align-items-center">
+                                                <div class="tp-testimonial-6-item-user-thumb"><img alt=""
+                                                        src="assets/img/testimonial/home-6/user-4.png"></div>
+                                                <div class="tp-testimonial-6-item-user-content">
+                                                    <p>هیلاری اوس</p><span>طراحی، منچستر</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="tp-testimonial-6-item p-relative">
+                                            <div class="tp-testimonial-6-item-shape"><img alt=""
+                                                    src="assets/img/testimonial/home-6/queto.png"></div>
+                                            <div class="tp-testimonial-6-item-content">
+                                                <h4 class="tp-testimonial-6-item-title">کیفیت عالی!</h4>
+                                                <p>من می خواستم یک بررسی بگذارم زیرا پشتیبانی آنها در عرض یک روز یا
+                                                    بیشتر به من کمک کرد، که خوب است! با تشکر و 5 ستاره!</p>
+                                            </div>
+                                            <div class="tp-testimonial-6-item-user d-flex align-items-center">
+                                                <div class="tp-testimonial-6-item-user-thumb"><img alt=""
+                                                        src="assets/img/testimonial/test-2-avatar-4.png"></div>
+                                                <div class="tp-testimonial-6-item-user-content">
+                                                    <p>هیلاری اوس</p><span>طراحی، منچستر</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tp-cta-6-area pt-120 pb-120" data-bg-color="#5956E9">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-8 col-lg-10">
+                        <div class="tp-cta-2-wrapper text-center">
+                            <h2 class="tp-cta-2-title">اکنون با <span>آکادیا<img alt=""
+                                        class="tp-underline-shape-12 wow bounceIn" data-wow-delay=".4s"
+                                        data-wow-duration="1.5s" src="{% static 'img/unlerline/cta-2-svg-1.svg' %}"> </span>شروع
+                                کنید !</h2>
+                            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چا.</p>
+                            <div class="tp-cta-2-form">
+                                <form action="index-6.html#"><span><svg fill="none" height="12" viewbox="0 0 14 12"
+                                            width="14" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M2.2 1.01465H11.8C12.46 1.01465 13 1.55465 13 2.21465V9.41465C13 10.0746 12.46 10.6146 11.8 10.6146H2.2C1.54 10.6146 1 10.0746 1 9.41465V2.21465C1 1.55465 1.54 1.01465 2.2 1.01465Z"
+                                                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="1.5"></path>
+                                            <path d="M13 2.21436L7 6.41436L1 2.21436" stroke="currentColor"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                            </path>
+                                        </svg> </span><input placeholder="آدرس ایمیل خود را وارد کنید" type="text">
+                                    <div class="tp-cta-2-btn"><button class="tp-btn-round">مشترک شوید</button></div>
+                                </form>
+                            </div>
+                            <div class="tp-cta-2-info-list"><span><span><svg fill="none" height="11" viewbox="0 0 14 11"
+                                            width="14" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M13 1.01465L4.75 9.26465L1 5.51465" opacity="0.6" stroke="white"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                        </svg> </span>دسترسی آسان</span> <span><span><svg fill="none" height="11"
+                                            viewbox="0 0 14 11" width="14" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M13 1.01465L4.75 9.26465L1 5.51465" opacity="0.6" stroke="white"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                        </svg> </span>بدون کارت اعتباری</span> <span><span><svg fill="none" height="11"
+                                            viewbox="0 0 14 11" width="14" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M13 1.01465L4.75 9.26465L1 5.51465" opacity="0.6" stroke="white"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                        </svg> </span>85000 دانشجو همراه ما هستند</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

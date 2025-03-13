@@ -6,7 +6,7 @@
                 <div class="col-xxl-3 col-xl-3 col-lg-6 col-6">
                     <div class="tp-header-2-right d-flex align-items-center">
                         <div class="tp-header-inner-logo tp-header-logo">
-                            <a href="index.html">
+                            <a href="{% url 'academy:home' %}">
                                 <img alt="logo" src="{% static 'img/logo/logo-black.png' %}">
                             </a>
                         </div>
@@ -246,11 +246,9 @@
                                 <i>1</i>
                             </button>
                         </div>
-                        <div class="tp-header-inner-btn d-none d-xxl-block">
-                            <a class="tp-btn-inner" href="course-with-filter.html">ثبت نام</a>
-                        </div>
+
                         {% if user.is_authenticated %}
-                        <div class="tp-header-inner-login tp-header-user-hover">
+                        <div class="tp-header-inner-login tp-header-user-hover  ml-30">
                             <button>
                                 <img alt="" src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'img/event/user.jpg' %}{% endif %}">
                             </button>
@@ -392,6 +390,10 @@
                             <button class="offcanvas-open-btn">
                                 <i class="fa-solid fa-bars"></i>
                             </button>
+                        </div>
+                        {% else %}
+                        <div class="tp-header-inner-btn d-none d-xxl-block">
+                            <a class="tp-btn-inner" href="{% url 'academy:login' %}">ورود</a>
                         </div>
                         {% endif %}
                     </div>

@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views.generic import View, DetailView, FormView
 from datetime import timedelta
 from django.utils import timezone
-from .models import Category, Course
+from .models import Category, Course, MainPageCategoryAdd, MainPageCourseAdd, Team
 from user.models import OTPCode, User
 from .forms import CommentForm, RecaptchaFrom, RegisterForm, LoginForm, ChangePasswordForgotPasswordFrom
 from django.conf import settings
@@ -92,8 +92,16 @@ class LoginView(View):
         return render(request, self.template_name, self.context)
 
 
-def Home(request):
-    return HttpResponse('ss')
+class Home(View):
+    template_name = 'academy/home.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            'mainpage_categorys': MainPageCategoryAdd.objects.all()[:4],
+            'mainpage_tabs_courses': MainPageCourseAdd.objects.all()[:4],
+            'team': Team.objects.all(),
+        }
+        return render(request, self.template_name, context)
 
 
 class ActivateRegisterdAccountView(View):

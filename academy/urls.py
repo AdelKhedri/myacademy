@@ -15,5 +15,5 @@ urlpatterns = [
     path('category/<slug:category_slug>', CourseCategoryView.as_view(), name='category'),
     path('bookmarker/<int:course_id>', BookmarkView.as_view(), name='bookmarker'),
     path('courses/<int:course_id>', ProductDetailsView.as_view(), name='course-details'),
-    path('', Home, name = 'home')
+    path('', Home.as_view(), name = 'home')
 ]
