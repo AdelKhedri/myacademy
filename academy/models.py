@@ -47,6 +47,9 @@ class Course(models.Model):
     def get_purch_url(self):
         return reverse('academy:cart-add', args=[self.pk])
 
+    def get_remove_from_cart(self):
+        return reverse('academy:cart-remove', args=[self.pk])
+
     def __str__(self):
         return self.name
 
