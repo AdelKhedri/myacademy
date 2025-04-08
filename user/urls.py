@@ -1,16 +1,13 @@
 from django.urls import path
-from .views import (ProfileView, ChangePasswordView, CourseAddView, CourseUpdateView, MyCourseView, MyCourseNotPublishedView, CourseDeleteView,
-                    MyBookmarkListView)
+from .views import (LoginView, LogoutView, RegisterView, ActivateRegisterdAccountView, ForgotPasswordView, ConfirmForgotPasswordView)
 
 
 app_name = 'user'
 urlpatterns = [
-    path('', ProfileView.as_view(), name = 'profile'),
-    path('change-password/', ChangePasswordView.as_view(), name = 'change-password'),
-    path('course/add/', CourseAddView.as_view(), name='course-add'),
-    path('course/<int:pk>/update/', CourseUpdateView.as_view(), name='course-update'),
-    path('course/<int:pk>/delete/', CourseDeleteView.as_view(), name='course-delete'),
-    path('my-course/', MyCourseView.as_view(), name='my-courses'),
-    path('my-course/pending/', MyCourseNotPublishedView.as_view(), name='my-courses-not-published'),
-    path('bookmarks', MyBookmarkListView.as_view(), name='my-bookmarked-courses'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout', LogoutView.as_view(), name='logout'),
+    path('register/active-account/', ActivateRegisterdAccountView.as_view(), name='active-account'),
+    path('forgot-password/', ForgotPasswordView.as_view(), name='forgot-password'),
+    path('forgot-password/confirm/', ConfirmForgotPasswordView.as_view(), name='confirm-forgot-password'),
 ]

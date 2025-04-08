@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, Seasion, Lesson, Category, Comment, MainPageCategoryAdd, MainPageCourseAdd, Team
+from .models import Course, Seasion, Lesson, Category, Comment, MainPageCategoryAdd, MainPageCourseAdd, Team, Bookmark
 from django.utils.html import format_html
 
 @admin.register(Course)
@@ -79,3 +79,9 @@ class TeamRegister(admin.ModelAdmin):
     @admin.display(description='عکس دسته بندی')
     def get_thumbnail(self, obj):
         return format_html(f'<img style="width: 100px;height:100px;border-radius:50%;" alt="no image" src="{obj.image.url if obj.image else None}">')
+
+
+@admin.register(Bookmark)
+class BookmarkRegister(admin.ModelAdmin):
+    list_display = ['id', 'user', 'content_type', 'media_id']
+    list_display_links = ['id', 'user']

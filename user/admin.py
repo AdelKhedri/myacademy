@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 
 @admin.register(User)
 class UserRegister(UserAdmin):
-    list_display = ['username', 'email', 'phone_number', 'is_active', 'is_teacher', 'is_superuser', 'balance']
+    list_display = ['username', 'email', 'phone_number', 'is_active', 'is_mentor', 'is_superuser', 'balance']
     search_fields = ['email', 'username', 'phone_number']
     ordering = ['id']
 
@@ -20,7 +20,7 @@ class UserRegister(UserAdmin):
         ),
         (
             'مجوز ها',
-            {'fields': [('is_active', 'is_superuser', 'is_staff', 'is_teacher'), 'groups', 'user_permissions']}
+            {'fields': [('is_active', 'is_superuser', 'is_staff', 'is_mentor'), 'groups', 'user_permissions']}
         ),
         (
             'تاریخ ها',

@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block title %}پروفایل | آکادمی من{% endblock %}
 {% block content %}
@@ -10,9 +10,9 @@
             <h2 class="tp-dashboard-tab-title">تنظیمات</h2>
             <div class="tp-dashboard-tab-list">
                 <ul>
-                    <li><a class="active" href="{% url 'user:profile' %}">مشخصات</a>
+                    <li><a class="active" href="{% url 'dashboard:profile' %}">مشخصات</a>
                     </li>
-                    <li><a href="{% url 'user:change-password' %}">رمز عبور</a></li>
+                    <li><a href="{% url 'dashboard:change-password' %}">رمز عبور</a></li>
                     <li><a href="instructor-setting-withdraw.html">برداشت</a></li>
                     <li><a href="instructor-setting-social.html">نمایه اجتماعی</a></li>
                 </ul>

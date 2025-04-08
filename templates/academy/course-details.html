@@ -36,7 +36,7 @@
                                                 <img style="border-radius: 50%;" alt="Salim Rana" src="{{ user.get_photo }}">
                                             </div>
                                             <div class="tp-course-details-2-author-content">
-                                                <span class="tp-course-details-2-author-designation">{% if user.is_teacher %}معلم{% elif user.is_superuser %}مدیر سایت{% endif %}</span>
+                                                <span class="tp-course-details-2-author-designation">{% if user.is_mentor %}معلم{% elif user.is_superuser %}مدیر سایت{% endif %}</span>
                                                 <h3 class="tp-course-details-2-meta-title"><a href="#">{{ user }}</a></h3>
                                             </div>
                                         </div>
@@ -151,9 +151,20 @@
                                     </div>
                                 </div>
                                 <div class="tp-course-details-2-widget-btn">
-                                    <a href="{{ course.get_purch_url }}">افزودن به سبد خرید</a>
+                                    {% if product_in_cart %}
+                                    <a style="background-color: #ff0022; color: white;;" onclick="sendFormToURL('{{ course.get_remove_from_cart_url }}')">حذف از سبد خرید</a>
+                                    {% else %}
+                                    <a onclick="sendFormToURL('{{ course.get_purch_url }}')">افزودن به سبد خرید</a>
+                                    {% endif %}
+
+                                    {% if course.id in all_bookmarks %}
+                                    <a style="background-color: #ff0022; color: white;" onclick="sendFormToURL('{% url 'academy:bookmarker' 'course' course.id %}?next={{ request.get_full_path }}')">حذف از مورد علاقه ها</a>
+                                    {% else %}
+                                    <a onclick="sendFormToURL('{% url 'academy:bookmarker' 'course' course.id %}?next={{ request.get_full_path }}')">افزودن به علاقه ها</a>
+                                    {% endif %}
                                     <p>برای تکمیل خرید از سبد خرید اقدام کنید.</p>
                                 </div>
+                                <!-- sendFormToURL method in components/cart.html -->
                                 <div class="tp-course-details-2-instructor-social text-center"><a
                                         href="course-details-3.html#"><span><svg fill="none" height="16"
                                                 viewbox="0 0 12 16" width="12" xmlns="http://www.w3.org/2000/svg">
@@ -335,7 +346,7 @@
                                             <img alt="" style="width: 225px;height: 225px;border-radius: 50%;" src="{{ course.teacher.get_photo }}">
                                         </div>
                                         <div class="tp-course-details-2-instructor-content">
-                                            <h5>{{ course.teacher }}</h5><span class="pre">{% if course.teacher.is_teacher %}مربی{% elif course.teacher.is_superuser %}مدیر سایت{% endif %}</span>
+                                            <h5>{{ course.teacher }}</h5><span class="pre">{% if course.teacher.is_mentor %}مربی{% elif course.teacher.is_superuser %}مدیر سایت{% endif %}</span>
                                             <div class="tp-course-details-2-instructor-sub d-flex">
                                                 <span>
                                                     <svg fill="none" height="15" viewbox="0 0 15 15" width="15" xmlns="http://www.w3.org/2000/svg">
@@ -755,9 +766,9 @@
                                 <div class="row justify-content-between">
                                     <a class="col-7" href="{{ course.get_absolute_url }}">جزیات دوره</a>
                                     {% if course in courses_bookmarked %}
-                                    <a style="background-color: #5169F1;" href="{% url 'academy:bookmarker' course.id %}?next={{ request.get_full_path }}" class="col-4">ذخیره شده</a>
+                                    <a style="background-color: #5169F1;" href="{% comment %}{% url 'academy:bookmarker' course.id %}?next={{ request.get_full_path }}{% endcomment %}" class="col-4">ذخیره شده</a>
                                     {% else %}
-                                    <a style="background-color: #FF5E74;" href="{% url 'academy:bookmarker' course.id %}?next={{ request.get_full_path }}" class="col-4">ذخیره نشده</a>
+                                    <a style="background-color: #FF5E74;" href="{% comment %}{% url 'academy:bookmarker' course.id %}?next={{ request.get_full_path }}{% endcomment %}" class="col-4">ذخیره نشده</a>
                                     {% endif %}
                                 </div>
                             </div>

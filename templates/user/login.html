@@ -1,9 +1,9 @@
-{% extends 'academy/base-auth.html' %}
+{% extends 'user/base-auth.html' %}
 {% block title %}ورود | آکادمی من{% endblock %}
 {% block content %}
                         <div class="tp-login-from-heading text-center">
                             <h4 class="tp-login-from-title">وارد شوید</h4>
-                            <p>حساب کاربری ندارید؟<a href="{% url 'academy:register' %}">اکنون ایجاد کنید</a></p>
+                            <p>حساب کاربری ندارید؟<a href="{% url 'user:register' %}">اکنون ایجاد کنید</a></p>
                         </div>
                         <form method="post" class="tp-login-input-form">
                             {% csrf_token %}
@@ -103,7 +103,7 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="tp-login-input-remeber text-end">
-                                                    <a href="{% url 'academy:forgot-password' %}">رمز عبور را فراموش کرده اید؟</a>
+                                                    <a href="{% url 'user:forgot-password' %}">رمز عبور را فراموش کرده اید؟</a>
                                                 </div>
                                             </div>
                                         </div>

@@ -27,7 +27,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_teacher', True)
+        extra_fields.setdefault('is_mentor', True)
         user = self.create_user(email, phone_number, password, **extra_fields)
         Profile.objects.create(user = user)
         return user

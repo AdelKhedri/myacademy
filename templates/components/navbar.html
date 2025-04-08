@@ -67,7 +67,7 @@
                                             <a href="instructor-dashboard.html">داشبورد</a>
                                             <ul class="tp-submenu">
                                                 <li><a href="#">داشبورد</a></li>
-                                                <li><a href="{% url 'user:profile' %}">پروفایل</a></li>
+                                                <li><a href="{% url 'dashboard:profile' %}">پروفایل</a></li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -261,7 +261,7 @@
                                             <img alt="" src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'img/event/user.jpg' %}{% endif %}"></div>
                                         <div class="tp-header-user-profile-content">
                                             <h4>{{ user.get_full_name|default:user.username }}</h4>
-                                            <span>{% if user.is_superuser %}موسس{% elif user.is_teacher %}مدرس{% else %}دانشجو{% endif %}</span>
+                                            <span>{% if user.is_superuser %}موسس{% elif user.is_mentor %}مدرس{% else %}دانشجو{% endif %}</span>
                                         </div>
                                     </div>
                                     <div class="tp-header-user-list">
@@ -286,7 +286,7 @@
                                                 داشبورد
                                             </a>
                                             </li>
-                                            <li><a href="{% url 'user:profile' %}">
+                                            <li><a href="{% url 'dashboard:profile' %}">
                                                 <span>
                                                     <svg fill="none" height="18" viewbox="0 0 16 18" width="16" xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -311,7 +311,7 @@
                                                                 fill="currentColor"></path>
                                                         </svg></span>دوره های ثبت نام شده</a></li>
                                             <li>
-                                                <a href="{% url 'user:my-bookmarked-courses' %}">
+                                                <a href="{% url 'dashboard:my-bookmark-list' %}">
                                                     <span>
                                                         <svg fill="none" height="18" viewbox="0 0 16 18" width="16" xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -369,7 +369,7 @@
                                                                 fill="currentColor" opacity="0.4"></path>
                                                         </svg> </span>تنظیمات</a></li>
                                             <li>
-                                                <a href="{% url 'academy:logout' %}">
+                                                <a href="{% url 'user:logout' %}">
                                                     <span>
                                                         <svg fill="none" height="18" viewbox="0 0 17 18" width="17" xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -395,7 +395,7 @@
                         </div>
                         {% else %}
                         <div class="tp-header-inner-btn d-none d-xxl-block">
-                            <a class="tp-btn-inner" href="{% url 'academy:login' %}">ورود</a>
+                            <a class="tp-btn-inner" href="{% url 'user:login' %}">ورود</a>
                         </div>
                         {% endif %}
                     </div>

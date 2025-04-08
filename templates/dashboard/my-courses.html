@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'dashboard/base.html' %}
 {% block title %}مدیریت دوره های من | آکادمی من{% endblock %}
 {% block content %}
 
@@ -9,8 +9,8 @@
                                 <h2 class="tp-dashboard-tab-title">دوره های من</h2>
                                 <div class="tp-dashboard-tab-list">
                                     <ul>
-                                        <li><a href="{% url 'user:my-courses' %}" {% if active_tab == 'published' %} class="active" {% endif %} >دوره های متنشر شده<span>({{ active_courses }})</span></a></li>
-                                        <li><a href="{% url 'user:my-courses-not-published' %}" {% if active_tab == 'not-published' %} class="active" {% endif %}>در انتظار انتشار<span>({{ inactive_courses }})</span></a></li>
+                                        <li><a href="{% url 'dashboard:my-courses' %}" {% if active_tab == 'published' %} class="active" {% endif %} >دوره های متنشر شده<span>({{ active_courses }})</span></a></li>
+                                        <li><a href="{% url 'dashboard:my-courses-not-published' %}" {% if active_tab == 'not-published' %} class="active" {% endif %}>در انتظار انتشار<span>({{ inactive_courses }})</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                                                 </div>
                                                 <div class="tp-course-action d-flex align-items-center">
                                                     <div class="tpd-action-inexact-btn">
-                                                        <a href="{% url 'user:course-update' course.pk %}">
+                                                        <a href="{% url 'dashboard:course-update' course.pk %}">
                                                             <svg fill="none" height="15" viewbox="0 0 15 15" width="15" xmlns="http://www.w3.org/2000/svg">
                                                                 <path
                                                                     d="M8.74422 2.63127C9.19134 2.14685 9.41489 1.90464 9.65245 1.76336C10.2256 1.42246 10.9315 1.41185 11.5142 1.73539C11.7557 1.86948 11.9862 2.10487 12.447 2.57566C12.9079 3.04644 13.1383 3.28183 13.2696 3.52856C13.5863 4.12387 13.5759 4.84487 13.2422 5.43042C13.1039 5.67309 12.8668 5.90146 12.3926 6.35821L6.75038 11.7926C5.85173 12.6581 5.4024 13.0909 4.84084 13.3102C4.27927 13.5296 3.66192 13.5134 2.42722 13.4811L2.25923 13.4768C1.88334 13.4669 1.6954 13.462 1.58615 13.338C1.4769 13.214 1.49182 13.0226 1.52165 12.6397L1.53785 12.4318C1.6218 11.3541 1.66378 10.8153 1.87422 10.3309C2.08466 9.84657 2.44766 9.45328 3.17366 8.6667L8.74422 2.63127Z"
@@ -120,18 +120,16 @@
                                                             </svg>
                                                         </button>
                                                         <div class="tpd-action-click-tooltip">
-                                                            <a href="{% url 'academy:bookmarker' course.id %}?next={{ current_url}}"
-                                                            {% if course in user.profile.bookmarks.all %}
-                                                            class="btn btn-info my-1" style="width: 100%;"
-                                                            {% else %}
-                                                            class="btn btn-success my-1" style="width: 100%;"
-                                                            {% endif %}>
-                                                            {% if course in user.profile.bookmarks.all %}
+                                                            <a onclick="sendFormToURL('{% url 'academy:bookmarker' 'course' course.id %}?next={{ request.get_full_path }}')"
+
+                                                            {% if course.id in all_bookmarks %}
+                                                            class="btn btn-success my-1" style="width: 100%;" >
                                                             <span class="ml-4">
                                                                 <i class="fa-solid fa-bookmark"></i>
                                                             </span>
                                                             ذخیره شده
                                                             {% else %}
+                                                            class="btn btn-info my-1" style="width: 100%;" >
                                                             <span class="ml-4">
                                                                 <i class="fa-solid fa-bookmark-slash"></i>
                                                             </span>
@@ -187,7 +185,7 @@
 {% for course in object_list %}
 <div aria-hidden="true" class="modal fade tpd-modal-announcement" id="deleteModal{{ forloop.counter}}" tabindex="-1">
     <div class="modal-dialog">
-        <form method="post" action="{% url 'user:course-delete' course.pk %}" class="modal-content">
+        <form method="post" action="{% url 'dashboard:course-delete' course.pk %}" class="modal-content">
             <div class="modal-header">
                 <h4 class="tpd-modal-title"
                     id="exampleModalLabel">حذف {{ course.name }}</h4>

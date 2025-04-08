@@ -1,9 +1,9 @@
-{% extends 'academy/base-auth.html' %}
+{% extends 'user/base-auth.html' %}
 {% block title %}ثبت نام | اکادمی من{% endblock %}
 {% block content %}
 <div class="tp-login-from-heading text-center">
     <h4 class="tp-login-from-title">یک حساب کاربری ایجاد کنید</h4>
-    <p>از قبل حساب کاربری دارید؟<a href="{% url 'academy:login' %}">وارد شوید</a></p>
+    <p>از قبل حساب کاربری دارید؟<a href="{% url 'user:login' %}">وارد شوید</a></p>
 </div>
 <form method="post" class="tp-login-input-form">
     {% csrf_token %}

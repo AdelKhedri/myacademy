@@ -75,11 +75,10 @@
         <div class="tp-course-btn">
             <div class="row justify-content-between">
                 <a class="col-7" href="{{ course.get_absolute_url }}">جزیات دوره</a>
-                
-                {% if course in user.profile.bookmarks.all %} 
-                <a class="col-4"  style="background-color: #5169F1;" href="{% url 'academy:bookmarker' course.id %}?next={{ current_url }}">ذخیره شده</a>
+                {% if course.id in all_bookmarks %} 
+                <a class="col-4" onclick="sendFormToURL('{% url 'academy:bookmarker' 'course' course.id %}?next={{ request.get_full_path}}')" style="background-color: #5169F1;">ذخیره شده</a>
                 {% else %}
-                <a class="col-4" style="background-color: #FF5E74;" href="{% url 'academy:bookmarker' course.id %}?next={{ current_url }}">ذخیره نشده</a>
+                <a class="col-4" style="background-color: #FF5E74;" onclick="sendFormToURL('{% url 'academy:bookmarker' 'course' course.id %}?next={{ request.get_full_path}}')">ذخیره نشده</a>
                 {% endif %}
             </div>
         </div>
