@@ -427,9 +427,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                {% if user.is_teacher or user.is_superuser %}
+                                {% if user.is_mentor or user.is_superuser %}
                                 <div class="tp-instructor-course-btn">
-                                    <a class="tp-btn-add-course" href="{% url 'user:course-add' %}">
+                                    <a class="tp-btn-add-course" href="{% url 'dashboard:course-add' %}">
                                         <i class="fa-regular fa-plus"></i>
                                         یک دوره جدید ایجاد کنید
                                     </a>
@@ -473,7 +473,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a {% if current_page == 'profile' %} class="active" {% endif %} href="{% url 'user:profile' %}">
+                                                <a {% if current_page == 'profile' %} class="active" {% endif %} href="{% url 'dashboard:profile' %}">
                                                     <span>
                                                         <svg fill="none" height="18" viewbox="0 0 16 18" width="16" xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -488,7 +488,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a {% if current_page == 'course-add' %} class="active" {% endif %} href="{% url 'user:course-add' %}">
+                                                <a {% if current_page == 'course-add' %} class="active" {% endif %} href="{% url 'dashboard:course-add' %}">
                                                     <span>
                                                         <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -523,7 +523,7 @@
                                                     </span>دوره های ثبت نام شده</a>
                                                 </li>
                                             <li>
-                                                <a {% if current_page == 'my_bookmarked_courses' %} class="active" {% endif %} href="{% url 'user:my-bookmarked-courses' %}">
+                                                <a {% if current_page == 'my_bookmarked_courses' %} class="active" {% endif %} href="{% url 'dashboard:my-bookmark-list' %}">
                                                     <span>
                                                         <svg fill="none" height="18" viewbox="0 0 16 18" width="16" xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -586,10 +586,10 @@
                                                 </a>
                                             </li>
 
-                                            {% if request.user.is_teacher or request.user.is_superuser %}
+                                            {% if request.user.is_mentor or request.user.is_superuser %}
                                             <li class="tp-user-menu-title space-gap">مربی</li>
                                             <li>
-                                                <a {% if current_page == 'my-courses' %} class="active" {% endif %} href="{% url 'user:my-courses' %}">
+                                                <a {% if current_page == 'my-courses' %} class="active" {% endif %} href="{% url 'dashboard:my-courses' %}">
                                                     <span>
                                                         <svg fill="none" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -701,7 +701,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{% url 'academy:logout' %}">
+                                                <a href="{% url 'user:logout' %}">
                                                     <span>
                                                         <svg fill="none" height="18" viewbox="0 0 17 18" width="17" xmlns="http://www.w3.org/2000/svg">
                                                             <path

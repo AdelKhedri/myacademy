@@ -1,9 +1,9 @@
-{% extends 'academy/base-auth.html' %}
+{% extends 'user/base-auth.html' %}
 {% block title %}فعال کردن اکانت | اکادمی من{% endblock %}
 {% block content %}
 <div class="tp-login-from-heading text-center">
 <h4 class="tp-login-from-title">پسورد اکانت خود را بازیابی کنید</h4>
-<p>حساب کاربری دارید؟<a href="{% url 'academy:login' %}">وارد شوید</a></p>
+<p>حساب کاربری دارید؟<a href="{% url 'user:login' %}">وارد شوید</a></p>
 </div>
 <div class="tp-login-input-form">
 <form method="post" class="row">
@@ -51,10 +51,10 @@
             {% endif %}
 
             <div class="col-6">
-                <div class="tp-login-input-remeber text-start"><a href="{% url 'academy:login' %}">وارد شوید</a></div>
+                <div class="tp-login-input-remeber text-start"><a href="{% url 'user:login' %}">وارد شوید</a></div>
             </div>
             <div class="col-6">
-                <div class="tp-login-input-remeber text-end"><a href="{% url 'academy:register' %}">ثبت نام</a></div>
+                <div class="tp-login-input-remeber text-end"><a href="{% url 'user:register' %}">ثبت نام</a></div>
             </div>
         </div>
         <div class="tp-login-from-btn">

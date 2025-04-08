@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user',
     'academy',
+    'dashboard',
+    'cart',
     'django_recaptcha',
 ]
 
@@ -89,8 +91,8 @@ RECAPTCHA_PUBLIC_KEY = ''
 RECAPTCHA_PRIVATE_KEY = ''
 
 LOGIN_AFTER_SIGNUP = True
-LOGIN_AFTER_SIGNUP_URL = '/profile/'
-LOGIN_URL = 'academy:login'
+REDIRECT_AFTER_LOGIN_AFTER_SIGNUP = '/dashboard/profile/'
+LOGIN_URL = 'user:login'
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 LANGUAGE_CODE = 'fa'
@@ -114,6 +116,8 @@ STATICFILES_DIRS = [
 MEDIA_URL = 'media/'
 MEDIA_ROOT = 'media'
 CART_SESSION_ID = 'xdjango-cart-xdjango'
+# FIXME: Change this option to False on production
+BYPASS_SHOPPING = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

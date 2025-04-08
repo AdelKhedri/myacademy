@@ -1,73 +1,70 @@
 from django import forms
-from .models import Profile, User
+from .models import Profile, User, OTPCode
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Checkbox
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from datetime import timedelta
+from random import randint
 
 
-class UserProfileForm(forms.ModelForm):
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'input'}), required=False, label='نام')
-    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'input'}), required=False, label='نام خانوادگی')
-    username = forms.CharField(validators=[], widget=forms.TextInput(attrs={'class': 'input'}), required=False, label='نام کاربری')
+class RecaptchaFrom(forms.Form):
+    recaptcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
+
+
+class RegisterForm(forms.ModelForm):
+    password1 = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={'class': 'password-input p-relative'}), label='پسورد')
+    password2 = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={'class': 'password-input p-relative'}), label='تکرار پسورد')
+    accept_rules = forms.BooleanField(widget=forms.CheckboxInput, label='پذیرش قوانین')
 
     class Meta:
-        model = Profile
-        fields = ['aboute', 'picture']
-        widgets = {
-            'aboute': forms.Textarea(attrs={'class': 'input', 'style': 'height: auto;', 'rows': 5}),
-            'picture': forms.FileInput(attrs={'class': 'input'})
-        }
+        model = User
+        fields = ['username', 'email', 'phone_number']
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-        
-        if self.user:
-            self.fields['first_name'].initial = self.user.first_name
-            self.fields['last_name'].initial = self.user.last_name
-            self.fields['username'].initial = self.user.username
+    def clean_password2(self):
+        password1 = self.cleaned_data['password1']
+        password2 = self.cleaned_data['password2']
+        if password1 != password2:
+            raise ValidationError('passwords dont match')
+        return password2
 
-    def save(self, commit = True):
-        profile = super().save(commit=False)
-        user = profile.user
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
-        user.username = self.cleaned_data['username']
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
         if commit:
             user.save()
-            profile.save()
+        Profile.objects.create(user=user)
         return user
 
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if self.user.username != username and User.objects.filter(username=username).exists():
-            raise forms.ValidationError('نام کاربری تکراری است.')
-        return username
+    def send_otp_code_to_number(self):
+        code = randint(12121, 98989)
+        otp = OTPCode.objects.create(phone_number = self.cleaned_data['phone_number'], expire_time = timedelta(minutes=4) + timezone.now(), code = code, code_type = 'register')
+        # add send code statement here
+        return True if otp else False
 
 
-class PasswordChangeForm(forms.Form):
-    last_password = forms.CharField(max_length=100, label='پسورد قبلی', widget=forms.PasswordInput)
-    new_password1 = forms.CharField(
-        max_length=100, label='پسورد جدید',
-        widget=forms.PasswordInput,
-        help_text= 'پسورد باید ترکیبی از متن و عدد و بیشتر از ۷ کاراکتر باشد.'
-        )
-    new_password2 = forms.CharField(max_length=100, label='تکرار پسورد', widget=forms.PasswordInput)
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=150, label='نام کاربری')
+    password = forms.CharField(max_length=150, widget=forms.PasswordInput, label='پسورد')
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
+
+class ChangePasswordForgotPasswordFrom(forms.Form):
+    password1 = forms.CharField(label='پسورد', widget=forms.PasswordInput(attrs={'placeholder': 'رمز عبور'}))
+    password2 = forms.CharField(label='تکرار پسورد', widget=forms.PasswordInput(attrs={'placeholder': 'تکرار رمز عبور'}))
+    code = forms.IntegerField(label='کد ارسال شده', widget=forms.NumberInput(attrs={'placeholder': 'کد ارسال شده'}))
 
     def clean(self):
-        cleaned_data = super().clean()
-        new_password1 = cleaned_data['new_password1']
-        new_password2 = cleaned_data['new_password2']
-        last_password = cleaned_data['last_password']
+        cleaned_data = self.cleaned_data
+        password1, password2 = cleaned_data.get("password1", None), cleaned_data.get("password2", None)
 
-        if not new_password1 or not last_password or new_password1 != new_password2 or len(new_password1) < 7:
-            raise forms.ValidationError('پسورد باید ترکیبی از متن و عدد و بیشتر از ۷ کاراکتر باشد.')
-        elif not self.user.check_password(self.cleaned_data['last_password']):
-            raise forms.ValidationError('پسورد قبلی اشتباه است.')
+        if (
+            not password1
+            or not password2
+            or len(password1) < 7
+            or password1.isnumeric()
+            or password1.isalpha()
+        ):
+            raise ValidationError("لطفا پسورد قوی با توجه با نکات امنیتی انتخاب کنید.")
+        if password1 != password2:
+            raise ValidationError('پسورد ها با هم مطابقت ندارند.')
         return cleaned_data
-
-    def save(self, commit = True):
-        self.user.set_password(self.cleaned_data['new_password1'])
-        self.user.save()
-        return self.user

@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block title %}دوره های پسندیده | آکادمی من{% endblock %}
 {% block content %}
@@ -18,12 +18,12 @@
                                         <div class="tp-dashboard-course tp-dashboard-course-2 mb-25">
                                             <div class="tp-course-teacher mb-15">
                                                 <span>
-                                                    <img alt="" src="{% if course.teacher.profile.picture %}{{ course.teacher.profile.picture.url }}{% else %}{% static 'img/event/user.jpg' %}{% endif %}">{{ course.teacher.get_full_name|default:course.teacher.username }}
+                                                    <img alt="" src="{% if course.get_object.teacher.profile.picture %}{{ course.get_object.teacher.profile.picture.url }}{% else %}{% static 'img/event/user.jpg' %}{% endif %}">{{ course.get_object.teacher.get_full_name|default:course.get_object.teacher.username }}
                                                 </span>
                                             </div>
                                             <div class="tp-dashboard-course-thumb">
                                                 <a href="#">
-                                                    <img alt="" src="{{ course.thumbnail.url }}">
+                                                    <img alt="" src="{{ course.get_object.thumbnail.url }}">
                                                 </a>
                                             </div>
                                             <div class="tp-dashboard-course-content">
@@ -35,7 +35,7 @@
                                                     <i class="fa-solid fa-star"></i>
                                                     <span>(15 بررسی)</span>
                                                 </div>
-                                                <h4 class="tp-dashboard-course-title"><a href="#">{{ course.name }}</a></h4>
+                                                <h4 class="tp-dashboard-course-title"><a href="#">{{ course.get_object.name }}</a></h4>
                                                 <div class="tp-dashboard-course-meta">
                                                     <span>
                                                         <span>
@@ -49,7 +49,7 @@
                                                                     stroke-width="1.2"></path>
                                                             </svg>
                                                         </span>
-                                                        {{ course.lessons_count }}
+                                                        {{ course.get_object.lessons_count }}
                                                     </span>
                                                     <span>
                                                         <span>
@@ -94,28 +94,19 @@
                                                     <div class="tp-dashboard-course-free"><span>رایگان</span></div>
                                                 </div>
                                                 <div class="tp-dashboard-btn d-flex align-items-center justify-content-between">
-                                                    <a href="{% url 'academy:bookmarker' course.id %}?next={{ current_url}}"
-                                                            {% if course in user.profile.bookmarks.all %}
-                                                            class="btn btn-info my-1" style="width: 100%;"
-                                                            {% else %}
-                                                            class="btn btn-success my-1" style="width: 100%;"
-                                                            {% endif %}>
-                                                            {% if course in user.profile.bookmarks.all %}
-                                                            <span class="ml-4">
-                                                                <i class="fa-solid fa-bookmark"></i>
-                                                            </span>
-                                                            ذخیره شده
-                                                            {% else %}
+                                                    <a onclick="sendFormToURL('{% url 'academy:bookmarker' 'course' course.get_object.id %}?next={{ request.get_full_path }}')"
+                                                        class="btn btn-danger my-1" style="width: 100%;">
                                                             <span class="ml-4">
                                                                 <i class="fa-solid fa-bookmark-slash"></i>
                                                             </span>
-                                                            ذخیره نشده
-                                                            {% endif %}
-                                                            </a>
+                                                            حذف از ذخیره شده ها
+                                                        </a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    {% empty %}
+                                        <div style="text-align: center; margin-bottom: 50px;">چیزی برای نمایش وجود نداره</div>
                                     {% endfor %}
                                 </div>
                             </div>

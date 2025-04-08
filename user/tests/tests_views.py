@@ -3,127 +3,62 @@ import os
 from academy.models import Course
 from academy.tests.tests_views import BaseTestCase
 from django.urls import reverse
-from user.models import User
+from user.models import User, OTPCode
 from django.core.files.uploadedfile import SimpleUploadedFile
+from unittest.mock import patch
+from django_recaptcha.client import RecaptchaResponse
+from freezegun import freeze_time
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 
-class TestProfileView(BaseTestCase):
+class TestLoginView(BaseTestCase):
     def setUp(self):
         super().setUp()
 
-        self.profile_data = {
-            'username': 'user',
-            'email': 'user@gmail.com',
-            'first_name': 'user',
-            'last_name': 'rr',
-            'about': 'bb'
-        }
-        User.objects.create(username='user2')
-        self.url = reverse('user:profile')
-        self.login()
-
-    def test_url(self):
-        res = self.client.get(self.url)
+    def test_url_exist(self):
+        res = self.client.get(self.login_url)
         self.assertEqual(res.status_code, 200)
 
-    def test_redirect_anonymous_user(self):
-        self.client.logout()
-        res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 302)
-        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2F', 302)
+    def test_template(self):
+        res = self.client.get(self.login_url)
+        self.assertTemplateUsed(res, 'user/login.html')
 
-    def test_template_used(self):
-        res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/profile.html')
+    @patch('django_recaptcha.fields.client.submit')
+    def test_fail_login_user_not_exist(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        self.user_data['username'] = 'test'
+        res = self.client.post(self.login_url, data=self.user_data)
+        self.assertEqual(res.context['msg'], 'authentication failed')
+        self.assertContains(res, 'کاربری با این مشخصات یافت نشد.')
 
-    def test_update_username_success(self):
-        self.login()
-        res = self.client.post(self.url, data=self.profile_data, follow=True)
-        self.assertTrue(res.wsgi_request.user.is_authenticated)
-        self.assertContains(res, 'پروفایل با موفقیت آپدیت شد.')
+    def test_failed_login_recaptcha(self):
+        del self.user_data['g-recaptcha-response']
+        res = self.client.post(self.login_url, data=self.user_data)
+        self.assertEqual(res.context['msg'], 'captcha error')
+        self.assertContains(res, 'لطفا کپچا رو تایید کنید.')
 
-    def test_update_username_failed_duplicated_username(self):
-        data = self.profile_data
-        data['username'] = 'user2'
-        res = self.client.post(self.url, data=data)
-        self.assertContains(res, ' نام کاربری تکراری است.')
+    @patch('django_recaptcha.fields.client.submit')
+    def test_login_success(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        res = self.client.post(self.login_url, data=self.user_data)
+        self.assertEqual(res.wsgi_request.user.username, 'user1')
 
 
-class TestChangePasswordView(BaseTestCase):
+class TestRegisterView(BaseTestCase):
     def setUp(self):
         super().setUp()
-        self.change_password_data = {
-            'new_password1': 'new_pass',
-            'new_password2': 'new_pass',
-            'last_password': 'password',
+
+        self.url = reverse('user:register')
+        self.register_data = {
+            'username': 'user2',
+            'email': 'user2@gmail.com',
+            'phone_number': '09123456788',
+            'password1': 'test1234',
+            'password2': 'test1234',
+            'g-recaptcha-response': 'mocked-captcha-response',
+            'accept_rules': True
         }
-        self.url = reverse('user:change-password')
-        self.login()
-
-    def test_url(self):
-        res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 200)
-
-    def test_template_used(self):
-        res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/change-password.html')
-
-    def test_redirect_anonymous_user(self):
-        self.client.logout()
-        res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 302)
-        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fchange-password%2F', 302)
-
-    def test_change_password_success(self):
-        res = self.client.post(self.url, data=self.change_password_data)
-        self.assertRedirects(res, reverse('academy:login'), 302)
-
-    def test_change_password_failed_invalid_last_password(self):
-        data = self.change_password_data
-        data['last_password'] = 'test'
-        res = self.client.post(self.url, data=self.change_password_data)
-        self.assertContains(res, 'پسورد قبلی اشتباه است.')
-
-    def test_change_password_failed_not_matched_passwords(self):
-        data = self.change_password_data
-        data.update({
-            'password1': 'test',
-            'password2': 'tests',
-            'last_password': 'asdasdas'
-            })
-        res = self.client.post(self.url, data=self.change_password_data)
-        self.assertContains(res, 'پسورد باید ترکیبی از متن و عدد و بیشتر از ۷ کاراکتر باشد.')
-
-
-class TestCourseAddView(BaseTestCase):
-    def setUp(self):
-        super().setUp()
-        self.pic_name = 'image_test_for_test_in_tests_.png'
-        self.dd = os.path.join(os.path.dirname(__file__), 'image_test_for_test_in_tests_.png')
-        with open(self.dd, 'rb') as f:
-            pic = SimpleUploadedFile(
-                name = self.pic_name,
-                content = f.read(),
-                content_type = 'image/png'
-            )
-
-        self.course_data = {
-            'name': 'test',
-            'description': 'test',
-            'price': 250000,
-            'price_with_discount': 240000,
-            'tax': 10,
-            'thumbnail': pic,
-            'time': '02:22:25',
-            'difficulty_level': 's',
-        }
-        self.seasion_data = [
-            {
-                'title': 'test1'
-            }
-        ]
-        self.url = reverse('user:course-add')
-        self.login()
 
     def test_url(self):
         res = self.client.get(self.url)
@@ -131,140 +66,109 @@ class TestCourseAddView(BaseTestCase):
 
     def test_template_used(self):
         res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/course.html')
-
-    def test_redirect_anonymous_user(self):
-        self.client.logout()
-        res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 302)
-        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fcourse%2Fadd%2F', 302)
-
-    def test_redirect_not_teacher(self):
-        self.user.is_teacher = False
-        self.user.is_superuser = False
-        self.user.save()
-        res = self.client.get(self.url)
-        self.assertRedirects(res, reverse('user:profile'), 302)
-
-    def test_add_course_success(self):
-        data = self.course_data
-        total_forms = len(self.seasion_data)
-        data['form-TOTAL_FORMS'] = total_forms
-        data['form-INITIAL_FORMS'] = 0
-        data['form-MIN_NUM_FORMS'] = 0
-        data['form-MAX_NUM_FORMS'] = 100
-
-        for i, seasion in enumerate(self.seasion_data):
-            data[f'form-{i}-title'] = seasion['title']
-
-        res = self.client.post(self.url, data=data)
-        self.assertRedirects(res, reverse('user:course-update', args=[Course.objects.first().pk]), 302)
-        self.assertEqual(Course.objects.first().name, self.course_data['name'])
-
-    
-    def tearDown(self):
-        file_name = f'media/courses/images/{self.pic_name}'
-        if os.path.exists(file_name):
-            os.remove(file_name)
+        self.assertTemplateUsed(res, 'user/register.html')
 
 
-class TestCourseUpdateView(BaseTestCase):
-    def setUp(self):
-        super().setUp()
+    @patch("django_recaptcha.fields.client.submit")
+    def test_register_success(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
 
-        self.pic_name = 'image_test_for_test_in_tests_.png'
-        self.dd = os.path.join(os.path.dirname(__file__), 'image_test_for_test_in_tests_.png')
-        with open(self.dd, 'rb') as f:
-            self.pic = SimpleUploadedFile(
-                name = self.pic_name,
-                content = f.read(),
-                content_type = 'image/png'
-            )
-        self.course_data = {
-            'name': 'test',
-            'description': 'test2',
-            'time': '02:12:12',
-            'price': 20220,
-            'tax': 2,
-            'difficulty_level': 's',
-        }
-        self.course = Course.objects.create(teacher = self.user, thumbnail = self.pic, **self.course_data)
-        self.url = reverse('user:course-update', args=[self.course.pk])
-        self.login()
-
-    def test_url(self):
-        res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 200)
-
-    def test_template_used(self):
-        res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/course.html')
-
-    def test_redirect_anonymous_user(self):
-        self.client.logout()
-        res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 404)
-
-        # redirect not worked for anonymous user becuse i used get_queryset
+        res = self.client.post(self.url, self.register_data)
+        res2 = self.client.get(self.url)
+        self.assertEqual(res.wsgi_request.session.get('phone_number', None), self.register_data['phone_number'])
         # self.assertEqual(res.status_code, 302)
-        # self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fcourse%2F1%2Fupdate%2F', 302)
 
-    def test_redirect_not_teacher(self):
-        self.user.is_teacher = False
-        self.user.is_superuser = False
-        self.user.save()
-        res = self.client.get(self.url)
-        self.assertRedirects(res, reverse('user:profile'), 302)
+    @patch("django_recaptcha.fields.client.submit")
+    def test_register_unique_username(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
 
-    def test_update_course_success(self):
-        data = self.course_data
-        data['name'] = 'new'
-        files = {'thumbnail': self.pic,}
+        self.register_data['username'] = 'user1'
+        res = self.client.post(self.url, self.register_data)
+        self.assertContains(res, 'کاربر با این نام کاربری از قبل موجود است.')
 
-        res = self.client.post(self.url, data=data, files=files)
+    @patch("django_recaptcha.fields.client.submit")
+    def test_register_unique_email(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+
+        self.register_data['email'] = 'user1@gmail.com'
+        res = self.client.post(self.url, self.register_data)
+        self.assertContains(res, 'کاربر با این ایمیل از قبل موجود است.')
+
+    @patch("django_recaptcha.fields.client.submit")
+    def test_register_unique_phone_number(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+
+        self.register_data['phone_number'] = '09123456789'
+        res = self.client.post(self.url, self.register_data)
+        self.assertContains(res, 'کاربر با این شماره تلفن از قبل موجود است.')
+
+    def test_captcha_failed(self):
+        res = self.client.post(self.url, {})
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(Course.objects.first().name, data['name'])
-
-    def test_error_update_course_of_another_teacher(self):
-        user = User.objects.create(username = 'test')
-        obj = Course.objects.create(name = 'testee', teacher = user, time = '00:01:11')
-        res = self.client.get(reverse('user:course-update', args=[obj.pk]))
-        self.assertEqual(res.status_code, 404)
-
-    
-    def tearDown(self):
-        file_name = f'media/courses/images/{self.pic_name}'
-        if os.path.exists(file_name):
-            os.remove(file_name)
+        self.assertContains(res, 'لطفا کپچا رو تایید کنید.')
 
 
-class TestMyCourseView(BaseTestCase):
+class TestActiveRegisterdAccountView(BaseTestCase):
     def setUp(self):
         super().setUp()
-
-        self.pic_name = 'image_test_for_test_in_tests_.png'
-        dd = os.path.join(os.path.dirname(__file__), 'image_test_for_test_in_tests_.png')
-        with open(dd, 'rb') as f:
-            pic = SimpleUploadedFile(
-                name = self.pic_name,
-                content = f.read(),
-                content_type = 'image/png'
-            )
-        self.course_data = {
-            'name': 'test',
-            'description': 'test2',
-            'time': '02:12:12',
-            'price': 20220,
-            'tax': 2,
-            'difficulty_level': 's',
-            'thumbnail': pic,
-            'is_active': True,
-            'teacher': self.user
+        self.register_data = {
+            'username': 'user2',
+            'password1': 'password',
+            'password2': 'password',
+            'email': 'user2@gmail.com',
+            'phone_number': '09123789456',
+            'accept_rules': True,
+            'g-recaptcha-response': 'RESPONSE',
         }
-        courses = [Course(**self.course_data) for _ in range(5)]
-        Course.objects.bulk_create(courses)
-        self.url = reverse('user:my-courses')
+        self.register_url = reverse('user:register')
+        self.url = reverse('user:active-account')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_url(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid = True)
+
+        res = self.client.post(self.register_url, data=self.register_data)
+        # print(res.content.decode('utf-8'))
+        self.assertEqual(res.status_code, 302)
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_template_used(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid = True)
+
+        res = self.client.post(self.register_url, data=self.register_data)
+        self.assertEqual(res.status_code, 302)
+        
+        res = self.client.get(self.url)
+        self.assertTemplateUsed(res, 'user/activate.html')
+
+    def test_redirect_registered_user(self):
         self.login()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+
+    def test_redirect_none_phone_number_in_session(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('user:register'))
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_active_account(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid = True)
+
+        res = self.client.post(self.register_url, self.register_data)
+        self.assertEqual(res.wsgi_request.session.get('phone_number', None), self.register_data['phone_number'])
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('user:active-account'))
+
+        code = OTPCode.objects.get(id = 1)
+        res = self.client.post(self.url, data={'g-recaptcha-response': 'RESPONSE', 'code': code.code})
+        self.assertTrue(res.wsgi_request.user.is_authenticated)
+
+
+class TestForgotPasswordView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('user:forgot-password')
 
     def test_url(self):
         res = self.client.get(self.url)
@@ -272,59 +176,111 @@ class TestMyCourseView(BaseTestCase):
 
     def test_template_used(self):
         res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/my-courses.html')
+        self.assertTemplateUsed(res, 'user/forgot-password.html')
 
-    def test_redirect_anonymous_user(self):
-        self.client.logout()
-        res = self.client.get(self.url)
+    @patch('django_recaptcha.fields.client.submit')
+    def test_success_send_code_with_phone_number(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': '09123456789'
+        }
+        
+        res = self.client.post(self.url, data=data)
         self.assertEqual(res.status_code, 302)
-        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fmy-course%2F', 302)
+        self.assertRedirects(res, reverse('user:confirm-forgot-password'))
 
-    def test_redirect_not_teacher(self):
-        self.user.is_teacher = False
-        self.user.is_superuser = False
-        self.user.save()
-        res = self.client.get(self.url)
-        self.assertRedirects(res, reverse('user:profile'), 302)
+    @patch('django_recaptcha.fields.client.submit')
+    def test_success_send_link_with_email(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': 'user1@gmail.com'
+        }
 
-    def tearDown(self):
-        folder = f'media/courses/images/'
-        pattern = os.path.join(folder, 'image_test_for_test_in_tests_*.png')
+        res = self.client.post(self.url, data=data)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('user:confirm-forgot-password'))
 
-        for file in glob.glob(pattern):
-            try:
-                os.remove(file)
-            except:
-                pass
+    @patch('django_recaptcha.fields.client.submit')
+    def test_success_send_code_with_username(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': 'user1'
+        }
+        
+        res = self.client.post(self.url, data=data)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('user:confirm-forgot-password'))
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_failed_send_code_number_not_found(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': '65231'
+        }
+
+        res = self.client.post(self.url, data=data)
+        self.assertContains(res, 'نام کاربری/ایمیل/شماره تلفن اشتباه است.')
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_failed_send_link_last_sended(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'token': '09123456789'
+        }
+
+        res = self.client.post(self.url, data=data)
+        res = self.client.post(self.url, data=data)
+        self.assertContains(res, 'ارسال کد در فاصله های 4 دقیقه پس از اخرین ارسال کد مجاز است.')
 
 
-class TestMyCourseNotPublishedView(BaseTestCase):
+    @freeze_time(datetime.now())
+    @patch('django_recaptcha.fields.client.submit')
+    def test_failed_send_link_last_sended(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        start_time = datetime.now()
+        data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'number': '09123456789'
+        }
+
+        res = self.client.post(self.url, data=data)
+
+        # freeze time
+        with freeze_time(start_time + timedelta(minutes=5, seconds=2)):
+            res = self.client.post(self.url, data=data)
+            self.assertEqual(res.status_code, 200)
+
+    def test_redirect_authorized_user(self):
+        self.login()
+        res = self.client.post(self.url, data={})
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:home'), 302, 200)
+
+
+class ConfirmTestForgotPasswordView(BaseTestCase):
     def setUp(self):
         super().setUp()
 
-        self.pic_name = 'image_test_for_test_in_tests_.png'
-        dd = os.path.join(os.path.dirname(__file__), 'image_test_for_test_in_tests_.png')
-        with open(dd, 'rb') as f:
-            pic = SimpleUploadedFile(
-                name = self.pic_name,
-                content = f.read(),
-                content_type = 'image/png'
-            )
-        self.course_data = {
-            'name': 'test',
-            'description': 'test2',
-            'time': '02:12:12',
-            'price': 20220,
-            'tax': 2,
-            'difficulty_level': 's',
-            'thumbnail': pic,
-            'is_active': False,
-            'teacher': self.user
+        self.otp_code = OTPCode.objects.create(
+            phone_number = self.user.phone_number,
+            expire_time=timezone.now() + timedelta(minutes=4),
+            code = 22266,
+            code_type = 'forgot-password')
+        self.data = {
+            'g-recaptcha-response': 'RESPONSE',
+            'code': self.otp_code.code,
+            'password1': 'new_pass',
+            'password2': 'new_pass',
         }
-        courses = [Course(**self.course_data) for _ in range(5)]
-        Course.objects.bulk_create(courses)
-        self.url = reverse('user:my-courses-not-published')
-        self.login()
+        self.url = reverse('user:confirm-forgot-password')
+        session = self.client.session
+        session['phone_number'] = self.user.phone_number
+        session.save()
 
     def test_url(self):
         res = self.client.get(self.url)
@@ -332,130 +288,71 @@ class TestMyCourseNotPublishedView(BaseTestCase):
 
     def test_template_used(self):
         res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/my-courses.html')
+        self.assertTemplateUsed(res, 'user/confirm-forgot-password.html')
 
-    def test_redirect_anonymous_user(self):
-        self.client.logout()
-        res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 302)
-        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fmy-course%2Fpending%2F', 302)
-
-    def test_redirect_not_teacher(self):
-        self.user.is_teacher = False
-        self.user.is_superuser = False
-        self.user.save()
-        res = self.client.get(self.url)
-        self.assertRedirects(res, reverse('user:profile'), 302)
-
-    def tearDown(self):
-        folder = f'media/courses/images'
-        pattern = os.path.join(folder, 'image_test_for_test_in_tests_*.png')
-
-        for file in glob.glob(pattern):
-            try:
-                os.remove(file)
-            except:
-                pass
-
-
-class TestCourseDeleteView(BaseTestCase):
-    def setUp(self):
-        super().setUp()
-
-        self.pic_name = 'image_test_for_test_in_tests_.png'
-        dd = os.path.join(os.path.dirname(__file__), 'image_test_for_test_in_tests_.png')
-        with open(dd, 'rb') as f:
-            pic = SimpleUploadedFile(
-                name = self.pic_name,
-                content = f.read(),
-                content_type = 'image/png'
-            )
-        self.course_data = {
-            'name': 'test',
-            'description': 'test2',
-            'time': '02:12:12',
-            'price': 20220,
-            'tax': 2,
-            'difficulty_level': 's',
-            'thumbnail': pic,
-            'is_active': False,
-            'teacher': self.user
-        }
-        courses = [Course(**self.course_data) for _ in range(5)]
-        Course.objects.bulk_create(courses)
-        self.url = reverse('user:course-delete', args=[1])
+    def test_redirect_authoraized_user(self):
         self.login()
-
-    def test_url(self):
-        res = self.client.post(self.url)
-        self.assertEqual(res.status_code, 302)
-
-    def test_redirect_anonymous_user(self):
-        self.client.logout()
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, 302)
-        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fmy-course%2F', 302)
+        self.assertRedirects(res, reverse('academy:home'))
 
-    def test_redirect_not_teacher(self):
-        self.user.is_teacher = False
-        self.user.is_superuser = False
-        self.user.save()
-        res = self.client.get(self.url)
-        self.assertRedirects(res, reverse('user:profile'), 302)
-
-    def test_delete_success(self):
-        res = self.client.post(self.url)
-        self.assertRedirects(res, reverse('user:my-courses'), 302)
-
-    def test_404_for_not_course_teacher(self):
-
-        c = Course.objects.get(id=1)
-        c.teacher = User.objects.create(username = 'user4')
-        c.save()
-        res = self.client.post(self.url)
-        self.assertEqual(res.status_code, 404)
-
-    def tearDown(self):
-        folder = f'media/courses/images'
-        pattern = os.path.join(folder, 'image_test_for_test_in_tests_*.png')
-
-        for file in glob.glob(pattern):
-            try:
-                os.remove(file)
-            except:
-                pass
-
-
-class TestMyBookmarkView(BaseTestCase):
-    def setUp(self):
-        super().setUp()
-
-        self.file_name = 'image_test_for_test_in_tests_.png'
-        with open(f'user/tests/{self.file_name}', 'rb') as f:
-            pic = SimpleUploadedFile(
-                name = self.file_name,
-                content = f.read(),
-                content_type = 'image/png'
-            )
-        self.course = Course.objects.create(
-            name = 'test',
-            teacher = self.user,
-            time = '02:02:00',
-            thumbnail = pic
-        )
-        self.url = reverse('user:my-bookmarked-courses')
+    def test_redirect_user_without_phone_number_in_session(self):
         self.login()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, reverse('academy:home'))
 
-    def test_url(self):
+    @patch('django_recaptcha.fields.client.submit')
+    def test_change_password_success(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+
+        res = self.client.post(self.url, self.data)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirects(res, res.wsgi_request.GET.get('next', reverse('user:login')))
+        self.assertNotIn(self.user.phone_number, res.wsgi_request.session)
+
+    @patch('django_recaptcha.fields.client.submit')
+    def test_change_password_failed_invalid_code(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, 200)
 
-    def test_template_used(self):
+    @patch('django_recaptcha.fields.client.submit')
+    def test_change_password_failed_invalid_recaptcha(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+        res = self.client.post(self.url, {})
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'کپچا اشتباه حل شده.')
+
+    @freeze_time(datetime.now())
+    @patch('django_recaptcha.fields.client.submit')
+    def test_change_password_failed_expire_code(self, mocked_value):
+        mocked_value.return_value = RecaptchaResponse(is_valid=True)
+
+        self.data['code'] = 22
+        start_time = datetime.now()
+        with freeze_time(start_time, timedelta(minutes=4, seconds=1)):
+            res = self.client.post(self.url, self.data)
+            self.assertContains(res, 'کد اشتباه است یا منقضی شده.')
+
+
+class TestLogoutView(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.url = reverse('user:logout')
+        self.login()
+
+    def test_url(self):
         res = self.client.get(self.url)
-        self.assertTemplateUsed(res, 'user/my-bookmark.html')
+        self.assertRedirects(res, reverse('academy:home'), 302)
 
     def test_redirect_anonymous_user(self):
         self.client.logout()
         res = self.client.get(self.url)
-        # Note: in client url the %2F is mean /
-        self.assertRedirects(res, reverse('academy:login') + '?next=%2Fprofile%2Fbookmarks', 302)
+        self.assertRedirects(res, reverse('user:login'), 302)
+
+    def test_logout_user(self):
+        res = self.client.get(self.url)
+        self.assertTrue(res.wsgi_request.user.is_anonymous)
+        self.assertRedirects(res, reverse('academy:home'))

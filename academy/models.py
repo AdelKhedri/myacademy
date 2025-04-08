@@ -1,9 +1,7 @@
 from django.db import models
-from django.forms import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from user.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
 from .managers import CommentManager
 from django.db.models import Count, Sum
 
@@ -39,16 +37,20 @@ class Course(models.Model):
         return self.seasions.annotate(lessons_count = Count('lessons')).aggregate(count = Sum('lessons_count'))['count'] or 0
     
     def get_final_price(self):
+        """
+        ###Final Price
+        return price with discount and tax
+        """
         return int(self.price_with_discount + (self.price // 100 * self.tax) if self.price_with_discount else self.price + (self.price // 100 * self.tax))
 
     def get_absolute_url(self):
         return reverse('academy:course-details', args=[self.pk])
 
     def get_purch_url(self):
-        return reverse('academy:cart-add', args=[self.pk])
+        return reverse('cart:cart-add', args=['course', self.pk])
 
-    def get_remove_from_cart(self):
-        return reverse('academy:cart-remove', args=[self.pk])
+    def get_remove_from_cart_url(self):
+        return reverse('cart:cart-remove', args=['course', self.pk])
 
     def __str__(self):
         return self.name
@@ -175,32 +177,22 @@ class MainPageCourseAdd(models.Model):
         return self.title
 
 
-class Order(models.Model):
-    status_types = (('pending', 'در انتظار پرداخت'),
-                    ('paid', 'پرداخت شده'),
-                    ('failed', 'ناموفق'),)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('دانشجو'))
-    total_price = models.IntegerField(_('قیمت کل'))
-    created_at = models.DateTimeField(_('زمان ساخت سبد خرید'), auto_now_add=True)
-    status = models.CharField(_('وضعت پرداخت'), max_length=7, default='pending')
+class Bookmark(models.Model):
+    content_types = (('course', 'دوره ویدیویی'), ('file', 'فایل'))
+    content_type = models.CharField(_("نوع محتوا"), max_length=6, choices=content_types)
+    media_id = models.IntegerField(_("ایدی محصول"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("کاربر"))
 
     class Meta:
-        verbose_name = 'سبد خرید'
-        verbose_name_plural = 'سبد های خرید'
-        ordering = ['pk']
+        verbose_name = "محصولات / پست های ذخیره شده"
+        verbose_name_plural = "محصول / پست ذخیره شده"
+        ordering = ['id']
+
+    def get_object(self):
+        content_types = {
+            'course': Course,
+        }
+        return content_types[self.content_type].objects.get(id=self.media_id)
 
     def __str__(self):
-        return f'{self.id} - {self.user.__str__()} - {self.get_status_display()}'
-
-
-class OrderItem(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name=_('دوره'))
-    price = models.IntegerField(_('قیمت'))
-
-
-    class Meta:
-        verbose_name = 'ایتم خرید اری شده'
-        verbose_name_plural = 'ایتم های خریداری شده'
-
-    def __str__(self):
-        return self.course.__str__()
+        return f"{self.content_type} : {self.media_id}"

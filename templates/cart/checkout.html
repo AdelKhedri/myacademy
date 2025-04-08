@@ -1,0 +1,80 @@
+{% extends 'academy/base.html' %}
+{% load static %}
+{% block title %}تایید سبد خرید | آکادمی من{% endblock %}
+{% block content %}
+    <main>
+        <section class="tp-cart-area pt-120 pb-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="tp-cart-list mb-25 mr-30">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="tp-cart-header-product" colspan="2">محصول</th>
+                                        <th class="tp-cart-header-price">قیمت</th>
+                                        <th class="tp-cart-header-quantity">مقدار</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in cart_courses %}
+                                    <tr>
+                                        <td class="tp-cart-img">
+                                            <a href="{{ product.get_object.get_absolute_url }}">
+                                                <img alt="" src="{{ product.get_object.thumbnail.url }}">
+                                            </a>
+                                        </td>
+                                        <td class="tp-cart-title"><a href="shop-details.html">{{ product.get_object.name }}</a></td>
+                                        <td class="tp-cart-price"><span>{{ product.get_object.price_final_price|default:product.get_object.price }} تومان</span></td>
+                                        <td class="tp-cart-action">
+                                            <a onclick="sendFormToURL('{{ product.get_object.get_remove_from_cart_url }}?next={{ request.get_full_path }}')" style="background-color: orangered; color: black;" class="tp-cart-action-btn border border-2 rounded-2 p-1">
+                                                <svg fill="none" height="10" viewbox="0 0 10 10" width="10" xmlns="http://www.w3.org/2000/svg">
+                                                    <path clip-rule="evenodd"
+                                                        d="M9.53033 1.53033C9.82322 1.23744 9.82322 0.762563 9.53033 0.46967C9.23744 0.176777 8.76256 0.176777 8.46967 0.46967L5 3.93934L1.53033 0.46967C1.23744 0.176777 0.762563 0.176777 0.46967 0.46967C0.176777 0.762563 0.176777 1.23744 0.46967 1.53033L3.93934 5L0.46967 8.46967C0.176777 8.76256 0.176777 9.23744 0.46967 9.53033C0.762563 9.82322 1.23744 9.82322 1.53033 9.53033L5 6.06066L8.46967 9.53033C8.76256 9.82322 9.23744 9.82322 9.53033 9.53033C9.82322 9.23744 9.82322 8.76256 9.53033 8.46967L6.06066 5L9.53033 1.53033Z"
+                                                        fill="currentColor" fill-rule="evenodd"></path>
+                                                </svg>
+                                                <span>حذف</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tp-cart-bottom">
+                            <div class="row align-items-end">
+                                <div class="col-xl-6 col-md-8">
+                                    <div class="tp-cart-coupon">
+                                        <form action="cart.html#">
+                                            <div class="tp-cart-coupon-input-box"><label>کد کوپن:</label>
+                                                <div class="tp-cart-coupon-input d-flex align-items-center">
+                                                    <input placeholder="کد کوپن را وارد کنید" type="text">
+                                                    <button type="submit">درخواست</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-4">
+                                    <form method="post" class="tp-cart-update text-md-end">
+                                        {% csrf_token %}
+                                        <button type="submit" class="tp-cart-update-btn" type="button">به روز رسانی سبد خرید</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="tp-cart-checkout-wrapper">
+                            <div class="tp-cart-checkout-total d-flex align-items-center justify-content-between">
+                                <span>مجموع</span> <span>{{ total_price }} تومان</span></div>
+                            <div class="tp-cart-checkout-proceed"><a class="tp-cart-checkout-btn w-100"
+                                    href="#">تسویه حساب</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

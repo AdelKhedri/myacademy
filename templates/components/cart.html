@@ -17,17 +17,17 @@
                 {% for course in cart_courses %}
                 <div class="cartmini__widget-item">
                     <div class="cartmini__thumb">
-                        <a href="{{ course.get_absolute_url }}">
-                            <img alt="" src="{{ course.thumbnail.url }}">
+                        <a href="{{ course..get_object.get_absolute_url }}">
+                            <img alt="" src="{{ course.get_object.thumbnail.url }}">
                         </a>
                     </div>
                     <div class="cartmini__content">
-                        <h5 class="cartmini__title home-2"><a href="{{ course.get_absolute_url }}">{{ course.name }}</a></h5>
+                        <h5 class="cartmini__title home-2"><a href="{{ course.get_object.get_absolute_url }}">{{ course.name }}</a></h5>
                         <div class="cartmini__price-wrapper">
-                            <span class="cartmini__price home-2">{{ course.get_final_price }} تومان</span>
+                            <span class="cartmini__price home-2">{{ course.get_object.price }} تومان</span>
                         </div>
                     </div>
-                    <a class="cartmini__del home-2" href="{{ course.get_remove_from_cart }}"><i class="fa-regular fa-xmark"></i></a>
+                    <a class="cartmini__del home-2" onclick="sendFormToURL('{{ course.get_object.get_remove_from_cart_url }}?next={{request.get_full_path}}')"><i class="fa-regular fa-xmark"></i></a>
                 </div>
                 {% endfor %}
             </div>
@@ -41,14 +41,31 @@
         </div>
         <div class="cartmini__checkout">
             <div class="cartmini__checkout-title mb-30">
-                <h4>زیرنویس:</h4>
+                <h4>قیمت کل:</h4>
                 <span>
                     {% if total_price > 0 %}{{ total_price }} تومان{% else %}رایگان{% endif %}</span>
             </div>
             <div class="cartmini__checkout-btn home-2">
-                <a class="tp-btn mb-10 w-100" href="#">مشاهده سبد خرید</a>
-                <a class="tp-btn tp-btn-border w-100" href="#">پرداخت</a>
+                <a class="tp-btn mb-10 w-100" href="{% url 'cart:cart-checkout' %}">مشاهده سبد خرید</a>
+                <a class="tp-btn tp-btn-border w-100" href="{% url 'cart:cart-checkout' %}">نهایی سازی خرید</a>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function sendFormToURL(url) {
+        let csrf = document.cookie.split('; ').find(row => row.startsWith('csrftoken'))?.split('=')[1];
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = url;
+
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "csrfmiddlewaretoken";
+        input.value = csrf;
+        form.append(input);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
