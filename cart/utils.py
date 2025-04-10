@@ -1,7 +1,8 @@
+from user.models import User
 from .models import Cart
 
-def get_cart(user):
-    cart, created = Cart.objects.get_or_create(user = user, status = 'pending')
+def get_cart(user: User):
+    cart, created = Cart.objects.get_or_create(user = user, status = 'created')
     cart_courses = cart.items.all()
     total_price = 0
     for course in cart_courses:

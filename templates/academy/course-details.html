@@ -291,7 +291,7 @@
                                                             <div class="right">
                                                                 <span>{{ lesson.time|date:'G:i:s'|default:'0 دقیقه'}}
                                                                     {% if lesson.is_free %}
-                                                                    <a href="{% if user.is_authenticated %}{{ lesson.file_name.url }}{% else %}{% url 'academy:login' %}{% endif %}">
+                                                                    <a href="{% if user.is_authenticated %}{{ lesson.file_name.url }}{% else %}{% url 'user:login' %}{% endif %}">
                                                                         <svg fill="none" height="11" viewbox="0 0 16 11" width="16" xmlns="http://www.w3.org/2000/svg">
                                                                             <path
                                                                                 d="M14.6808 4.83159C14.8936 5.13001 15 5.27922 15 5.5001C15 5.72097 14.8936 5.87018 14.6808 6.16861C13.7245 7.50949 11.2825 10.4001 8 10.4001C4.71755 10.4001 2.27547 7.50949 1.31923 6.16861C1.10641 5.87018 1 5.72097 1 5.5001C1 5.27922 1.10641 5.13001 1.31923 4.83159C2.27547 3.49071 4.71754 0.600098 8 0.600098C11.2825 0.600098 13.7245 3.49071 14.6808 4.83159Z" stroke="#5169F1" stroke-width="1.2">
@@ -601,7 +601,7 @@
                                     </div>
                                     <div class="tp-course-details-2-review-reply-btn"><a href="course-details-3.html#">نمایش نظرات بیشتر</a></div>
                                 </div>
-                                <h5 id="name_element" class="tp-course-details-2-main-title text-center">s</h5>
+                                <h5 id="name_element" class="tp-course-details-2-main-title text-center"></h5>
                                 <h4 class="tp-course-details-2-main-title">یک نظر بنویسید</h4>
                                 {% if request.user.is_authenticated %}
                                 <div class="tp-course-details-2-comment-box pr-25">

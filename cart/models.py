@@ -28,8 +28,8 @@ class CartItem(models.Model):
 
 
 class Cart(models.Model):
-    status_list = (('pending', 'در انتظار'), ('payed', 'پرداخت شده'))
-    status = models.CharField(_("وضعیت"), choices = status_list, default='pending', max_length=7)
+    status_list = (('created', 'ساخته شده'), ('pending', 'در انتظار'), ('paid', 'پرداخت شده'))
+    status = models.CharField(_("وضعیت"), choices = status_list, default='created', max_length=7)
     items = models.ManyToManyField(CartItem, verbose_name=_("دوره ها"))
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("کاربر"))
 
