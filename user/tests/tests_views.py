@@ -1,10 +1,6 @@
-import glob
-import os
-from academy.models import Course
 from academy.tests.tests_views import BaseTestCase
 from django.urls import reverse
-from user.models import User, OTPCode
-from django.core.files.uploadedfile import SimpleUploadedFile
+from user.models import OTPCode
 from unittest.mock import patch
 from django_recaptcha.client import RecaptchaResponse
 from freezegun import freeze_time

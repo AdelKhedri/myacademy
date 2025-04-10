@@ -1,3 +1,5 @@
+import glob
+import os
 from unittest.mock import patch
 from django_recaptcha.client import RecaptchaResponse
 from django.test import TestCase
@@ -78,3 +80,15 @@ class TestCourseCategoryView(BaseTestCase):
     def test_not_found_category_with_code_404(self):
         res = self.client.get(reverse('academy:category', kwargs={'category_slug': 'sss'}))
         self.assertEqual(res.status_code, 404)
+
+    def tearDown(self):
+        folder = f'media/courses/images'
+        file_name = self.file_name
+        file_name = file_name[:-4] + '*' + file_name[-4:]
+        pattern = os.path.join(folder, file_name)
+
+        for file in glob.glob(pattern):
+            try:
+                os.remove(file)
+            except:
+                pass
